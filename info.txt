@@ -1,0 +1,13 @@
+Github - repositorio...............................
+https://github.com/kliver98/SoccerGame 
+Librerias para juegos..............................
+Arcade
+Kivy
+PyGame
+Como administraremos el trabajo....................
+Trello
+Taiga
+IDE................................................
+PyDev (En eclipse)
+Anaconda (Con Sublime text)
+
