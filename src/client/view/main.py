@@ -1,6 +1,7 @@
 from client.controller import constants as cs
+from client.model import Field as m
 import pygame as pg
-import sys
+import os 
 
 class MainWindow():
     
@@ -9,10 +10,9 @@ class MainWindow():
         self.init()
         
     def init(self):
+        m.Field().draw(self.window)
         run = True
-        
         while run:
-            self.clock.tick(60)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     run = False
@@ -20,18 +20,16 @@ class MainWindow():
             self.redrawWindow()
         
     def redrawWindow(self):
-        self.window.fill((0,255,0))
         pg.display.update()
     
     def setup(self):
-        self.window = pg.display.set_mode((cs.WIDTH,cs.HEIGHT))
-        pg.display.set_caption("SOCCER GAME By CJKS")
+        os.environ['SDL_VIDEO_CENTERED'] = '1' #To center the window in the middle
+        self.window = pg.display.set_mode((int(cs.WIDTH*cs.SCALE),int(cs.HEIGHT*cs.SCALE)))
+        pg.display.set_caption(cs.APP_NAME)
         self.clock = pg.time.Clock()
+        pg.init()
 
 try:
     MainWindow()
 except Exception as e:
     pass
-finally:
-    pg.quit()
-    sys.exit()
