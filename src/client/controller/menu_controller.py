@@ -7,6 +7,7 @@ Created on 23/09/2019
 import pygame
 from client.model import menu
 from client.view import menu_view
+from client.controller import  constants
 
 class Menu_Controller():
     
@@ -28,9 +29,11 @@ class Menu_Controller():
             keys=pygame.key.get_pressed()
             
             if keys[pygame.K_UP]:
-                selec=0
+                selec=constants.MODE_ONLINE
+                
             elif keys[pygame.K_DOWN]:
-                selec=1
+                selec=constants.MODE_CPU
             elif keys[pygame.K_z]:
                 wait=False
             self.view.move_selector(selec)
+            self.model.change_mode(selec)

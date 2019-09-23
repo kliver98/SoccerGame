@@ -11,11 +11,8 @@ class Menu():
     def __init__(self):
         self.mode=constants.MODE_ONLINE
     
-    def change_mode(self):
-        if self.mode == constants.MODE_ONLINE:
-            self.mode=constants.MODE_CPU
-        elif self.mode==constants.MODE_CPU:
-            self.mode = constants.MODE_ONLINE
+    def change_mode(self, mode): 
+            self.mode=mode
             
     def get_mode(self):
         return self.mode
