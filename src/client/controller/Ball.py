@@ -22,14 +22,19 @@ class Ball():
         """Method to draw into screen the ball"""
         self.window.blit(self.image.convert_alpha(),[self.x,self.y])
         
-    def move(self,data):
+    def move(self,data, team):
         """Method to move the coordenates of the ball depending where user moves the rows and if it hit both"""
         self.image = pg.image.load(cs.BALL_IMAGE+str(self.cont)+".png")
         self.angle = self.angle+90 if self.angle<361 else 0
         self.image = pg.transform.rotate(self.image, self.angle)
         self.cont = 1 if self.cont>5 else self.cont+1
-        if data[0]==0:
+        self.x = data[0]+30 if team else data[0]-20
+        self.y = data[1]+20 if team else data[1]+20     
+        """if data[0]==0:
             self.x+=data[1]
         else:
-            self.y+=data[1]
+            self.y+=data[1]"""
+            
+    def unlink_ball(self,i):
+        self.x += i   
         

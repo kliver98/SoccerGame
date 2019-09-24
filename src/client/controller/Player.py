@@ -45,16 +45,16 @@ class Player():
             self.setupPlayer(1)"""
             
         if keys[pg.K_LEFT]:
-            data = (0,-self.vel)
             self.x -= self.vel
-        elif keys[pg.K_RIGHT]:
-            data = (0,self.vel)
+            data = (self.x,self.y)#(0,-self.vel)
+        if keys[pg.K_RIGHT]:
             self.x += self.vel
-        elif keys[pg.K_UP]:
-            data = (1,-self.vel)
+            data = (self.x,self.y)#(0,self.vel)
+        if keys[pg.K_UP]:
             self.y -= self.vel
-        elif keys[pg.K_DOWN]:
-            data = (1,self.vel)
+            data = (self.x,self.y)#(1,-self.vel)
+        if keys[pg.K_DOWN]:
             self.y += self.vel
+            data = (self.x,self.y)#(1,self.vel)
             
         return data
