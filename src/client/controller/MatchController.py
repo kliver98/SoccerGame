@@ -1,8 +1,3 @@
-'''
-Created on 22/09/2019
-
-@author: Usuario
-'''
 
 from client.model import Match as m
 

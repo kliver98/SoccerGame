@@ -1,8 +1,4 @@
-'''
-Created on 22/09/2019
 
-@author: Usuario
-'''
 class Match():
     """Class of model that has all functions/logic needed to execute application without including view logic"""
     

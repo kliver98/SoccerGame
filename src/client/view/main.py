@@ -6,6 +6,7 @@ import os
 from client.controller.Player import Player
 from client.controller.Ball import Ball
 from client.controller import MatchController as match_c
+from client.controller import menu_controller
 
 class MainWindow():
     """Class principal of the GUI"""
@@ -20,6 +21,12 @@ class MainWindow():
         self.field = m.Field(self.window)
         self.player = Player("TestUser",cs.WIDTH*cs.SCALE*0.3, (cs.HEIGHT*cs.SCALE/2)-(30), self.window,True)
         self.ball = Ball(self.player.x+self.player.rect.x/2+100,self.player.y+self.player.rect.y/2,self.window)
+        self.menu= menu_controller.Menu_Controller(self.window)
+
+
+        '''show the menu and wait for select a game mode'''
+        self.field.draw()
+        self.menu.init()
         run = True
         """Here the application is hearing the keywords pressed"""
         while run:
@@ -52,6 +59,7 @@ class MainWindow():
     def redrawWindow(self,player = None, ball = None):
         """Update the window with their new graphics"""
         self.field.draw()
+        
         if player: #Drawing the player into screen
             player.draw()
         if ball:

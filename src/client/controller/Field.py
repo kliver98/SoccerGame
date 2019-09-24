@@ -1,8 +1,4 @@
-'''
-Created on 22/09/2019
 
-@author: Usuario
-'''
 import pygame as pg
 from client.controller import constants as cs
 
