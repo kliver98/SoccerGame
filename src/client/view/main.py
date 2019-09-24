@@ -25,8 +25,13 @@ class MainWindow():
         self.menu= menu_controller.Menu_Controller(self.window)
 
         '''show the menu and wait for select a game mode'''
-        self.field.draw()
         self.menu.init()
+        mode=self.menu.get_mode()
+        '''verified the game mode'''
+        if mode==cs.MODE_ONLINE:
+            x=0 #implementar pedir los datos de conexion, clien_connection_controller,network and connection view
+        
+            
         run = True
         """Here the application is hearing the keywords pressed"""
         while run:
@@ -84,5 +89,5 @@ class MainWindow():
 try:
     MainWindow()
 except Exception as e:
-    #print(e.trace_call())
+    print(e.trace_call())
     pass

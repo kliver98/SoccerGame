@@ -32,3 +32,6 @@ class Menu_Controller():
                 wait=False
             self.view.move_selector(selec)
             self.model.change_mode(selec)
+            
+    def get_mode(self):
+        return self.model.get_mode()

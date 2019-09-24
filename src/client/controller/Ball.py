@@ -36,5 +36,5 @@ class Ball():
             self.y+=data[1]"""
             
     def unlink_ball(self,i):
-        self.x += i   
+        self.x += i
         
