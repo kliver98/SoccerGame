@@ -52,7 +52,7 @@ class MainWindow():
         self.ball.controlled_by_username = ""
         self.player.has_ball = False
         for i in range(0,17):
-            self.ball.move((0,i if self.player.team else -i))
+            self.ball.move((i if self.player.team else -i,0))
             self.redrawWindow(self.player, self.ball)
         
     def redrawWindow(self,player = None, ball = None):
