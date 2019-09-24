@@ -20,6 +20,7 @@ class Ball():
         self.vel = cs.PLAYER_SPEED
         self.window = window
         self.rect = self.image.get_rect()
+        self.angle = 0
         
     def draw(self):
         """Method to draw into screen the ball"""
@@ -28,6 +29,8 @@ class Ball():
     def move(self,data):
         """Method to move the coordenates of the ball depending where user moves the rows and if it hit both"""
         self.image = pg.image.load(cs.BALL_IMAGE+str(self.cont)+".png")
+        self.angle = self.angle+90 if self.angle<361 else 0
+        self.image = pg.transform.rotate(self.image, self.angle)
         self.cont = 1 if self.cont>5 else self.cont+1
         if data[0]==0:
             self.x+=data[1]

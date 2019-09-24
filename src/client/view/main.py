@@ -21,7 +21,7 @@ class MainWindow():
         self.player = Player("TestUser",cs.WIDTH*cs.SCALE*0.3, (cs.HEIGHT*cs.SCALE/2)-(30), self.window,True)
         self.ball = Ball(self.player.x+self.player.rect.x/2+100,self.player.y+self.player.rect.y/2,self.window)
         run = True
-        """Here the application is earing the keywords pressed"""
+        """Here the application is hearing the keywords pressed"""
         while run:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
