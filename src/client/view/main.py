@@ -26,6 +26,12 @@ class MainWindow():
 
         '''show the menu and wait for select a game mode'''
         self.menu.init()
+        mode=self.menu.get_mode()
+        '''verified the game mode'''
+        if mode==cs.MODE_ONLINE:
+            x=0 #implementar pedir los datos de conexion, clien_connection_controller,network and connection view
+        
+            
         run = True
         """Here the application is hearing the keywords pressed"""
         while run:
