@@ -25,7 +25,6 @@ class MainWindow():
 
 
         '''show the menu and wait for select a game mode'''
-        self.field.draw()
         self.menu.init()
         run = True
         """Here the application is hearing the keywords pressed"""

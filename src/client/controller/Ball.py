@@ -21,15 +21,15 @@ class Ball():
     def draw(self):
         """Method to draw into screen the ball"""
         self.window.blit(self.image.convert_alpha(),[self.x,self.y])
-        
+    
+    #data is a tupla where data[0] is the increment of the position on x of the player and data[1] is the increment on y    
     def move(self,data):
         """Method to move the coordenates of the ball depending where user moves the rows and if it hit both"""
         self.image = pg.image.load(cs.BALL_IMAGE+str(self.cont)+".png")
         self.angle = self.angle+90 if self.angle<361 else 0
         self.image = pg.transform.rotate(self.image, self.angle)
         self.cont = 1 if self.cont>5 else self.cont+1
-        if data[0]==0:
-            self.x+=data[1]
-        else:
-            self.y+=data[1]
+        self.x+=data[0]
+        self.y+=data[1]
+        
         

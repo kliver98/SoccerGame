@@ -37,7 +37,8 @@ class Player():
         """Method that move the position of player according the arrows user pressed. Also return where the ball has to move if both hitted"""
         keys = pg.key.get_pressed()
         data = None
-        
+        datax=0
+        datay=0
         self.setupPlayer() #Allways moving foots
         """if self.has_ball: #Just moving foots when hits the ball
             self.setupPlayer()
@@ -45,16 +46,20 @@ class Player():
             self.setupPlayer(1)"""
             
         if keys[pg.K_LEFT]:
-            data = (0,-self.vel)
+            datax=-self.vel
+            data = (datax,datay)
             self.x -= self.vel
-        elif keys[pg.K_RIGHT]:
-            data = (0,self.vel)
+        if keys[pg.K_RIGHT]:
+            datax=self.vel
+            data = (datax,datay)
             self.x += self.vel
-        elif keys[pg.K_UP]:
-            data = (1,-self.vel)
+        if keys[pg.K_UP]:
+            datay=-self.vel
+            data = (datax,datay)
             self.y -= self.vel
-        elif keys[pg.K_DOWN]:
-            data = (1,self.vel)
+        if keys[pg.K_DOWN]:
+            datay=self.vel
+            data = (datax,datay)
             self.y += self.vel
             
         return data
