@@ -4,8 +4,9 @@ Created on 22/09/2019
 @author: JORGE
 '''
 import socket
-from _thread import *
+##from _thread import *
 import sys
+from server import room
 
 server = input("Please insert the ip server, it will be locallhost for defect")
 port = 5555
@@ -21,7 +22,7 @@ try:
 except socket.error as e:
     str(e)
 
-s.listen(2)
+s.listen(6)
 print("server was started, waiting for connections")
 
 def read_pos(str):
@@ -34,7 +35,7 @@ def make_pos(tup):
 
 pos = [(0,0),(100,100)]
 
-def threaded_client(conn, player):
+'''def threaded_client(conn, player):
     conn.send(str.encode(make_pos(pos[player])))
     reply = ""
     while True:
@@ -60,12 +61,28 @@ def threaded_client(conn, player):
             break
 
     print("Lost connection")
-    conn.close()
+    conn.close()'''
+
+#return the room that are aviable , None if 
+def verified_aviabled():
+    r=None
+    for i in roomList:
+        if i.is_avaible():
+            return i
+    return r
 
 currentPlayer = 0
+currentRoom=0
+roomList=[]
+
 while True:
     conn, addr = s.accept()
     print("Connected to:", addr)
-
-    start_new_thread(threaded_client, (conn, currentPlayer))
+    r= verified_aviabled()
+    if r is None:
+        r=room.Room(currentRoom)
+        roomList.append(r)
+        currentRoom+=1
+    #start_new_thread(threaded_client, (conn, currentPlayer))
+    r.add_player(conn, currentPlayer)
     currentPlayer += 1
