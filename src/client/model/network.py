@@ -14,6 +14,9 @@ class Network():
         self.addr = (self.server, self.port)
         self.pos = self.connect()
         
+   #     self.send("1")
+        
+        
 # funcion que recibe la informacion de las posiciones de los objetos desde el sefvidor
     def getPos(self):
         return self.pos
@@ -32,3 +35,9 @@ class Network():
             return self.client.recv(2048).decode()
         except socket.error as e:
             print(e)
+            
+    def run_network(self):        
+        run=True
+        while run:
+            self.send("1,1")
+        

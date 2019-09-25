@@ -19,7 +19,7 @@ class Menu_Controller():
         while wait:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    wait = False
+                   # wait = False
                     pygame.quit()
             keys=pygame.key.get_pressed()
             

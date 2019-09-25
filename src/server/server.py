@@ -44,7 +44,7 @@ def threaded_client(conn, player):
 
             if not data:
                 print("Disconnected")
-                break
+               
             else:
                 if player == 1:
                     reply = pos[0]
@@ -55,7 +55,8 @@ def threaded_client(conn, player):
                 print("Sending : ", reply)
 
             conn.sendall(str.encode(make_pos(reply)))
-        except:
+        except Exception as e:
+            print(e.trace_call())
             break
 
     print("Lost connection")
@@ -66,5 +67,5 @@ while True:
     conn, addr = s.accept()
     print("Connected to:", addr)
 
-  #  start_new_thread(threaded_client, (conn, currentPlayer))
-   # currentPlayer += 1
+    start_new_thread(threaded_client, (conn, currentPlayer))
+    currentPlayer += 1

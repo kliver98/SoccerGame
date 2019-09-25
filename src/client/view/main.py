@@ -1,4 +1,5 @@
 #All imports
+import _thread
 from client.controller import constants as cs
 from client.controller import Field as m
 import pygame as pg
@@ -8,6 +9,8 @@ from client.controller.Ball import Ball
 from client.controller import MatchController as match_c
 from client.controller import menu_controller
 from client.controller import MainController as main_c
+from client.controller import client_connection_controller
+from _dummy_thread import start_new_thread
 
 class MainWindow():
     """Class principal of the GUI"""
@@ -21,24 +24,39 @@ class MainWindow():
         """Start the application drawing into screen"""
         self.field = m.Field(self.window)
         self.player = Player("TestUser",cs.WIDTH*cs.SCALE*0.3, (cs.HEIGHT*cs.SCALE/2)-(30), self.window,True)
+        self.oponent=Player("oponent",800,100,self.window,False)#oponent definition
         self.ball = Ball(self.player.x+self.player.rect.x/2+100,self.player.y+self.player.rect.y/2,self.window)
         self.menu= menu_controller.Menu_Controller(self.window)
-
+        self.network=None
+        self.mode=None
         '''show the menu and wait for select a game mode'''
         self.menu.init()
-        mode=self.menu.get_mode()
+        self.mode=self.menu.get_mode()
         '''verified the game mode'''
-        if mode==cs.MODE_ONLINE:
-            x=0 #implementar pedir los datos de conexion, clien_connection_controller,network and connection view
-        
+        if self.mode==cs.MODE_ONLINE:
+            self.network=client_connection_controller.ClientConnectionController(self.window)
+            self.network.start_network()
             
+        
+        clock=pg.time.Clock()   
+         
         run = True
         """Here the application is hearing the keywords pressed"""
         while run:
+            
+            ##clock.tick(30)
+            if self.network is not None :
+                position=self.player.get_pos()
+                self.network.sen_data(f"{position[0]},{position[1]}")
+                ##self.network.sen_data("1,1")
+                opo_pos=self.network.get_opponent_pos(position[0],position[1])#recibe oponent position
+                self.oponent.change_position(opo_pos[0], opo_pos[1])
+                print(opo_pos)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     run = False
                     pg.quit()
+            
             data = self.player.move()
             if self.main_controller.is_ball_inside_screen(self.ball):
                 continue
@@ -72,6 +90,7 @@ class MainWindow():
         second = ball #To do later functionality
         one.draw()
         second.draw()
+        self.oponent.draw()
         pg.display.update()
     
     def setup(self):
