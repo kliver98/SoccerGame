@@ -6,7 +6,7 @@ import random as r
 APP_NAME = "SOCCER GAME By CJKS"
 WIDTH = 1280
 HEIGHT = 720
-SCALE = 0.7
+SCALE = 0.5
 CLOCK_TICK_RATE = 30
 RESOURCES_LOCATION = "../../resources/"
 #FIELD_IMAGE = f"{RESOURCES_LOCATION}images/soccer_field{r.randrange(1,3)}.jpg"

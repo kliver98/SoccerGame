@@ -1,8 +1,4 @@
-'''
-Created on 22/09/2019
 
-@author: JORGE
-'''
 import socket
 ##from _thread import *
 import sys

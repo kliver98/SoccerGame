@@ -1,5 +1,5 @@
 
-from client.model import Match as m
+from client.model import match as m
 
 class MatchController():
     """Class that handle all events that connects with model"""

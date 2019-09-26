@@ -1,14 +1,14 @@
-#All imports
+
 import _thread
 from client.controller import constants as cs
-from client.controller import Field as m
+from client.controller import field as m
 import pygame as pg
 import os 
-from client.controller.Player import Player
-from client.controller.Ball import Ball
-from client.controller import MatchController as match_c
+from client.controller.player import Player
+from client.controller.ball import Ball
+from client.controller import match_controller as match_c
 from client.controller import menu_controller
-from client.controller import MainController as main_c
+from client.controller import main_controller as main_c
 from client.controller import client_connection_controller
 from _dummy_thread import start_new_thread
 
@@ -23,9 +23,9 @@ class MainWindow():
     def init(self):
         """Start the application drawing into screen"""
         self.field = m.Field(self.window)
-        self.player = Player("TestUser",cs.WIDTH*cs.SCALE*0.3, (cs.HEIGHT*cs.SCALE/2)-(30), self.window,True)
-        self.oponent=Player("oponent",800,100,self.window,False)#oponent definition
-        self.ball = Ball(self.player.x+self.player.rect.x/2+100,self.player.y+self.player.rect.y/2,self.window)
+        self.player = Player("Player1",cs.WIDTH*cs.SCALE*0.3, (cs.HEIGHT*cs.SCALE/2)-(30), self.window,True)
+        self.oponent=Player("Player2",800,100,self.window,False)#oponent definition
+        self.ball = Ball(cs.WIDTH*cs.SCALE*0.5,cs.HEIGHT*cs.SCALE*0.5,self.window)
         self.menu= menu_controller.Menu_Controller(self.window)
         self.network=None
         self.mode=None
@@ -35,19 +35,16 @@ class MainWindow():
         '''verified the game mode'''
         if self.mode==cs.MODE_ONLINE:
             self.network=client_connection_controller.ClientConnectionController(self.window)
-            self.network.start_network()
-            
-        
-        clock=pg.time.Clock()   
+            self.network.start_network() 
          
         run = True
         """Here the application is hearing the keywords pressed"""
         while run:
             
-            ##clock.tick(30)
+            self.clock.tick(cs.CLOCK_TICK_RATE)
             if self.network is not None :
                 position=self.player.get_pos()
-                self.network.sen_data(f"{position[0]},{position[1]}")
+                self.network.sen_data(f"{position[0]},{position[1]}")#,{position[2]}")
                 ##self.network.sen_data("1,1")
                 opo_pos=self.network.get_opponent_pos(position[0],position[1])#recibe oponent position
                 self.oponent.change_position(opo_pos[0], opo_pos[1])
@@ -57,7 +54,7 @@ class MainWindow():
                     run = False
                     pg.quit()
             
-            data = self.player.move()
+            data = self.player.move() #This do the movement of the player. ONLY PLAYER
             if self.main_controller.is_ball_inside_screen(self.ball):
                 continue
             if self.main_controller.is_player_inside_screen(self.player):
@@ -71,7 +68,7 @@ class MainWindow():
                 self.player.has_ball = False
             if pg.key.get_pressed()[pg.K_z]:
                 self.unlink_ball_of_player()
-            self.redrawWindow(self.player,self.ball)
+            self.redrawWindow()
     
     def unlink_ball_of_player(self):
         """Method that unlink ball of the player sending the ball a few pixels away like kicking"""
@@ -81,15 +78,13 @@ class MainWindow():
         self.player.has_ball = False
         for i in range(0,17):
             self.ball.unlink_ball((i if self.player.team else -i))
-            self.redrawWindow(self.player, self.ball)
+            self.redrawWindow()
         
-    def redrawWindow(self,player = None, ball = None):
+    def redrawWindow(self):
         """Update the window with their new graphics"""
         self.field.draw()
-        one = player #To do later functionality
-        second = ball #To do later functionality
-        one.draw()
-        second.draw()
+        self.player.draw()
+        self.ball.draw()
         self.oponent.draw()
         pg.display.update()
     
@@ -108,5 +103,5 @@ class MainWindow():
 try:
     MainWindow()
 except Exception as e:
-    print(e.trace_call())
+    print(e)
     pass

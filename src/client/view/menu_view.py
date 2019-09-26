@@ -5,7 +5,7 @@ from client.controller import constants
 
 class Menu_View():
     
-    menu_image=pygame.image.load(constants.MENU_OPTION_IMAGE)
+    menu_image = pygame.image.load(constants.MENU_OPTION_IMAGE)
     menu_image = pygame.transform.scale(menu_image, (int(constants.WIDTH*constants.SCALE), int(constants.HEIGHT*constants.SCALE)))
     selector_image=pygame.image.load(constants.MENU_SELECTOR_IMAGE)
     field_image = pygame.image.load(constants.FIELD_IMAGE)

@@ -15,7 +15,6 @@ class Player():
         self.img_number = 1
         self.image = pg.image.load(cs.PLAYER_IMAGE_BLACK[self.img_number-1] if self.team else cs.PLAYER_IMAGE_WHITE[self.img_number-1])
         self.setupPlayer()
-        self.vel = cs.PLAYER_SPEED
         self.window = window
         self.rect = self.image.get_rect()
         self.has_ball = False
@@ -38,23 +37,19 @@ class Player():
         keys = pg.key.get_pressed()
         data = None
         self.setupPlayer() #Allways moving foots
-        """if self.has_ball: #Just moving foots when hits the ball
-            self.setupPlayer()
-        else:
-            self.setupPlayer(1)"""
             
         if keys[pg.K_LEFT]:
-            self.x -= self.vel
-            data = (self.x,self.y)#(0,-self.vel)
+            self.x -= cs.PLAYER_SPEED
+            data = (self.x,self.y)
         if keys[pg.K_RIGHT]:
-            self.x += self.vel
-            data = (self.x,self.y)#(0,self.vel)
+            self.x += cs.PLAYER_SPEED
+            data = (self.x,self.y)
         if keys[pg.K_UP]:
-            self.y -= self.vel
-            data = (self.x,self.y)#(1,-self.vel)
+            self.y -= cs.PLAYER_SPEED
+            data = (self.x,self.y)
         if keys[pg.K_DOWN]:
-            self.y += self.vel
-            data = (self.x,self.y)#(1,self.vel)
+            self.y += cs.PLAYER_SPEED
+            data = (self.x,self.y)
             
         return data
     

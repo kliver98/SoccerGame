@@ -13,7 +13,6 @@ class Ball():
         self.cont = 1
         self.image = pg.image.load(cs.BALL_IMAGE+str(self.cont)+".png")
         self.cont+=1
-        self.vel = cs.PLAYER_SPEED
         self.window = window
         self.rect = self.image.get_rect()
         self.angle = 0
@@ -29,11 +28,7 @@ class Ball():
         self.image = pg.transform.rotate(self.image, self.angle)
         self.cont = 1 if self.cont>5 else self.cont+1
         self.x = data[0]+30 if team else data[0]-20
-        self.y = data[1]+20 if team else data[1]+20     
-        """if data[0]==0:
-            self.x+=data[1]
-        else:
-            self.y+=data[1]"""
+        self.y = data[1]+20 if team else data[1]+20
             
     def unlink_ball(self,i):
         self.x += i

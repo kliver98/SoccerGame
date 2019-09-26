@@ -1,8 +1,4 @@
-'''
-Created on 23/09/2019
 
-@author: JORGE
-'''
 import socket
 
 class Network():
