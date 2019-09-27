@@ -32,8 +32,9 @@ class Network():
         except socket.error as e:
             print(e)
             
-    def run_network(self):        
-        run=True
-        while run:
-            self.send("1,1")
+                   
+   # def run_network(self):        
+    #    run=True
+     #   while run:
+      #      self.send("1,1")'''
         
