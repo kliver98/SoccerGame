@@ -4,7 +4,8 @@ class Match():
     
     def __init__(self):
         """Builder empty"""
-        pass
+        self.score_player1 = 0
+        self.score_player2 = 0
     
     def is_collided_with(self, player, ball):
         """Method that check if a player -specified by parameter- hit with the ball -specified by parameter-"""

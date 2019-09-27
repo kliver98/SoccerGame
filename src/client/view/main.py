@@ -13,6 +13,10 @@ from client.controller import client_connection_controller
 from _dummy_thread import start_new_thread
 import tkinter as tk
 from tkinter import simpledialog
+import time
+import sys
+import ctypes
+import math
 
 class MainWindow():
     """Class principal of the GUI"""
@@ -25,12 +29,12 @@ class MainWindow():
     def init(self):
         """Start the application drawing into screen"""
         self.field = m.Field(self.window)
-        username_p1 = "A"#self.ask_username()
+        username_p1 = self.ask_username()
         username_op = ""#self.ask_username()
         #print(f"p1: {username_p1} - op: {username_op}")
         self.player = Player(username_p1 if username_p1 else "Player1",cs.WIDTH*cs.SCALE*0.3, (cs.HEIGHT*cs.SCALE/2)-(30), self.window,True)
         self.oponent=Player(username_op if username_op else "Oponent",800,100,self.window,False)#oponent definition
-        self.ball = Ball(cs.WIDTH*cs.SCALE*0.5,cs.HEIGHT*cs.SCALE*0.5,self.window)
+        self.ball = Ball(448,251,self.window)
         self.menu= menu_controller.Menu_Controller(self.window)
         self.network=None
         self.mode=None
@@ -43,9 +47,22 @@ class MainWindow():
             self.network.start_network() 
          
         run = True
+        start_ticks=pg.time.get_ticks()
+        second_time = False
         """Here the application is hearing the keywords pressed"""
         while run:
-            
+            self.sc=(pg.time.get_ticks()-start_ticks)/1000
+            timer_painted = False
+            if self.sc>cs.PLAY_TIME and self.sc<(cs.PLAY_TIME+cs.REST_TIME):
+                self.redrawWindow(1)
+                second_time = True
+                timer_painted = True
+            else:
+                timer_painted = False
+            if second_time and self.sc>((cs.PLAY_TIME*2)+cs.REST_TIME):
+                self.show_message("El juego se cerrara","Se acabaron los dos tiempos, el juego se cerrara")
+                self.close_ap()
+            self.match = match_c.MatchController()
             #self.clock.tick(cs.CLOCK_TICK_RATE)
             if self.network is not None :
                 player_pos=self.player.get_pos()
@@ -80,7 +97,14 @@ class MainWindow():
                 self.player.has_ball = False
             if pg.key.get_pressed()[pg.K_z]:
                 self.unlink_ball_of_player()
-            self.redrawWindow()
+            if not timer_painted:
+                self.redrawWindow()
+    
+    def show_message(self, title, body):
+        ctypes.windll.user32.MessageBoxW(0, body, title, 1)
+    
+    def close_ap(self):
+        sys.exit()
     
     def unlink_ball_of_player(self):
         """Method that unlink ball of the player sending the ball a few pixels away like kicking"""
@@ -105,9 +129,22 @@ class MainWindow():
         root.destroy()
         return text
     
-    def redrawWindow(self):
+    def drawText(self, text, size,coord):
+        pg.font.init()
+        mf = pg.font.SysFont('Century',size)
+        ts = mf.render(text,False,(0,0,0))
+        self.window.blit(ts,coord)
+    
+    def redrawWindow(self, type = 0):
         """Update the window with their new graphics"""
         self.field.draw()
+        if type ==0:
+            self.drawText(f"Tiempo: {math.floor(self.sc)} s", 25, ((cs.WIDTH*cs.SCALE)-150,10))
+        else:
+            self.drawText(f"Tiempo descanso: {math.floor(self.sc)} s", 25, ((cs.WIDTH*cs.SCALE)-300,10))
+        #Drawing name of player
+        self.drawText(f"Jugador: {self.player.username}", 25, (10,10))
+        #End name of player
         self.player.draw()
         self.ball.draw()
         self.oponent.draw()
@@ -117,7 +154,6 @@ class MainWindow():
         """Get ready the main window and others needed"""
         os.environ['SDL_VIDEO_CENTERED'] = '1' #To center the window in the middle
         self.window = pg.display.set_mode((int(cs.WIDTH*cs.SCALE),int(cs.HEIGHT*cs.SCALE)))
-        self.match = match_c.MatchController()
         self.main_controller = main_c.MainController();
         pg.display.set_caption(cs.APP_NAME)
         self.clock = pg.time.Clock()
@@ -128,5 +164,5 @@ class MainWindow():
 try:
     MainWindow()
 except Exception as e:
-    print(e)
+    #print(e)
     pass
