@@ -11,6 +11,8 @@ from client.controller import menu_controller
 from client.controller import main_controller as main_c
 from client.controller import client_connection_controller
 from _dummy_thread import start_new_thread
+import tkinter as tk
+from tkinter import simpledialog
 
 class MainWindow():
     """Class principal of the GUI"""
@@ -23,8 +25,11 @@ class MainWindow():
     def init(self):
         """Start the application drawing into screen"""
         self.field = m.Field(self.window)
-        self.player = Player("Player1",cs.WIDTH*cs.SCALE*0.3, (cs.HEIGHT*cs.SCALE/2)-(30), self.window,True)
-        self.oponent=Player("Player2",800,100,self.window,False)#oponent definition
+        username_p1 = "A"#self.ask_username()
+        username_op = ""#self.ask_username()
+        #print(f"p1: {username_p1} - op: {username_op}")
+        self.player = Player(username_p1 if username_p1 else "Player1",cs.WIDTH*cs.SCALE*0.3, (cs.HEIGHT*cs.SCALE/2)-(30), self.window,True)
+        self.oponent=Player(username_op if username_op else "Oponent",800,100,self.window,False)#oponent definition
         self.ball = Ball(cs.WIDTH*cs.SCALE*0.5,cs.HEIGHT*cs.SCALE*0.5,self.window)
         self.menu= menu_controller.Menu_Controller(self.window)
         self.network=None
@@ -86,7 +91,20 @@ class MainWindow():
         for i in range(0,17):
             self.ball.unlink_ball((i if self.player.team else -i))
             self.redrawWindow()
-        
+            
+    
+    def ask_username(self):
+        root = tk.Tk()
+        root.withdraw()
+        x = ((root.winfo_screenwidth() - root.winfo_reqwidth()) / 2)-50
+        y = ((root.winfo_screenheight() - root.winfo_reqheight()) / 2)-50
+        root.geometry("+%d+%d" % (x, y))
+        root.update()
+        text = simpledialog.askstring(title="Informacion",
+                                  prompt="Ingrese nombre de usuario: ")
+        root.destroy()
+        return text
+    
     def redrawWindow(self):
         """Update the window with their new graphics"""
         self.field.draw()

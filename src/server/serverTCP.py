@@ -75,7 +75,7 @@ while True:
     conn, addr = s.accept()
     print("Connected to:", addr)
     r= verified_aviabled()
-    if r is None:
+    if not r:
         r=room.Room(currentRoom)
         roomList.append(r)
         currentRoom+=1
