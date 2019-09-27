@@ -32,4 +32,10 @@ class Ball():
             
     def unlink_ball(self,i):
         self.x += i
-        
+     
+    def get_position(self):
+        return (int(self.x),int(self.y))
+      
+    def change_position(self,posx,posy):
+        self.x=posx
+        self.y=posy

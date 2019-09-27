@@ -12,7 +12,8 @@ class ClientConnectionController:
         
     def start_network(self):  
         ip= self.view.get_ip()
-        self.model=network.Network(ip) 
+        self.model=network.Network(ip)
+        print("se ha iniciado el cliente") 
         #self.model.run_network()
       
     def sen_data(self,data):  
@@ -22,3 +23,7 @@ class ClientConnectionController:
         
         pos=self.model.send(f"{mainx},{mainy}").split(",") 
         return int(pos[0]),int(pos[1])   
+    
+    def get_info(self,mainx,mainy,ballx,bally):
+        data=self.model.send(f"{mainx},{mainy},{ballx},{bally}").split(",")
+        return int(data[0]),int(data[1]),int(data[2]),int (data[3]) 

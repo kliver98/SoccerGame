@@ -55,7 +55,7 @@ class Player():
     
     def get_pos(self):
         return (int(self.x),int(self.y))
-    
+        
     def change_position(self,x,y):
         self.x=x
         self.y=y

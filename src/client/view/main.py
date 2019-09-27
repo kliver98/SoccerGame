@@ -46,14 +46,21 @@ class MainWindow():
         """Here the application is hearing the keywords pressed"""
         while run:
             
-            self.clock.tick(cs.CLOCK_TICK_RATE)
+            #self.clock.tick(cs.CLOCK_TICK_RATE)
             if self.network is not None :
-                position=self.player.get_pos()
-                self.network.sen_data(f"{position[0]},{position[1]}")#,{position[2]}")
+                player_pos=self.player.get_pos()
+                ball_pos=self.ball.get_position()
+                #self.network.sen_data(f"{position[0]},{position[1]}")#,{position[2]}")
                 ##self.network.sen_data("1,1")
-                opo_pos=self.network.get_opponent_pos(position[0],position[1])#recibe oponent position
-                self.oponent.change_position(opo_pos[0], opo_pos[1])
-                print(opo_pos)
+                #opo_pos=self.network.get_opponent_pos(position[0],position[1])#recibe oponent position
+               
+                
+                info=self.network.get_info(player_pos[0], player_pos[1], ball_pos[0], ball_pos[1])
+                
+                print(info)
+                self.oponent.change_position(info[0], info[1])
+                self.ball.change_position(info[2], info[3])
+                print(info)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     run = False
