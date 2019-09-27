@@ -31,7 +31,7 @@ class Network():
             return self.client.recv(2048).decode()
         except socket.error as e:
             print(e)
-            
+         
     def run_network(self):        
         run=True
         while run:
