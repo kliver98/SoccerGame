@@ -1,5 +1,1 @@
-from client.view import main
-
-if __name__=='__main__':
-    """Initialize the application"""
-    main
+__author__ = 'Kliver Giron - Jorge Lievano - Cristian Cobo - Sergio Lozada'
