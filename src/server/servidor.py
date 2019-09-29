@@ -25,6 +25,9 @@ print("server was started, waiting for connections")
 
 
 while True:
-    conn, addr = s.accept()
+    '''tupla (socket asignado, mensaje de direccion) al aceptar un cliente'''
+    net, addr = s.accept() 
     print("Connected to:", addr)#notificacion de cliente conectado, reportando su ip
-    '''  logica para crear salas, asignar jugadores a una sala'''
+    
+    
+    '''TODO:  logica para crear salas, asignar jugadores a una sala'''
