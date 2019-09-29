@@ -1,7 +1,26 @@
 #Class: MainWindow
 
-"""
-This class represents the main class of a client's view. This class has different panels or containers
-"""
+"""Esta es la clase principal de la vista del cliente. Contiene otros paneles o contenedores"""
 
-#Begin
+"""Inicio de la clase"""
+
+
+
+"""Constantes de la clase"""
+
+
+
+"""Atributos de la clase"""
+
+
+
+
+"""Metodo constructor de la clase"""
+
+
+
+"""Metodos relacionados con la clase"""
+
+
+
+
