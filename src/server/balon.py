@@ -2,11 +2,13 @@
 
 class Balon:
     
+    __coordenada=None
+    __username=None
+    __posesionA=None
+    __posesionB=None
+    
     def __init__(self):
-        self.coordenada=None
-        self.username=None
-        self.posesionA=None
-        self.posesionB=None
+        pass
         
     def get_coordenada(self):
-        return self.coordenada
+        return self.__coordenada
