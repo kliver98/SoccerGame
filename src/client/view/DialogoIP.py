@@ -5,7 +5,7 @@
 import tkinter
 
 
-
+"""Esta es la clase que representa la Ventana de dialogo cuando se requiera ingresar la direccion IP"""
 
 class DialogoIP():
     """Constantes de la clase"""
@@ -13,7 +13,7 @@ class DialogoIP():
     TITULO_DIALOGO = "Direccion IP"
     COLOR_FONDO_DIALOGO = "white"
     GEOMETRIA_DIALOGO = '400x200'
-    IMAGEN = f"ip.png"
+    IMAGEN = f"../../../resources/images/ip.png"
     
     """Relaciones de la clase"""
     
@@ -36,9 +36,9 @@ class DialogoIP():
         """Configuracion de la ventana"""
         self._panel = tkinter.Tk()
         self._panel.title(self.TITULO_DIALOGO)
-        self._panel.configure(background = self.COLOR_FONDO_DIALOGO)
+
         self._panel.geometry(self.GEOMETRIA_DIALOGO)
-        self._txtLabel1 = tkinter.Label(self._panel, text="Ingresa la direccion IP" , font=("Agency FB",12), bg = 'white', pady = 0).place(x=230, y=70)
+        self._txtLabel1 = tkinter.Label(self._panel, text="Ingresa la direccion IP" , font=("Agency FB",12), pady = 0).place(x=230, y=70)
         self._image = tkinter.PhotoImage(file = self.IMAGEN)
         
         self._txtBoxIP = tkinter.Entry(self._panel).place(x= 210 , y =100)

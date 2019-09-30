@@ -25,10 +25,10 @@ class VentanaPrincipal():
     
     #Ventanas de prueba
     """Objetos tipo ventana de pruebas >>> continuar en la tarde 30/09/2019"""
-    #panelmenu = PanelMenu()
-   # panelespera= PanelEspera()
-   # panelestadisticas = PanelEstadisticas()
-   # panelayuda= PanelAyuda()
+    panelmenu = PanelMenu()
+    panelespera= PanelEspera()
+    panelestadisticas = PanelEstadisticas()
+    panelayuda= PanelAyuda()
     dialogo = DialogoIP()
     
     

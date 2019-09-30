@@ -15,11 +15,11 @@ class PanelAyuda():
     COLOR_FONDO_PANEL = 'white'
     GEOMETRIA_PANEL = '400x600'
     TITULO_PANEL = "Ayuda"    
-    IMAGEN_FLECHA_IZQUIERDA =  f"flechaIzquierda.png"
-    IMAGEN_FLECHA_DERECHA = f"flechaDerecha.png"
-    IMAGEN_FLECHA_ABAJO = f"flechaAbajo.png"
-    IMAGEN_FLECHA_ARRIBA = f"flechaArriba.png"
-    IMAGEN_PATEAR =  f"teclaPatear.png"
+    IMAGEN_FLECHA_IZQUIERDA =  f"../../../resources/images/flechaIzquierda.png"
+    IMAGEN_FLECHA_DERECHA = f"../../../resources/images/flechaDerecha.png"
+    IMAGEN_FLECHA_ABAJO = f"../../../resources/images/flechaAbajo.png"
+    IMAGEN_FLECHA_ARRIBA = f"../../../resources/images/flechaArriba.png"
+    IMAGEN_PATEAR =  f"../../../resources/images/teclaPatear.png"
                 
     
     

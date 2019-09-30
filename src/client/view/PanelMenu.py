@@ -47,14 +47,13 @@ class   PanelMenu():
         geometria = self.GEOMETRIA_PANEL
         panel = tkinter.Tk()
         panel.title(self.TITULO_PANEL)
-        panel.configure(background = self.COLOR_FONDO_PANEL)
         panel.geometry(self.GEOMETRIA_PANEL)
     
         self._image1 = tkinter.PhotoImage(file = self.IMAGEN_BALON )
-        self._txtLabel1 = tkinter.Label(panel, text="The Best SoccerGame", font=("Agency FB",14), bg = 'white', pady = 0).place(x=130, y=160)
-        self._txtLabel2= tkinter.Label(panel, text="Que quieres hacer?", font=("Agency FB",14), bg = 'white', pady =0).place(x=140, y=200)
+        self._txtLabel1 = tkinter.Label(panel, text="Soccer Game", font=("Agency FB",14),pady = 0).place(x=160, y=160)
+        self._txtLabel2= tkinter.Label(panel, text="Que quieres hacer?", font=("Agency FB",14), pady =0).place(x=140, y=200)
         
-        self._imgLabel1 = tkinter.Label(panel,image = self._image1 ).place(x=160, y=30)
+        self._imgLabel1 = tkinter.Label(panel,image = self._image1 ).place(x=170, y=60)
         self._btnPartido1 = tkinter.Button(panel,text="Partido n x n", font= ("Agency FB",10), width = 20).place(x= 150, y = 240)
         self._btnPartido2 = tkinter.Button(panel,text="Partido n x CPU", font= ("Agency FB",10), width = 20).place(x= 150, y = 275)
         self._btnAyuda = tkinter.Button(panel,text="Ayuda", font= ("Agency FB",10), width = 20).place(x= 150, y = 310)
