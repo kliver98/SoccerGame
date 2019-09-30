@@ -29,18 +29,17 @@ class Jugador():
         self.__usuario = usuario
         self.__equipo = equipo
         self.__coordenadas = (250,250) #Ver como se cuadra lo de las coordenadas que aparece el jugador
-        self.__numero_de_imagen = 1 
+        self.__numero_de_imagen = 1
         self.__angulo_de_imagen = 270 if self.team else 90
     
     def configurar_imagen(self):
         """Metodo que crea la ruta de imagen del jugador dependiendo de que imagen cargar, de las tres disponibles, y retorna la ruta generada"""
         imagen = self.IMAGEN_JUGADOR_A+self.numero_de_imagen+self.EXTENCION_DE_IMAGEN if self.equipo else self.IMAGEN_JUGADOR_B+self.numero_de_imagen+self.EXTENCION_DE_IMAGEN 
         self.numero_de_imagen = 1 if self.numero_de_imagen>3 else self.numero_de_imagen+1
-        return imagen
+        return (imagen,self.__angulo_de_imagen)
     
     def mover(self, izquierda, derecha, arriba, abajo):
-        """Metodo que mueve las coordenadas de la imagen del jugador, cambia el numero de imagen y retorna ruta generada con angulo de imagen"""
-        imagen = self.configurar_imagen() #Siempre mueve los pies
+        """Metodo que mueve las coordenadas de la imagen del jugador, cambia el numero de imagen y retorna tupla de ruta generada con angulo de imagen"""
         
         if izquierda:
             self.set_coordenadas(self.__coordenadas[0]-self.VELOCIDAD, 0)
@@ -50,11 +49,19 @@ class Jugador():
             self.set_coordenadas(0, self.__coordenadas[1]-self.VELOCIDAD)
         if abajo:
             self.set_coordenadas(0, self.__coordenadas[1]+self.VELOCIDAD)
-            
-        return (imagen,self.__angulo_de_imagen)
+    
+    def get_datos(self):
+        """Metodo que retorna una tupla con la información del nombre de usuario, equipo, coordenada en x y coordenada en y"""
+        return (self.__usuario,self.__equipo,self.__coordenadas[0],self.__coordenadas[1])
+    
+    def get_usuario(self):
+        """Metodo que devuelve el nombre de usuario"""
+        return self.__usuario
     
     def set_coordenadas(self,x,y):
+        """Metodo que actualiza la tupla con las coordenadas en x y y del jugador"""
         self.__coordenadas = (x,y)
         
     def get_coordenadas(self):
+        """Metodo que retorna una tupla con las coordenadas del jugador"""
         return self.__coordenadas

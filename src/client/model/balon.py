@@ -37,3 +37,7 @@ class Balon():
         self.__coordenadas = (x,y)
         imagen = self.configurar_imagen()
         return (imagen,self.__angulo)
+    
+    def get_coordenadas(self):
+        """Metodo que retorna tupla de las coordenadas x,y del balon"""
+        return self.__coordenadas
