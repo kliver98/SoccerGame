@@ -5,6 +5,7 @@ from client.view.PanelMenu import PanelMenu
 from client.view.PanelEspera import PanelEspera
 from client.view.PanelEstadisticas import PanelEstadisticas
 from client.view.PanelAyuda import PanelAyuda
+from client.view.DialogoIP import DialogoIP
 
 """Inicio de la clase"""
 
@@ -24,10 +25,11 @@ class VentanaPrincipal():
     
     #Ventanas de prueba
     """Objetos tipo ventana de pruebas >>> continuar en la tarde 30/09/2019"""
-    panelmenu = PanelMenu()
-    panelespera= PanelEspera()
+    #panelmenu = PanelMenu()
+   # panelespera= PanelEspera()
    # panelestadisticas = PanelEstadisticas()
-    panelayuda= PanelAyuda()
+   # panelayuda= PanelAyuda()
+    dialogo = DialogoIP()
     
     
     """Metodo constructor de la clase"""
