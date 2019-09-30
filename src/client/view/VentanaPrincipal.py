@@ -8,14 +8,14 @@ from client.view.PanelAyuda import PanelAyuda
 
 """Inicio de la clase"""
 
-import tkinter
+import tkinter 
 
 
 class VentanaPrincipal():
 
 
     """Constantes de la clase"""
-    
+
     """Relaciones de la clase"""
     
     
@@ -23,10 +23,10 @@ class VentanaPrincipal():
     
     
     #Ventanas de prueba
-    """Objetos tipo ventana de pruebas >>> continuar en la tarde 29/09/2019"""
+    """Objetos tipo ventana de pruebas >>> continuar en la tarde 30/09/2019"""
     panelmenu = PanelMenu()
     panelespera= PanelEspera()
-    panelestadisticas = PanelEstadisticas()
+   # panelestadisticas = PanelEstadisticas()
     panelayuda= PanelAyuda()
     
     
