@@ -31,11 +31,13 @@ class Balon():
         self.__numero_de_imagen+=1
         return imagen
     
-    def mover(self, x, y):
-        """Metodo que mueve las coordenadas de la imagen del balon, cambia el numero de imagen y retorna ruta generada con angulo de imagen"""
+    def actualizar_datos(self, x, y, usuario):
+        """Metodo que mueve las coordenadas de la imagen del balon, cambia el numero de imagen, modifica el nombre del jugador que tiene el
+            balon y retorna ruta generada con angulo de imagen"""
         self.__angulo = 0 if self.__angulo<361 else self.__angulo+5
         self.__coordenadas = (x,y)
         imagen = self.configurar_imagen()
+        self.__usuario = usuario
         return (imagen,self.__angulo)
     
     def get_coordenadas(self):

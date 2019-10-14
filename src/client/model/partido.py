@@ -26,6 +26,15 @@ class Partido():
         """Metodo para agregar un jugador a la lista de jugadores"""
         self.__jugadores.append(Jugador(usuario,equipo))
     
+    def esta_jugador_dentro_campo(self, coordenadas_campo, coordenadas_jugador):
+        """Metodo que verifica si un jugador esta dentro de las coordenadas del campo.
+        Recibe coordenadas_campo y coordenadas_jugador que son un arreglo conteniendo informacion respectiva de las coordenas [x,y]"""
+        return self.__campo.esta_jugador_dentro_campo(coordenadas_campo, coordenadas_jugador)
+    
+    def mover_jugador(self, izquierda, derecha, arriba, abajo):
+        jugador = self.get_jugador(self.__usuario_de_jugador)
+        jugador.mover(izquierda, derecha, arriba, abajo)
+    
     def get_datos_jugadores(self):
         """Metodo que retorna arreglo de seis datos de la informacion de los usuarios, separados por aplicacion.SEPARADOR
         nombre de usuario, equipo, coordenada en x, coordenada en y, ruta de la imagen, entero para rotar la imagen"""
@@ -54,10 +63,10 @@ class Partido():
             jugador = self.get_jugador(aux[0])
             jugador.set_coordenadas(aux[2],aux[3])
             
-    def set_posicion_balon(self, x, y):
+    def set_datos_balon(self, x, y,usuario):
         """Metodo que mueve las coordenadas de la imagen del balon, retorna string de ruta generada de la imagen del balon y 
         angulo de imagen para rotar. Separa estos dos datos por aplicacion.SEPARADOR"""
-        mover = self.__balon.mover(x, y)
+        mover = self.__balon.actualizar_datos(x, y, usuario)
         return f"{mover[0]}{aplicacion.SEPARADOR}{mover[1]}"
             
     def get_posicion_balon(self):
