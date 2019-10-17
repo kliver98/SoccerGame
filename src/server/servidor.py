@@ -7,6 +7,7 @@ CONEXIONES_ESPERA=10
 jugadores={}
 salas={}
 
+
 '''se piden los parametros para iniciar el servidor'''
 server = input("Please insert the ip server, it will be locallhost for defect")
 port = 5555
