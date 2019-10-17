@@ -51,7 +51,7 @@ class Jugador():
             self.set_coordenadas(0, self.__coordenadas[1]+self.VELOCIDAD)
     
     def get_datos(self):
-        """Metodo que retorna una tupla con la información del nombre de usuario, equipo, coordenada en x y coordenada en y"""
+        """Metodo que retorna una tupla con la informacion del nombre de usuario, equipo, coordenada en x y coordenada en y"""
         return (self.__usuario,self.__equipo,self.__coordenadas[0],self.__coordenadas[1])
     
     def get_usuario(self):
