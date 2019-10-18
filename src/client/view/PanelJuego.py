@@ -1,5 +1,6 @@
 #Class: MainWindow
 import pygame
+import threading
 # Inicializamos pygame
 pygame.init()
 """Esta es la clase que representa la ventana de juego(Login) de un cliente"""
@@ -36,10 +37,13 @@ class    PanelJuego():
     __macadorEquipoUno = None # goles anotados por el equipo uno
     __macadorEquipoDos = None # goles anotados por el equipo dos 
     __parteDeJuego = None # parte en la que se encuentra el partido
+    __controlador = None # controlador que conecta con el modelo
     
     """Metodo constructor de la clase"""
     def __init__(self):
-        
+        pass
+    def ventana(self,controlador):
+        self.controlador = controlador
         self.parteDeJuego = self.PRIMER_TIMEPO
         self.timepoPartido = '000'
         self.macadorEquipoUno = '00'
@@ -83,16 +87,47 @@ class    PanelJuego():
         self.pantalla.blit(imagenCampoDeJuego,(0,50)) # muestra la imagen del campo de juego en la posicion 0,50 del panel
         self.pantalla.blit(imgagenReloj,(410,21)) #  muestra la imagen del reloj cronometro en la posicion 410,21 del panel
         
+                
         pygame.display.update() #actualiza toda la ventana
         
         salir=False
         while not salir:
-        # Capturamos los eventos que se han producido
+        
             for event in pygame.event.get():
-            # Si el evento es salir de la ventana, terminamos
+                # Si el evento es salir de la ventana, terminamos
                 if event.type == pygame.QUIT: salir = True
-       
-
-    """Metodos relacionados con la clase""" 
-pantalla = PanelJuego()
-
+                """Si el evento es que presiono alguna tecla"""
+                if event.type == pygame.KEYDOWN:
+                    """verificamos cual fue la que presiono"""
+                    if event.key == pygame.K_RIGHT :  
+                        controlador.mover_jugador(False,True,False,False)
+                    if event.key == pygame.K_LEFT : 
+                        controlador.mover_jugador(True,False,False,False)
+                    if event.key == pygame.K_UP : 
+                        controlador.mover_jugador(False,False,True,False)
+                    if event.key == pygame.K_DOWN : 
+                        controlador.mover_jugador(False,False,False,True)
+                        
+            #Traemos el arreglo que contiene  los datos de los jugadores 
+            jugadores = controlador.get_datos_jugadores()
+            # Se recorre el arreglo 
+            for i in jugadores:
+                datosJugador = jugadores[i].split('-')
+                imagenJugador = pygame.image.load(datosJugador[4]) #se toman la ruta de la imagen
+                imagenJugador = pygame.transform.rotate(imagenJugador, int(datosJugador[0])) # se rota la imagen dado el numero del angulo de la rotacion
+                self.pantalla.blit(imagenJugador,(int(datosJugador[2]),int(datosJugador[3]))) # se pone la imagen en la pantalla en las coordenadas x-y
+             
+            posicionBalon = controlador.get_posicion_balon().split('-') # se obtiene la posicion del balon
+            rutaImagenBalon = controlador.get_imagen_balon().split('-')[0] # se obtiene la ruta de la imagen del balon
+            anguloImagenBalon = controlador.get_imagen_balon().split('-')[1] # se obtiene el angulo de la rotacion de la imagen
+            imagenBalon = pygame.image.load(rutaImagenBalon)# se caraga la imagen del balon
+            imagenBalon = pygame.transform.rotate(imagenBalon, int(anguloImagenBalon)) # se rota la imagen del balon dado el numero del angulo de la rotacion
+            self.pantalla.blit(imagenBalon,(int(posicionBalon[0]),int(posicionBalon[1])))   # se pone la imagen del balon en la pantalla en las coordenadas x-y 
+    
+            
+            pygame.display.update()
+        
+        
+    
+panel = PanelJuego()
+panel.ventana()

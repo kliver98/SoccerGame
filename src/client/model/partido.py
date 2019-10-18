@@ -1,5 +1,6 @@
 from client.model import balon, campo, aplicacion
 from client.model.jugador import Jugador
+from client.controller.ControladorPartido import Controlador
 
 
 class Partido():
@@ -13,6 +14,8 @@ class Partido():
     __jugadores = None
     """Atributo string que tiene el nombre del jugador del cliente, el unico jugador que puede controlar"""
     __usuario_de_jugador = None
+    """Atributo que referencia al controlador del partido"""
+    __controladorPartido = None
     
     def __init__(self, usuario_de_jugador, numero_campo):
         """Constructor que inicializa el balon, el campo y la lista de jugadores. Recibe el nombre de usuario que controla el cliente, 
@@ -21,6 +24,8 @@ class Partido():
         self.__balon = balon.Balon()
         self.__campo = campo.Campo(numero_campo)
         self.__jugadores = []
+        self.__controladorPartido = Controlador(self)
+        self.__controladorPartido.iniciarCampoDeJuego()
         
     def agregar_jugador(self, usuario, equipo):
         """Metodo para agregar un jugador a la lista de jugadores"""
@@ -74,7 +79,10 @@ class Partido():
         coord = self.__balon.get_coordenadas()
         return f"{coord[0]}{aplicacion.SEPARADOR}{coord[1]}"
     
+    def get_imagen_actual_balon(self):
+        """Metodo que retorna un string con la ruta de la imagen actual del balon y el angulo de la misma  retorn------> "ruta-angulo" """
+    
     def get_ruta_imagen_campo(self):
         """Metodo que retorna un string con la ruta de imagen del campo"""
         return self.__campo.get_ruta_imagen()
-            
+
