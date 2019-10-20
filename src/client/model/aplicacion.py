@@ -18,15 +18,18 @@ class Aplicacion():
         """Constructor vacio que solo inicializa el objeto aplicacion"""
         pass
     
-    def iniciar_partido(self, usuario_de_jugador, numero_campo, modo_partido,ip):
+    def iniciar_partido(self, usuario_de_jugador, numero_campo,ip):
         """Metodo que crea/instancia un nuevo partido. Recibe el nombre de usuario del cliente (el unico que se puede controlar), 
         numero de la imagen del campo a cargar"""
-        self.__partido = partido.Partido(usuario_de_jugador , numero_campo, modo_partido,ip)
+        self.__partido = partido.Partido(usuario_de_jugador , numero_campo,ip)
         
     def agregar_jugador(self, usuario, equipo):
         """Metodo que agrega un jugador al partido actual que se este jugando"""
         self.__partido.agregar_jugador(usuario, equipo)
-        
+    
+    def iniciar_bots(self):
+        return self.__partido.iniciar_bots(MAX_JUGADORES_SALA_EQUIPO)
+    
     def esta_jugador_dentro_campo(self, coordenadas_campo, coordenadas_jugador):
         """Metodo que verifica si un jugador esta dentro de las coordenadas del campo.
         Recibe coordenadas_campo y coordenadas_jugador que son un arreglo conteniendo informacion respectiva de las coordenas [x,y]
@@ -73,3 +76,18 @@ class Aplicacion():
 
     def get_max_jugadores_equipo(self):
         return MAX_JUGADORES_SALA_EQUIPO
+    
+    def esta_formatoIP_bien(self,ip):
+        if ip=="localhost":
+            return True
+        arr = ip.split(".")
+        if len(arr)!=4 or ip=="0.0.0.0":
+            return False
+        for i in arr:
+            try:
+                n = int(i)
+                if n>255:
+                    return False
+            except:
+                return False
+        return True

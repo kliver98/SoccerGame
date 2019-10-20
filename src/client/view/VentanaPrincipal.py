@@ -71,12 +71,24 @@ class VentanaPrincipal():
             modo = self.modo_juego()
             #Preparar partido
             if modo==MODO_JUEGO_LOCAL: #Preparar bots
-                self.controlador.iniciar_partido(self.usuario_de_jugador,2,modo)            
+                self.controlador.iniciar_partido(self.usuario_de_jugador,2)
+                bots_creados = self.controlador.iniciar_bots() #Crea los jugadores bots al igual que el jugador del equipo del cliente
+                print(f"Se crearon los bots? R:{bots_creados}")
                 break
             else: #Quiere jugar online
                 ip = self.ventana_preguntar("Ingrese la direccion IP del servidor a conectarse: ")
-                self.controlador.iniciar_partido(self.usuario_de_jugador,2,modo,ip)
-            
+                print(f"IP bien? {self.controlador.esta_formatoIP_bien(ip)}")
+                if not ip or not self.controlador.esta_formatoIP_bien(ip):
+                    ip = None
+                    continue
+                self.pintar_fondo(menu = True)
+                self.dibujar_texto("Esperando jugadores...", int(ANCHO*0.06), (int(ANCHO*0.1855),int(ALTO*0.45)))
+                pg.display.update()
+                for i in range(0,250000): #Para probar pantalla espera
+                    print(f"Hola{i}")
+                #self.controlador.iniciar_partido(self.usuario_de_jugador,2,ip)
+                
+        self.iniciar() #Para que se cierre la aplicacion solo cuando el usuario de clic en x de la ventana
         
     def modo_juego(self):
         self.clock.tick(30)

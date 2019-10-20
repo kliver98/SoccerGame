@@ -15,25 +15,32 @@ class Partido():
     __jugadores = None
     """Atributo string que tiene el nombre del jugador del cliente, el unico jugador que puede controlar"""
     __usuario_de_jugador = None
-    """Atributo que representa el modo de juego"""
-    __modo = None
     """Atributo para representar un objeto de la clase Conexion si se esta jugando online"""
     __conexion = None
     
-    def __init__(self, usuario_de_jugador, numero_campo, modo_juego,ip):
+    def __init__(self, usuario_de_jugador, numero_campo,ip):
         """Constructor que inicializa el balon, el campo y la lista de jugadores. Recibe el nombre de usuario que controla el cliente, 
         numero (entero positivo) de la imagen del campo a cargar"""
         self.__usuario_de_jugador = usuario_de_jugador
         self.__balon = balon.Balon()
         self.__campo = campo.Campo(numero_campo)
         self.__jugadores = []
-        self.__modo = modo_juego
         if ip:
             self.__conexion = Conexion(ip)
         
     def agregar_jugador(self, usuario, equipo):
         """Metodo para agregar un jugador a la lista de jugadores"""
         self.__jugadores.append(Jugador(usuario,equipo))
+    
+    def iniciar_bots(self, num_jugadores_equipo):
+        self.__jugadores.append(Jugador(f"{self.__usuario_de_jugador}",True)) #Jugador del usuario del cliente
+        for i in range(1,num_jugadores_equipo*2):
+            if i<num_jugadores_equipo:
+                equipo = True
+            else:
+                equipo = False
+            self.agregar_jugador(f"bot#{i}",equipo)
+        return len(self.__jugadores)==(num_jugadores_equipo*2)
     
     def esta_jugador_dentro_campo(self, coordenadas_campo, coordenadas_jugador):
         """Metodo que verifica si un jugador esta dentro de las coordenadas del campo.

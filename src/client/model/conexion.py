@@ -36,3 +36,4 @@ class Conexion():
         except socket.error as e:
             print("Error de conexion al enviar informacion")
             print(e)
+        
