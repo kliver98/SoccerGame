@@ -1,6 +1,6 @@
 import socket
 
-class Coneccion():
+class Conexion():
     
     BUFFER_SIZE=2048
     

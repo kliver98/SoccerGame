@@ -10,10 +10,10 @@ class Controlador():
     def get_nombre_aplicacion(self):
         return self.aplicacion.get_nombre_aplicacion()
     
-    def iniciar_partido(self, usuario_de_jugador, numero_campo):
+    def iniciar_partido(self, usuario_de_jugador, numero_campo, modo_juego, ip = None):
         """Metodo que crea/instancia un nuevo partido. Recibe el nombre de usuario del cliente (el unico que se puede controlar), 
         numero de la imagen del campo a cargar"""
-        self.aplicacion.iniciar_partido(usuario_de_jugador, numero_campo)
+        self.aplicacion.iniciar_partido(usuario_de_jugador, numero_campo, modo_juego,ip)
         
     def agregar_jugador(self, usuario, equipo):
         """Metodo que agrega un jugador al partido actual que se este jugando"""

@@ -1,6 +1,8 @@
 from client.model import balon, campo, aplicacion
 from client.model.jugador import Jugador
-
+from client.model.conexion import Conexion
+MODO_JUEGO_ONLINE = 1
+MODO_JUEGO_LOCAL = 2
 
 class Partido():
     
@@ -13,14 +15,21 @@ class Partido():
     __jugadores = None
     """Atributo string que tiene el nombre del jugador del cliente, el unico jugador que puede controlar"""
     __usuario_de_jugador = None
+    """Atributo que representa el modo de juego"""
+    __modo = None
+    """Atributo para representar un objeto de la clase Conexion si se esta jugando online"""
+    __conexion = None
     
-    def __init__(self, usuario_de_jugador, numero_campo):
+    def __init__(self, usuario_de_jugador, numero_campo, modo_juego,ip):
         """Constructor que inicializa el balon, el campo y la lista de jugadores. Recibe el nombre de usuario que controla el cliente, 
         numero (entero positivo) de la imagen del campo a cargar"""
         self.__usuario_de_jugador = usuario_de_jugador
         self.__balon = balon.Balon()
         self.__campo = campo.Campo(numero_campo)
         self.__jugadores = []
+        self.__modo = modo_juego
+        if ip:
+            self.__conexion = Conexion(ip)
         
     def agregar_jugador(self, usuario, equipo):
         """Metodo para agregar un jugador a la lista de jugadores"""

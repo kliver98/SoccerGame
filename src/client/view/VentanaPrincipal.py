@@ -19,7 +19,7 @@ class VentanaPrincipal():
         self.setup()
         self.iniciar()
 
-    def ventana_preguntar_usuario(self):
+    def ventana_preguntar(self, msj):
         root = tk.Tk()
         root.withdraw()
         x = ((root.winfo_screenwidth() - root.winfo_reqwidth()) / 2)-120
@@ -27,14 +27,14 @@ class VentanaPrincipal():
         root.geometry("+%d+%d" % (x, y))
         root.update()
         text = simpledialog.askstring(title="Informacion",
-                                  prompt="Ingrese su nombre de usuario con el cual se identificara: ")
+                                  prompt=msj)
         root.destroy()
         return text
     
-    def dibujar_texto(self, text, size,coord):
+    def dibujar_texto(self, text, size,coord, color = (0,0,0), negrita = False):
         pg.font.init()
         mf = pg.font.SysFont('Century',size)
-        ts = mf.render(text,False,(0,0,0))
+        ts = mf.render(text,negrita,color)
         self.window.blit(ts,coord)
 
     def mostrar_mensaje(self, title, body):
@@ -49,18 +49,34 @@ class VentanaPrincipal():
         #Pinto los jugadores. Todos
         pg.display.update()
     
-    def pintar_fondo(self):
+    def pintar_fondo(self, menu = False):
+        if menu:
+            imagen= pg.image.load("../../../resources/images/fondo.jpg")
+            imagen = pg.transform.scale(imagen,(ANCHO,ALTO))
+            self.window.blit(imagen,[0,0])
+            pg.display.update()
+            return
         imagen= pg.image.load(self.controlador.get_ruta_imagen_campo())
         imagen = pg.transform.scale(imagen,(ANCHO,ALTO))
         self.window.blit(imagen,[0,0])
         pg.display.update()
     
     def iniciar(self):
-        self.controlador.iniciar_partido(self.usuario_de_jugador,2)
-        self.pintar_fondo()
-        #Seleccionar modo
-        modo = self.modo_juego()
-        print(f"modo: {modo}")
+        if not self.usuario_de_jugador:
+            self.cerrar_aplicacion()
+        self.pintar_fondo(menu = True)
+        ip = None
+        while not ip:
+            #Seleccionar modo
+            modo = self.modo_juego()
+            #Preparar partido
+            if modo==MODO_JUEGO_LOCAL: #Preparar bots
+                self.controlador.iniciar_partido(self.usuario_de_jugador,2,modo)            
+                break
+            else: #Quiere jugar online
+                ip = self.ventana_preguntar("Ingrese la direccion IP del servidor a conectarse: ")
+                self.controlador.iniciar_partido(self.usuario_de_jugador,2,modo,ip)
+            
         
     def modo_juego(self):
         self.clock.tick(30)
@@ -71,16 +87,16 @@ class VentanaPrincipal():
                 if event.type == pg.QUIT:
                     run = False
                     pg.quit()
-            self.dibujar_texto("Seleccione el modo para jugar", int(ALTO*0.09), (int((ANCHO/2)-ANCHO*0.35),ALTO*0.15))
+            self.dibujar_texto("Seleccione el modo para jugar", int(ANCHO*0.055), (int((ANCHO/2)-ANCHO*0.37),ALTO*0.15))
             max_jug_equipo = self.controlador.get_max_jugadores_equipo()
-            self.dibujar_texto(f"A. {max_jug_equipo} vs {max_jug_equipo}", int(ALTO*0.08) , (int((ANCHO/2)-ANCHO*0.07),ALTO*0.35) )
-            self.dibujar_texto(f"B. {max_jug_equipo} vs PC", int(ALTO*0.08) , (int((ANCHO/2)-ANCHO*0.07),ALTO*0.55) )
+            self.dibujar_texto(f"a. {max_jug_equipo} vs {max_jug_equipo}", int(ANCHO*0.053) , (int((ANCHO/2)-ANCHO*0.102),ALTO*0.35) )
+            self.dibujar_texto(f"b. {max_jug_equipo} vs PC", int(ANCHO*0.05) , (int((ANCHO/2)-ANCHO*0.112),ALTO*0.55) )
             self.dibujar_texto(
-                                "Guia rapida: Esta pantalla te permite seleccionar el modo de juego, online o contra la computadora."
-                                ,int(ALTO*0.033) , (ANCHO*0.05,ALTO*0.8) )
+                                "Guia rapida: Esta pantalla te permite seleccionar el modo de juego, presione la tecla correspondiente."
+                                ,int(ANCHO*0.02) , (ANCHO*0.05,ALTO*0.8))
             self.dibujar_texto(
                                 "Los controles en el juego son: teclas arriba, abajo, izquierda, derecha. Para patear/robar: x/z"
-                                ,int(ALTO*0.033) , (ANCHO*0.05,ALTO*0.85) )
+                                ,int(ANCHO*0.02) , (ANCHO*0.05,ALTO*0.85))
             pg.display.update()
             if pg.key.get_pressed()[pg.K_a]:
                 modo = MODO_JUEGO_ONLINE
@@ -102,7 +118,7 @@ class VentanaPrincipal():
         self.window = pg.display.set_mode((ANCHO,ALTO))
         self.controlador = controlador.Controlador()
         pg.display.set_caption(self.controlador.get_nombre_aplicacion())
-        self.usuario_de_jugador = self.ventana_preguntar_usuario()
+        self.usuario_de_jugador = self.ventana_preguntar("Ingrese su nombre de usuario con el cual se identificara: ")
         self.clock = pg.time.Clock()
         pg.init()
 
