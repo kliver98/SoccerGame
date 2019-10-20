@@ -51,7 +51,7 @@ class Aplicacion():
     def set_datos_balon(self, x, y, usuario):
         """Metodo que mueve las coordenadas de la imagen del balon como tambien cambia el nombre del jugador que tiene el balon y, 
         retorna tupla de ruta generada de la imagen del balon y angulo de imagen para rotar"""
-        return self.__partido.set_posicion_balon(x,y,usuario)
+        return self.__partido.set_datos_balon(x,y,usuario)
     
     def get_posicion_balon(self):
         """Metodo que retorna un string con la posicion (x,y) del balon separado por: aplicacion.SEPARADOR"""

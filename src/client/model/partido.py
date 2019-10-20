@@ -79,5 +79,5 @@ class Partido():
         return self.__campo.get_ruta_imagen()
     
     def get_usuario_de_jugador(self):
+        """Metodo que retorna un string con el noombre de usuario del jugador de el cliente actual, solo que el controla el cliente actual"""
         return self.__usuario_de_jugador
-            

@@ -2,7 +2,7 @@
 class Balon():
     
     #Constantes
-    LOCACION_RESOURCES = "/../../resources/"
+    LOCACION_RESOURCES = "../../../resources/"
     """Constante de la ruta basica y plana de balon"""
     IMAGEN_BALON = f"{LOCACION_RESOURCES}images/ball_roll"
     """Constante string del tipo de extension de las imagenes que representan al jugador"""
@@ -26,15 +26,15 @@ class Balon():
         
     def configurar_imagen(self):
         """Metodo que crea la ruta de imagen del jugador dependiendo de que imagen cargar, de las tres disponibles, y retorna la ruta generada"""
-        self.__numero_de_imagen = self.numero_de_imagen if self.numero_de_imagen<7 else 1
-        imagen = f"{self.IMAGEN_BALON}{self.numero_de_imagen}{self.EXTENCION_DE_IMAGEN}"
+        self.__numero_de_imagen = self.__numero_de_imagen if self.__numero_de_imagen<7 else 1
+        imagen = f"{self.IMAGEN_BALON}{self.__numero_de_imagen}{self.EXTENCION_DE_IMAGEN}"
         self.__numero_de_imagen+=1
         return imagen
     
     def actualizar_datos(self, x, y, usuario):
         """Metodo que mueve las coordenadas de la imagen del balon, cambia el numero de imagen, modifica el nombre del jugador que tiene el
             balon y retorna ruta generada con angulo de imagen"""
-        self.__angulo = 0 if self.__angulo<361 else self.__angulo+5
+        self.__angulo = 0 if self.__angulo>360 else self.__angulo+5
         self.__coordenadas = (x,y)
         imagen = self.configurar_imagen()
         self.__usuario = usuario
