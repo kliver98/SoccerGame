@@ -60,22 +60,35 @@ class VentanaPrincipal():
         self.pintar_fondo()
         #Seleccionar modo
         modo = self.modo_juego()
+        print(f"modo: {modo}")
         
     def modo_juego(self):
+        self.clock.tick(30)
         modo = MODO_JUEGO_ONLINE
         run = True
         while run:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    run = False
+                    pg.quit()
             self.dibujar_texto("Seleccione el modo para jugar", int(ALTO*0.09), (int((ANCHO/2)-ANCHO*0.35),ALTO*0.15))
             max_jug_equipo = self.controlador.get_max_jugadores_equipo()
-            self.dibujar_texto(f"{max_jug_equipo} vs {max_jug_equipo}", int(ALTO*0.08) , (int((ANCHO/2)-ANCHO*0.07),ALTO*0.35) )
-            self.dibujar_texto(f"{max_jug_equipo} vs PC", int(ALTO*0.08) , (int((ANCHO/2)-ANCHO*0.07),ALTO*0.55) )
+            self.dibujar_texto(f"A. {max_jug_equipo} vs {max_jug_equipo}", int(ALTO*0.08) , (int((ANCHO/2)-ANCHO*0.07),ALTO*0.35) )
+            self.dibujar_texto(f"B. {max_jug_equipo} vs PC", int(ALTO*0.08) , (int((ANCHO/2)-ANCHO*0.07),ALTO*0.55) )
             self.dibujar_texto(
                                 "Guia rapida: Esta pantalla te permite seleccionar el modo de juego, online o contra la computadora."
                                 ,int(ALTO*0.033) , (ANCHO*0.05,ALTO*0.8) )
             self.dibujar_texto(
-                                "Los controles en el juego son: teclas arriba, abajo, izquierda, derecha. Para patear y robar: x,z"
+                                "Los controles en el juego son: teclas arriba, abajo, izquierda, derecha. Para patear/robar: x/z"
                                 ,int(ALTO*0.033) , (ANCHO*0.05,ALTO*0.85) )
             pg.display.update()
+            if pg.key.get_pressed()[pg.K_a]:
+                modo = MODO_JUEGO_ONLINE
+                run = False
+            elif pg.key.get_pressed()[pg.K_b]:
+                modo = MODO_JUEGO_LOCAL
+                run = False
+            
         return modo
         
     def jugando(self):
