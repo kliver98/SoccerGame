@@ -1,31 +1,23 @@
-from client.model import partido
-"""Constante global, no ligada a la clase, para identificar donde estan los recursos para usar en el juego"""
-LOCACION_RESOURCES = "../../../resources/"
-"""Constante global, no ligada a la clase, para concatenar datos y despues tambien poder separarlos (split). 
-El separador sera tanto para modelo, vista y/o controlador"""
-SEPARADOR = "-"
-"""Constante global, no ligada a la clase, que representa el nombre de la aplicacion"""
-NOMBRE_APLICACION = "Soccer Game"
-MAX_JUGADORES_SALA_EQUIPO = 2
+from client.model.aplicacion import Aplicacion
 
-class Aplicacion():
+class Controlador():
     
-    #Atributos
-    """Atributo que referencia a un partido"""
-    __partido = None
+    aplicacion = None
     
     def __init__(self):
-        """Constructor vacio que solo inicializa el objeto aplicacion"""
-        pass
+        self.aplicacion = Aplicacion()
+        
+    def get_nombre_aplicacion(self):
+        return self.aplicacion.get_nombre_aplicacion()
     
     def iniciar_partido(self, usuario_de_jugador, numero_campo):
         """Metodo que crea/instancia un nuevo partido. Recibe el nombre de usuario del cliente (el unico que se puede controlar), 
         numero de la imagen del campo a cargar"""
-        self.__partido = partido.Partido(usuario_de_jugador , numero_campo)
+        self.aplicacion.iniciar_partido(usuario_de_jugador, numero_campo)
         
     def agregar_jugador(self, usuario, equipo):
         """Metodo que agrega un jugador al partido actual que se este jugando"""
-        self.__partido.agregar_jugador(usuario, equipo)
+        self.aplicacion.agregar_jugador(usuario, equipo)
         
     def esta_jugador_dentro_campo(self, coordenadas_campo, coordenadas_jugador):
         """Metodo que verifica si un jugador esta dentro de las coordenadas del campo.
@@ -33,43 +25,40 @@ class Aplicacion():
         Para las coordenadas_campo siempre seran las mismas dado que la pantalla no se podra modificar, sin embargo como es una propiedad
         de la vista, no se guarda en esta clase campo.
         Retorna True o False si el jugador esta dentro del campo"""
-        return self.__partido.esta_jugador_dentro_campo(coordenadas_campo, coordenadas_jugador)  
+        return self.aplicacion.esta_jugador_dentro_campo(coordenadas_campo, coordenadas_jugador)  
         
     def jugadores_colisionando_con_balon(self):
-        return self.__partido.jugadores_colisionando()
+        return self.aplicacion.jugadores_colisionando()
         
     def get_datos_jugadores(self):
         """Metodo que retorna arreglo de seis datos de la informacion de los usuarios, separados por aplicacion.SEPARADOR
         nombre de usuario, equipo, coordenada en x, coordenada en y, ruta de la imagen, entero para rotar la imagen"""
-        return self.__partido.get_datos_jugadores()
+        return self.aplicacion.get_datos_jugadores()
     
     def set_datos_jugadores(self, datos):
         """Metodo que actualiza las coordenadas de los jugadores que se obtienen por parametro, 
         datos es un arreglo y cada uno tiene get_datos() de clase jugador pero es un string separado por aplicacion.SEPARADOR
         Ejemplo (separador ,): arr = ['jugador1,False,100,200' , 'jugador2,False,150,180' , 'jugador3,True,400,50' , 'jugador4,True,350,149']"""
-        self.__partido.set_datos_jugadores(datos)
+        self.aplicacion.set_datos_jugadores(datos)
         
     def set_datos_balon(self, x, y, usuario):
         """Metodo que mueve las coordenadas de la imagen del balon como tambien cambia el nombre del jugador que tiene el balon y, 
         retorna tupla de ruta generada de la imagen del balon y angulo de imagen para rotar"""
-        return self.__partido.set_datos_balon(x,y,usuario)
+        return self.aplicacion.set_datos_balon(x,y,usuario)
     
     def get_posicion_balon(self):
         """Metodo que retorna un string con la posicion (x,y) del balon separado por: aplicacion.SEPARADOR"""
-        return self.__partido.get_posicion_balon()
+        return self.aplicacion.get_posicion_balon()
     
     def get_ruta_imagen_campo(self):
         """Metodo que retorna un string con la ruta de la imagen del campo a cargar"""
-        return self.__partido.get_ruta_imagen_campo()
+        return self.aplicacion.get_ruta_imagen_campo()
     
     def get_usuario_de_jugador(self):
-        return self.__partido.get_usuario_de_jugador()
+        return self.aplicacion.get_usuario_de_jugador()
     
     def get_separador(self):
-        return SEPARADOR
+        return self.aplicacion.get_separador()
     
-    def get_nombre_aplicacion(self):
-        return NOMBRE_APLICACION
-
     def get_max_jugadores_equipo(self):
-        return MAX_JUGADORES_SALA_EQUIPO
+        return self.aplicacion.get_max_jugadores_equipo()
