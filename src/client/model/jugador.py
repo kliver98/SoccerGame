@@ -3,7 +3,7 @@ import random
 class Jugador():
 
     #Constantes
-    LOCACION_RESOURCES = "/../../resources/"
+    LOCACION_RESOURCES = "../../../resources/"
     """Constante string que contiene la ruta basica y plana del recurso de imagen que representa el jugador A, sin numero de imagen ni extension"""
     IMAGEN_JUGADOR_A = f"{LOCACION_RESOURCES}images/playerBlack"
     """Constante string que contiene la ruta basica y plana del recurso de imagen que representa el jugador B, sin numero de imagen ni extension"""
@@ -29,7 +29,7 @@ class Jugador():
         """Constructor que recibe el nombre de usuario y el equipo al cual pertenece"""
         self.__usuario = usuario
         self.__equipo = equipo
-        self.__coordenadas = (random.randint(200,500),random.randint(200,500)) #Ver como se cuadra lo de las coordenadas que aparece el jugador
+        self.__coordenadas = (random.randint(10,850),random.randint(10,520)) #Ver como se cuadra lo de las coordenadas que aparece el jugador
         self.__numero_de_imagen = 1
         self.__angulo_de_imagen = 270 if equipo else 90
     

@@ -22,7 +22,7 @@ class VentanaPrincipal():
     def ventana_preguntar(self, msj):
         root = tk.Tk()
         root.withdraw()
-        x = ((root.winfo_screenwidth() - root.winfo_reqwidth()) / 2)-120
+        x = ((root.winfo_screenwidth() - root.winfo_reqwidth()) / 2)-128
         y = ((root.winfo_screenheight() - root.winfo_reqheight()) / 2)-60
         root.geometry("+%d+%d" % (x, y))
         root.update()
@@ -43,10 +43,19 @@ class VentanaPrincipal():
     def cerrar_aplicacion(self):
         sys.exit()
         
-    def actualizar_pantalla_jugando(self, jugadores, usuario_de_jugador):
+    def actualizar_pantalla_jugando(self, jugadores):
         """Update the window with their new graphics"""
         self.pintar_fondo()
         #Pinto los jugadores. Todos
+        separador = self.controlador.get_separador()
+        for j in jugadores:
+            datos = j.split(separador)
+            print(datos)
+            imagen = pg.image.load(datos[4])
+            imagen = pg.transform.rotate(imagen, int(datos[5]))
+            eje_x = int(datos[2]) 
+            eje_y = int(datos[3])
+            self.window.blit(imagen.convert_alpha(),[eje_x,eje_y])
         pg.display.update()
     
     def pintar_fondo(self, menu = False):
@@ -74,6 +83,9 @@ class VentanaPrincipal():
                 self.controlador.iniciar_partido(self.usuario_de_jugador,2)
                 bots_creados = self.controlador.iniciar_bots() #Crea los jugadores bots al igual que el jugador del equipo del cliente
                 print(f"Se crearon los bots? R:{bots_creados}")
+                self.actualizar_pantalla_jugando(self.controlador.get_datos_jugadores())
+                for i in range(0,500000): #Para probar jugadores en pantalla (que pinta)
+                    print(f"Probando{i}")
                 break
             else: #Quiere jugar online
                 ip = self.ventana_preguntar("Ingrese la direccion IP del servidor a conectarse: ")
@@ -84,9 +96,9 @@ class VentanaPrincipal():
                 self.pintar_fondo(menu = True)
                 self.dibujar_texto("Esperando jugadores...", int(ANCHO*0.06), (int(ANCHO*0.1855),int(ALTO*0.45)))
                 pg.display.update()
-                for i in range(0,250000): #Para probar pantalla espera
-                    print(f"Hola{i}")
-                #self.controlador.iniciar_partido(self.usuario_de_jugador,2,ip)
+                self.controlador.iniciar_partido(self.usuario_de_jugador,2,ip) #DESCOMENTAR PARTE QUE INICIA EL SERVIDOR <-------------------- OJO. Ahi inicia conexion
+                for i in range(0,500000): #Para probar pantalla espera
+                    print(f"Probando{i}")
                 
         self.iniciar() #Para que se cierre la aplicacion solo cuando el usuario de clic en x de la ventana
         

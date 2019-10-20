@@ -25,8 +25,8 @@ class Partido():
         self.__balon = balon.Balon()
         self.__campo = campo.Campo(numero_campo)
         self.__jugadores = []
-        if ip:
-            self.__conexion = Conexion(ip)
+        #if ip:
+        #    self.__conexion = Conexion(ip)
         
     def agregar_jugador(self, usuario, equipo):
         """Metodo para agregar un jugador a la lista de jugadores"""
