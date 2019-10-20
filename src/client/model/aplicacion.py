@@ -1,6 +1,6 @@
 from client.model import partido
 """Constante global, no ligada a la clase, para identificar donde estan los recursos para usar en el juego"""
-LOCACION_RESOURCES = "/../../resources/"
+LOCACION_RESOURCES = "../../../resources/"
 """Constante global, no ligada a la clase, para concatenar datos y despues tambien poder separarlos (split). 
 El separador sera tanto para modelo, vista y/o controlador"""
 SEPARADOR = "-"
@@ -60,3 +60,9 @@ class Aplicacion():
     def get_ruta_imagen_campo(self):
         """Metodo que retorna un string con la ruta de la imagen del campo a cargar"""
         return self.__partido.get_ruta_imagen_campo()
+    
+    def get_usuario_de_jugador(self):
+        return self.__partido.get_usuario_de_jugador()
+    
+    def get_separador(self):
+        return SEPARADOR

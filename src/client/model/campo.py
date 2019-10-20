@@ -1,10 +1,11 @@
-from client.model import aplicacion
+
 
 class Campo():
     
     #Constantes
+    LOCACION_RESOURCES = "../../../resources/"
     """Constante string que tiene la ruta basica y plana de la imagen que representa el jugador"""
-    IMAGEN_CAMPO = f"{aplicacion.LOCACION_RESOURCES}images/soccer_field"
+    IMAGEN_CAMPO = f"{LOCACION_RESOURCES}images/soccer_field"
     """Constante string que tiene el tipo de extencion de la imagen del campo"""
     EXTENCION_DE_IMAGEN = ".jpg"
     

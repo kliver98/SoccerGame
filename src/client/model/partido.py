@@ -77,4 +77,7 @@ class Partido():
     def get_ruta_imagen_campo(self):
         """Metodo que retorna un string con la ruta de imagen del campo"""
         return self.__campo.get_ruta_imagen()
+    
+    def get_usuario_de_jugador(self):
+        return self.__usuario_de_jugador
             

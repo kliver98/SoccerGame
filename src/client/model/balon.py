@@ -1,10 +1,10 @@
-from client.model import aplicacion
 
 class Balon():
     
     #Constantes
+    LOCACION_RESOURCES = "/../../resources/"
     """Constante de la ruta basica y plana de balon"""
-    IMAGEN_BALON = f"{aplicacion.LOCACION_RESOURCES}images/ball_roll"
+    IMAGEN_BALON = f"{LOCACION_RESOURCES}images/ball_roll"
     """Constante string del tipo de extension de las imagenes que representan al jugador"""
     EXTENCION_DE_IMAGEN = ".png"
     
