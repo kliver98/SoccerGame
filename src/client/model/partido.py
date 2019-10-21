@@ -3,6 +3,9 @@ from client.model.jugador import Jugador
 from client.model.conexion import Conexion
 MODO_JUEGO_ONLINE = 1
 MODO_JUEGO_LOCAL = 2
+TIEMPO_CADA_JUEGO = 60
+TIEMPO_ANUNCIO = 3
+VELOCIDAD_JUGADOR = 10
 
 class Partido():
     
@@ -42,9 +45,17 @@ class Partido():
             self.agregar_jugador(f"bot#{i}",equipo)
         return len(self.__jugadores)==(num_jugadores_equipo*2)
     
-    def esta_jugador_dentro_campo(self, coordenadas_campo, coordenadas_jugador):
+    def set_coordenadas_jugador_cliente(self, coord, anteriores):
+        jugador = self.get_jugador(self.__usuario_de_jugador)
+        if anteriores:
+            jugador.reset_coordenadas(coord)
+            return
+        jugador.set_coordenadas(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR)
+    
+    def esta_jugador_dentro_campo(self, coordenadas_campo):
         """Metodo que verifica si un jugador esta dentro de las coordenadas del campo.
         Recibe coordenadas_campo y coordenadas_jugador que son un arreglo conteniendo informacion respectiva de las coordenas [x,y]"""
+        coordenadas_jugador = self.get_jugador(self.__usuario_de_jugador).get_coordenadas()
         return self.__campo.esta_jugador_dentro_campo(coordenadas_campo, coordenadas_jugador)
     
     def mover_jugador(self, izquierda, derecha, arriba, abajo):
@@ -97,3 +108,12 @@ class Partido():
     def get_usuario_de_jugador(self):
         """Metodo que retorna un string con el noombre de usuario del jugador de el cliente actual, solo que el controla el cliente actual"""
         return self.__usuario_de_jugador
+    
+    def get_tiempos(self):
+        return (TIEMPO_CADA_JUEGO,TIEMPO_ANUNCIO)
+    
+    def get_velocidad_jugador(self):
+        return VELOCIDAD_JUGADOR
+    
+    def get_coordenadas_cliente(self):
+        return self.get_jugador(self.__usuario_de_jugador).get_coordenadas()

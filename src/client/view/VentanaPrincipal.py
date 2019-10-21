@@ -42,15 +42,15 @@ class VentanaPrincipal():
     
     def cerrar_aplicacion(self):
         sys.exit()
-        
+    
     def actualizar_pantalla_jugando(self, jugadores):
         """Update the window with their new graphics"""
         self.pintar_fondo()
+        self.dibujar_texto(f"Tiempo: {int(self.sg)}", int(ANCHO*0.025), [ANCHO*0.43,ALTO*0.02], (0, 0, 0), True)
         #Pinto los jugadores. Todos
         separador = self.controlador.get_separador()
         for j in jugadores:
             datos = j.split(separador)
-            print(datos)
             imagen = pg.image.load(datos[4])
             imagen = pg.transform.rotate(imagen, int(datos[5]))
             eje_x = int(datos[2]) 
@@ -81,15 +81,11 @@ class VentanaPrincipal():
             #Preparar partido
             if modo==MODO_JUEGO_LOCAL: #Preparar bots
                 self.controlador.iniciar_partido(self.usuario_de_jugador,2)
-                bots_creados = self.controlador.iniciar_bots() #Crea los jugadores bots al igual que el jugador del equipo del cliente
-                print(f"Se crearon los bots? R:{bots_creados}")
-                self.actualizar_pantalla_jugando(self.controlador.get_datos_jugadores())
-                for i in range(0,500000): #Para probar jugadores en pantalla (que pinta)
-                    print(f"Probando{i}")
-                break
+                self.controlador.iniciar_bots() #Crea los jugadores bots al igual que el jugador del equipo del cliente
+                self.jugando()
+                self.pintar_fondo(menu = True)
             else: #Quiere jugar online
                 ip = self.ventana_preguntar("Ingrese la direccion IP del servidor a conectarse: ")
-                print(f"IP bien? {self.controlador.esta_formatoIP_bien(ip)}")
                 if not ip or not self.controlador.esta_formatoIP_bien(ip):
                     ip = None
                     continue
@@ -103,10 +99,10 @@ class VentanaPrincipal():
         self.iniciar() #Para que se cierre la aplicacion solo cuando el usuario de clic en x de la ventana
         
     def modo_juego(self):
-        self.clock.tick(30)
         modo = MODO_JUEGO_ONLINE
         run = True
         while run:
+            self.clock.tick(15)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     run = False
@@ -133,9 +129,56 @@ class VentanaPrincipal():
         
     def jugando(self):
         run = True
+        start_ticks = pg.time.get_ticks()
+        tiempos = self.controlador.get_tiempos() #Arreglo, en 0 esta tiempo juego de 1 tiempo partido, en 1 tiempo para anuncio
         while run:
-            pass
-        
+            self.clock.tick(30)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    run = False
+                    pg.quit()
+            coord_ant = self.controlador.get_coordenadas_cliente()
+            c = (0,0)
+            keys = pg.key.get_pressed()
+            if keys[pg.K_UP]:
+                c = (0,-1)
+                self.controlador.set_coordenadas_jugador_cliente(c)
+            if keys[pg.K_DOWN]:
+                c = (0,1)
+                self.controlador.set_coordenadas_jugador_cliente(c)
+            if keys[pg.K_LEFT]:
+                c = (-1,0)
+                self.controlador.set_coordenadas_jugador_cliente(c)
+            if keys[pg.K_RIGHT]:
+                c = (1,0)
+                self.controlador.set_coordenadas_jugador_cliente(c)
+            if not self.controlador.esta_jugador_dentro_campo((ANCHO,ALTO)):
+                self.controlador.set_coordenadas_jugador_cliente(coord_ant, True)
+                continue
+            self.sg = (pg.time.get_ticks()-start_ticks)/1000 #Segundos transcurridos del juego
+            if int(self.sg)==tiempos[0]:
+                self.cargar_anuncio(tiempos[1])
+            elif int(self.sg)>(tiempos[0]*2+tiempos[1]):
+                run = False
+            self.actualizar_pantalla_jugando(self.controlador.get_datos_jugadores())
+    
+    def cargar_anuncio(self, tiempo):
+        start_ticks = pg.time.get_ticks()
+        run = True
+        while run:
+            self.clock.tick(5) #Dado que solo se reproducira audio no hay problema con 5fps
+            sg = (pg.time.get_ticks()-start_ticks)/1000 #Segundos transcurridos del juego
+            self.pintar_fondo(True)
+            self.dibujar_texto(f"Tiempo restante: {int(tiempo-sg)}", int(ANCHO*0.02), [ANCHO*0.42,10])
+            pg.display.update()
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    run = False
+                    pg.quit()
+            if sg>tiempo:
+                run = False
+                continue
+    
     def setup(self):
         """Get ready the main window and others nee-ded"""
         os.environ['SDL_VIDEO_CENTERED'] = '1' #Para centrar en el medio la ventana
@@ -150,5 +193,5 @@ class VentanaPrincipal():
 try:
     VentanaPrincipal()
 except Exception as e:
-    print(e.trace())
+    #print(e.trace())
     pass

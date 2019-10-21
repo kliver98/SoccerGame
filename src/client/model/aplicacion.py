@@ -3,10 +3,10 @@ from client.model import partido
 LOCACION_RESOURCES = "../../../resources/"
 """Constante global, no ligada a la clase, para concatenar datos y despues tambien poder separarlos (split). 
 El separador sera tanto para modelo, vista y/o controlador"""
-SEPARADOR = "-"
+SEPARADOR = ";"
 """Constante global, no ligada a la clase, que representa el nombre de la aplicacion"""
 NOMBRE_APLICACION = "Soccer Game"
-MAX_JUGADORES_SALA_EQUIPO = 4
+MAX_JUGADORES_SALA_EQUIPO = 2
 
 class Aplicacion():
     
@@ -30,13 +30,13 @@ class Aplicacion():
     def iniciar_bots(self):
         return self.__partido.iniciar_bots(MAX_JUGADORES_SALA_EQUIPO)
     
-    def esta_jugador_dentro_campo(self, coordenadas_campo, coordenadas_jugador):
+    def esta_jugador_dentro_campo(self, coordenadas_campo):
         """Metodo que verifica si un jugador esta dentro de las coordenadas del campo.
         Recibe coordenadas_campo y coordenadas_jugador que son un arreglo conteniendo informacion respectiva de las coordenas [x,y]
         Para las coordenadas_campo siempre seran las mismas dado que la pantalla no se podra modificar, sin embargo como es una propiedad
         de la vista, no se guarda en esta clase campo.
         Retorna True o False si el jugador esta dentro del campo"""
-        return self.__partido.esta_jugador_dentro_campo(coordenadas_campo, coordenadas_jugador)  
+        return self.__partido.esta_jugador_dentro_campo(coordenadas_campo)  
         
     def jugadores_colisionando_con_balon(self):
         return self.__partido.jugadores_colisionando()
@@ -51,7 +51,10 @@ class Aplicacion():
         datos es un arreglo y cada uno tiene get_datos() de clase jugador pero es un string separado por aplicacion.SEPARADOR
         Ejemplo (separador ,): arr = ['jugador1,False,100,200' , 'jugador2,False,150,180' , 'jugador3,True,400,50' , 'jugador4,True,350,149']"""
         self.__partido.set_datos_jugadores(datos)
-        
+    
+    def set_coordenadas_jugador_cliente(self, coord, anteriores):
+        self.__partido.set_coordenadas_jugador_cliente(coord, anteriores)
+    
     def set_datos_balon(self, x, y, usuario):
         """Metodo que mueve las coordenadas de la imagen del balon como tambien cambia el nombre del jugador que tiene el balon y, 
         retorna tupla de ruta generada de la imagen del balon y angulo de imagen para rotar"""
@@ -91,3 +94,12 @@ class Aplicacion():
             except:
                 return False
         return True
+    
+    def get_tiempos(self):
+        return self.__partido.get_tiempos()
+    
+    def get_velocidad_jugador(self):
+        return self.__partido.get_velocidad_jugador()
+    
+    def get_coordenadas_cliente(self):
+        return self.__partido.get_coordenadas_cliente()
