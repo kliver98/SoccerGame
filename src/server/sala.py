@@ -32,24 +32,25 @@ class Sala:
         self.__balon=balon.Balon()
         self.__estadisticas=estadisticas.Estadisticas()
         self.__jugadores={}
-        
+        self.posicion_actual=1
         
     def add_player(self,net,playerid):
         self.equipos[self.equipo_disponible].append(playerid)
-        start_new_thread(self.__threaded_client,(net,playerid,self.equipo_disponible))
+        start_new_thread(self.__threaded_client,(net,playerid,self.equipo_disponible,self.posicion_actual))
         self.__comprobar_disponibilidad()
         
-    def __threaded_client(self,net,playerid,equipo):
-        info_out=f"sala:{self.id} equipo: {equipo}"
+    def __threaded_client(self,net,playerid,equipo,posicion):
+        info_out=f"sala:{self.id} equipo: {equipo} posicion: {posicion}"
         self.enviar(net,info_out)
         
         while True:
             try:
                 info_in=self.leer(net)
-                
+                info_out=f"{self.equipoA},{self.equipoB}"
                 if not(info_in):
                     print(f"Desconectado: {playerid}")
                 else:
+                    self.equipos[equipo][playerid]=info_in
                     self.enviar(net,info_out)
         
             except Exception as e:
@@ -70,13 +71,17 @@ class Sala:
             return "Vacio"
         
     def __comprobar_disponibilidad(self):
-        if len(self.equipoA)+len(self.equipoB)==4:
+        lonA=len(self.equipoA)
+        lonB=len(self.equipoB)
+        if lonA + lonB==4:
             self.disponible=False
         else:
-            if len(self.equipoA) < self.MAX_JUGADORES_TEAM:
+            if lonA < self.MAX_JUGADORES_TEAM:
                 self.equipo_disponible='A'
+                lonA +=1
             else:
-                self.equipo_disponible='B'    
+                self.equipo_disponible='B' 
+                self.posicion_actual=lonA+lonB+1   
     
     def esta_disponible(self):
         return self.disponible        
