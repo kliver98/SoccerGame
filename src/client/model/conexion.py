@@ -8,9 +8,11 @@ class Conexion():
         '''inicializa la coneccion con el servidor'''
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server = ip
-        self.port = 5555
+        self.port = 5558
         self.addr = (self.server, self.port)
+        print(self.addr)
         self.info = self.conectar()
+        print(f"info: {self.info}")
      
     def  conectar(self):
         '''metodo para conectar el cliente con el servidor'''
