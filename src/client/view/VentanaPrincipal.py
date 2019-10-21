@@ -5,8 +5,8 @@ import os
 from client.controller import controlador
 import sys
 import ctypes
-ALTO = 300#550
-ANCHO = 600#900
+ALTO = 550
+ANCHO = 900
 MODO_JUEGO_ONLINE = 1
 MODO_JUEGO_LOCAL = 2
 FPS_JUGANDO = 60
@@ -83,7 +83,7 @@ class VentanaPrincipal():
                 self.jugando()
                 self.pintar_fondo(menu = True)
             else: #Quiere jugar online
-                ip = "localhost"#self.ventana_preguntar("Ingrese la direccion IP del servidor a conectarse: ")
+                ip = self.ventana_preguntar("Ingrese la direccion IP del servidor a conectarse: ")
                 if not ip or not self.controlador.esta_formatoIP_bien(ip):
                     ip = None
                     continue
@@ -185,7 +185,7 @@ class VentanaPrincipal():
         self.window = pg.display.set_mode((ANCHO,ALTO))
         self.controlador = controlador.Controlador()
         pg.display.set_caption(self.controlador.get_nombre_aplicacion())
-        self.usuario_de_jugador = "Kliver"#self.ventana_preguntar("Ingrese su nombre de usuario con el cual se identificara: ")
+        self.usuario_de_jugador = self.ventana_preguntar("Ingrese su nombre de usuario con el cual se identificara: ")
         self.clock = pg.time.Clock()
         pg.init()
 
