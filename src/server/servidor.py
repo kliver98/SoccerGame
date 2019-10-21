@@ -9,7 +9,7 @@ salas=[]
 
 
 '''se piden los parametros para iniciar el servidor'''
-server = input("Please insert the ip server, it will be locallhost for defect")
+server = "localhost"#input("Please insert the ip server, it will be localhost for defect")
 port = 5558
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

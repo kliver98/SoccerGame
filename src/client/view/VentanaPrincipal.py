@@ -5,10 +5,11 @@ import os
 from client.controller import controlador
 import sys
 import ctypes
-ALTO = 550
-ANCHO = 900
+ALTO = 300#550
+ANCHO = 600#900
 MODO_JUEGO_ONLINE = 1
 MODO_JUEGO_LOCAL = 2
+FPS_JUGANDO = 60
 
 class VentanaPrincipal():
     
@@ -56,19 +57,16 @@ class VentanaPrincipal():
             eje_x = int(datos[2]) 
             eje_y = int(datos[3])
             self.window.blit(imagen.convert_alpha(),[eje_x,eje_y])
-        pg.display.update()
     
     def pintar_fondo(self, menu = False):
         if menu:
             imagen= pg.image.load("../../../resources/images/fondo.jpg")
             imagen = pg.transform.scale(imagen,(ANCHO,ALTO))
             self.window.blit(imagen,[0,0])
-            pg.display.update()
             return
         imagen= pg.image.load(self.controlador.get_ruta_imagen_campo())
         imagen = pg.transform.scale(imagen,(ANCHO,ALTO))
         self.window.blit(imagen,[0,0])
-        pg.display.update()
     
     def iniciar(self):
         if not self.usuario_de_jugador:
@@ -85,7 +83,7 @@ class VentanaPrincipal():
                 self.jugando()
                 self.pintar_fondo(menu = True)
             else: #Quiere jugar online
-                ip = self.ventana_preguntar("Ingrese la direccion IP del servidor a conectarse: ")
+                ip = "localhost"#self.ventana_preguntar("Ingrese la direccion IP del servidor a conectarse: ")
                 if not ip or not self.controlador.esta_formatoIP_bien(ip):
                     ip = None
                     continue
@@ -100,7 +98,7 @@ class VentanaPrincipal():
         modo = MODO_JUEGO_ONLINE
         run = True
         while run:
-            self.clock.tick(15)
+            self.clock.tick(60)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     run = False
@@ -130,7 +128,7 @@ class VentanaPrincipal():
         start_ticks = pg.time.get_ticks()
         tiempos = self.controlador.get_tiempos() #Arreglo, en 0 esta tiempo juego de 1 tiempo partido, en 1 tiempo para anuncio
         while run:
-            self.clock.tick(30)
+            self.clock.tick(FPS_JUGANDO)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     run = False
@@ -150,15 +148,19 @@ class VentanaPrincipal():
             if keys[pg.K_RIGHT]:
                 c = (1,0)
                 self.controlador.set_coordenadas_jugador_cliente(c)
-            if not self.controlador.esta_jugador_dentro_campo((ANCHO,ALTO)):
+            if keys[pg.K_x]:
+                pass
+            if keys[pg.K_z]:
+                pass
+            if not self.controlador.esta_jugador_dentro_campo((ANCHO,ALTO)): #No debe seguir pintando, debe regresar las coordenadas anteriores
                 self.controlador.set_coordenadas_jugador_cliente(coord_ant, True)
-                continue
             self.sg = (pg.time.get_ticks()-start_ticks)/1000 #Segundos transcurridos del juego
             if int(self.sg)==tiempos[0]:
                 self.cargar_anuncio(tiempos[1])
             elif int(self.sg)>(tiempos[0]*2+tiempos[1]):
                 run = False
             self.actualizar_pantalla_jugando(self.controlador.get_datos_jugadores())
+            pg.display.update()
     
     def cargar_anuncio(self, tiempo):
         start_ticks = pg.time.get_ticks()
@@ -183,7 +185,7 @@ class VentanaPrincipal():
         self.window = pg.display.set_mode((ANCHO,ALTO))
         self.controlador = controlador.Controlador()
         pg.display.set_caption(self.controlador.get_nombre_aplicacion())
-        self.usuario_de_jugador = self.ventana_preguntar("Ingrese su nombre de usuario con el cual se identificara: ")
+        self.usuario_de_jugador = "Kliver"#self.ventana_preguntar("Ingrese su nombre de usuario con el cual se identificara: ")
         self.clock = pg.time.Clock()
         pg.init()
 

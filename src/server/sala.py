@@ -48,7 +48,7 @@ class Sala:
                 info_in=self.leer(net)
                 
                 if not(info_in):
-                    print(f"Desconectado: {playerid}")
+                    print(f"Desconectado: {playerid} -> Sala {self.id}")
                 else:
                     self.enviar(net,info_out)
         
@@ -70,7 +70,7 @@ class Sala:
             return "Vacio"
         
     def __comprobar_disponibilidad(self):
-        if len(self.equipoA)+len(self.equipoB)==4:
+        if len(self.equipoA)+len(self.equipoB)==self.MAX_JUGADORES_TEAM*2:
             self.disponible=False
         else:
             if len(self.equipoA) < self.MAX_JUGADORES_TEAM:
@@ -79,4 +79,4 @@ class Sala:
                 self.equipo_disponible='B'    
     
     def esta_disponible(self):
-        return self.disponible        
+        return self.disponible    
