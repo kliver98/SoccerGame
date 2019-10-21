@@ -25,8 +25,6 @@ class Campo():
         campo_y = coordenadas_campo[1]
         jugador_x = coordenadas_jugador[0]
         jugador_y = coordenadas_jugador[1]
-        print(f"campo: {coordenadas_campo}")
-        print(f"jugador: {coordenadas_jugador}")
         if jugador_x>0 and jugador_x+30<campo_x:
             if jugador_y>5 and jugador_y+50<campo_y:
                 return True

@@ -93,8 +93,6 @@ class VentanaPrincipal():
                 self.dibujar_texto("Esperando jugadores...", int(ANCHO*0.06), (int(ANCHO*0.1855),int(ALTO*0.45)))
                 pg.display.update()
                 self.controlador.iniciar_partido(self.usuario_de_jugador,2,ip) #DESCOMENTAR PARTE QUE INICIA EL SERVIDOR <-------------------- OJO. Ahi inicia conexion
-                #for i in range(0,500000): #Para probar pantalla espera
-                 #   print(f"Probando{i}")
                 
         self.iniciar() #Para que se cierre la aplicacion solo cuando el usuario de clic en x de la ventana
         
