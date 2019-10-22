@@ -14,7 +14,7 @@ class Jugador():
     #Atributos
     """Atributo string para identificar al jugador"""
     __usuario = None #Las dos lineas bajas son para hacer las variables privadas
-    """Atributo boleano para identificar a que equipo pertenece el jugador"""
+    """Atributo A o B para identificar a que equipo pertenece el jugador"""
     __equipo = None
     """Atributo tupla para almacenar las coordenadas x,y donde esta la imagen del jugador"""
     __coordenadas = None
@@ -29,11 +29,11 @@ class Jugador():
         self.__equipo = equipo
         self.__coordenadas = (random.randint(10,850),random.randint(10,500)) #Ver como se cuadra lo de las coordenadas que aparece el jugador
         self.__numero_de_imagen = 1
-        self.__angulo_de_imagen = 270 if equipo else 90
+        self.__angulo_de_imagen = 270 if equipo=="A" else 90
     
     def configurar_imagen(self):
         """Metodo que crea la ruta de imagen del jugador dependiendo de que imagen cargar, de las tres disponibles, y retorna la ruta generada"""
-        imagen = self.IMAGEN_JUGADOR_A+str(self.__numero_de_imagen)+self.EXTENCION_DE_IMAGEN if self.__equipo else self.IMAGEN_JUGADOR_B+str(self.__numero_de_imagen)+self.EXTENCION_DE_IMAGEN 
+        imagen = self.IMAGEN_JUGADOR_A+str(self.__numero_de_imagen)+self.EXTENCION_DE_IMAGEN if self.__equipo=="A" else self.IMAGEN_JUGADOR_B+str(self.__numero_de_imagen)+self.EXTENCION_DE_IMAGEN 
         self.__numero_de_imagen = 1 if self.__numero_de_imagen>2 else self.__numero_de_imagen+1
         return (imagen,self.__angulo_de_imagen)
     
@@ -69,3 +69,4 @@ class Jugador():
     def get_coordenadas(self):
         """Metodo que retorna una tupla con las coordenadas del jugador"""
         return self.__coordenadas
+    

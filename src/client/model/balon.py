@@ -31,15 +31,25 @@ class Balon():
         self.__numero_de_imagen+=1
         return imagen
     
-    def actualizar_datos(self, x, y, usuario):
+    def actualizar_datos(self, x, y, usuario, tipo = True):
         """Metodo que mueve las coordenadas de la imagen del balon, cambia el numero de imagen, modifica el nombre del jugador que tiene el
             balon y retorna ruta generada con angulo de imagen"""
+        if not tipo:
+            return (self.configurar_imagen(),self.__angulo)
         self.__angulo = 0 if self.__angulo>360 else self.__angulo+5
         self.__coordenadas = (x,y)
         imagen = self.configurar_imagen()
         self.__usuario = usuario
         return (imagen,self.__angulo)
     
+    def set_coordenadas(self,x,y):
+        self.__coordenadas = (self.__coordenadas[0]+x,self.__coordenadas[1]+y)
+    
     def get_coordenadas(self):
         """Metodo que retorna tupla de las coordenadas x,y del balon"""
+        if self.__coordenadas == None:
+            self.__coordenadas = (350,300)
         return self.__coordenadas
+    
+    def get_usuario(self):
+        return self.__usuario

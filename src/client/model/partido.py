@@ -2,11 +2,12 @@ from client.model import balon, campo, aplicacion
 from client.model.jugador import Jugador
 from client.model.conexion import Conexion
 from _thread import *
+from msvcrt import kbhit
 
 MODO_JUEGO_ONLINE = 1
 MODO_JUEGO_LOCAL = 2
 TIEMPO_CADA_JUEGO = 60
-TIEMPO_ANUNCIO = 3
+TIEMPO_ANUNCIO = 5
 VELOCIDAD_JUGADOR = 5
 
 class Partido():
@@ -55,20 +56,23 @@ class Partido():
         self.__jugadores.append(Jugador(usuario,equipo))
     
     def iniciar_bots(self, num_jugadores_equipo):
-        self.__jugadores.append(Jugador(f"{self.__usuario_de_jugador}",True)) #Jugador del usuario del cliente
+        self.__jugadores.append(Jugador(f"{self.__usuario_de_jugador}","A")) #Jugador del usuario del cliente
         for i in range(1,num_jugadores_equipo*2):
             if i<num_jugadores_equipo:
-                equipo = True
+                equipo = "A"
             else:
-                equipo = False
+                equipo = "B"
             self.agregar_jugador(f"bot#{i}",equipo)
         return len(self.__jugadores)==(num_jugadores_equipo*2)
     
-    def set_coordenadas_jugador_cliente(self, coord, anteriores):
+    def set_coordenadas_jugador_cliente(self, coord,soltar_balon, anteriores):
         jugador = self.get_jugador(self.__usuario_de_jugador)
         if anteriores:
             jugador.reset_coordenadas(coord)
             return
+        if not self.__conexion and not soltar_balon: #Esta jugando LOCAL
+            if self.jugador_cliente_colisionando_balon():
+                self.mover_balon(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR)
         jugador.set_coordenadas(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR)
     
     def esta_jugador_dentro_campo(self, coordenadas_campo):
@@ -115,10 +119,29 @@ class Partido():
         mover = self.__balon.actualizar_datos(x, y, usuario)
         return f"{mover[0]}{aplicacion.SEPARADOR}{mover[1]}"
             
-    def get_posicion_balon(self):
+    def get_datos_balon(self):
         """Metodo que retorna un string con la posicion (x,y) del balon separado por: aplicacion.SEPARADOR"""
+        datos = None
+        if not self.__conexion: #Es LOCAL, contra PC
+            datos = self.__balon.actualizar_datos(0,0,"",False)
+        else: #Debo traer datos de balon dle servidor
+            datos = None
         coord = self.__balon.get_coordenadas()
-        return f"{coord[0]}{aplicacion.SEPARADOR}{coord[1]}"
+        return f"{datos[0]}{aplicacion.SEPARADOR}{datos[1]}{aplicacion.SEPARADOR}{coord[0]}{aplicacion.SEPARADOR}{coord[1]}"
+    
+    def mover_balon(self,x,y): #Solo se llama en modo de juego LOCAL
+        self.__balon.set_coordenadas(x, y)
+    
+    def jugador_cliente_colisionando_balon(self): #Dado que es el cliente, se que sera del equipo A y solo sera llamado cuando este jugano local
+        cliente = self.get_jugador(self.__usuario_de_jugador)
+        coord_c = cliente.get_coordenadas()
+        coord_b = self.__balon.get_coordenadas()
+        if cliente.get_usuario()==self.__balon.get_usuario():
+            return True
+        if coord_c[0]+30>coord_b[0] and coord_c[0]+10<coord_b[0]:
+            if coord_c[1]+40>coord_b[1] and coord_c[1]+5<coord_b[1]:
+                return True
+        return False
     
     def get_ruta_imagen_campo(self):
         """Metodo que retorna un string con la ruta de imagen del campo"""
@@ -136,3 +159,10 @@ class Partido():
     
     def get_coordenadas_cliente(self):
         return self.get_jugador(self.__usuario_de_jugador).get_coordenadas()
+    
+    def alguien_tiene_balon(self):
+        if self.__balon.get_usuario():
+            if self.__balon.get_usuario()!="":
+                return True
+        
+        return False

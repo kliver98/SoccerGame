@@ -50,13 +50,18 @@ class VentanaPrincipal():
         self.dibujar_texto(f"Tiempo: {int(self.sg)}", int(ANCHO*0.025), [ANCHO*0.43,ALTO*0.02], (0, 0, 0), True)
         #Pinto los jugadores. Todos
         separador = self.controlador.get_separador()
-        for j in jugadores:
+        for j in jugadores: #Pintando todos los jugadores
             datos = j.split(separador)
             imagen = pg.image.load(datos[4])
             imagen = pg.transform.rotate(imagen, int(datos[5]))
             eje_x = int(datos[2]) 
             eje_y = int(datos[3])
             self.window.blit(imagen.convert_alpha(),[eje_x,eje_y])
+        datos_balon = self.controlador.get_datos_balon()
+        datos = datos_balon.split(separador)
+        imagen = pg.image.load(datos[0])
+        imagen = pg.transform.rotate(imagen, int(datos[1]))
+        self.window.blit(imagen.convert_alpha(),[int(datos[2]),int(datos[3])])
     
     def pintar_fondo(self, menu = False):
         if menu:
@@ -136,24 +141,25 @@ class VentanaPrincipal():
             coord_ant = self.controlador.get_coordenadas_cliente()
             c = (0,0)
             keys = pg.key.get_pressed()
-            if keys[pg.K_UP]:
-                c = (0,-1)
-                self.controlador.set_coordenadas_jugador_cliente(c)
-            if keys[pg.K_DOWN]:
-                c = (0,1)
-                self.controlador.set_coordenadas_jugador_cliente(c)
-            if keys[pg.K_LEFT]:
-                c = (-1,0)
-                self.controlador.set_coordenadas_jugador_cliente(c)
-            if keys[pg.K_RIGHT]:
-                c = (1,0)
-                self.controlador.set_coordenadas_jugador_cliente(c)
+            soltar_balon = False
             if keys[pg.K_x]:
-                pass
+                soltar_balon = True
             if keys[pg.K_z]:
                 pass
+            if keys[pg.K_UP]:
+                c = (0,-1)
+                self.controlador.set_coordenadas_jugador_cliente(c,soltar_balon)
+            if keys[pg.K_DOWN]:
+                c = (0,1)
+                self.controlador.set_coordenadas_jugador_cliente(c,soltar_balon)
+            if keys[pg.K_LEFT]:
+                c = (-1,0)
+                self.controlador.set_coordenadas_jugador_cliente(c,soltar_balon)
+            if keys[pg.K_RIGHT]:
+                c = (1,0)
+                self.controlador.set_coordenadas_jugador_cliente(c,soltar_balon)
             if not self.controlador.esta_jugador_dentro_campo((ANCHO,ALTO)): #No debe seguir pintando, debe regresar las coordenadas anteriores
-                self.controlador.set_coordenadas_jugador_cliente(coord_ant, True)
+                self.controlador.set_coordenadas_jugador_cliente(coord_ant,soltar_balon,True)
             self.sg = (pg.time.get_ticks()-start_ticks)/1000 #Segundos transcurridos del juego
             if int(self.sg)==tiempos[0]:
                 self.cargar_anuncio(tiempos[1])
@@ -193,5 +199,5 @@ class VentanaPrincipal():
 try:
     VentanaPrincipal()
 except Exception as e:
-    #print(e.trace())
+    print(e.trace())
     pass

@@ -41,17 +41,12 @@ class Controlador():
         Ejemplo (separador ,): arr = ['jugador1,False,100,200' , 'jugador2,False,150,180' , 'jugador3,True,400,50' , 'jugador4,True,350,149']"""
         self.aplicacion.set_datos_jugadores(datos)
         
-    def set_coordenadas_jugador_cliente(self,coord, anteriores = False):
-        self.aplicacion.set_coordenadas_jugador_cliente(coord, anteriores)
-        
-    def set_datos_balon(self, x, y, usuario):
-        """Metodo que mueve las coordenadas de la imagen del balon como tambien cambia el nombre del jugador que tiene el balon y, 
-        retorna tupla de ruta generada de la imagen del balon y angulo de imagen para rotar"""
-        return self.aplicacion.set_datos_balon(x,y,usuario)
+    def set_coordenadas_jugador_cliente(self,coord,soltar_balon, anteriores = False):
+        self.aplicacion.set_coordenadas_jugador_cliente(coord,soltar_balon, anteriores)
     
-    def get_posicion_balon(self):
+    def get_datos_balon(self):
         """Metodo que retorna un string con la posicion (x,y) del balon separado por: aplicacion.SEPARADOR"""
-        return self.aplicacion.get_posicion_balon()
+        return self.aplicacion.get_datos_balon()
     
     def get_ruta_imagen_campo(self):
         """Metodo que retorna un string con la ruta de la imagen del campo a cargar"""
@@ -80,3 +75,9 @@ class Controlador():
     
     def get_coordenadas_cliente(self):
         return self.aplicacion.get_coordenadas_cliente()
+    
+    def alguien_tiene_balon(self):
+        return self.aplicacion.alguien_tiene_balon()
+    
+    def jugador_cliente_colisionando_balon(self):
+        return self.aplicacion.jugador_cliente_colisionando_balon()
