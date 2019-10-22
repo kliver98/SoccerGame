@@ -167,4 +167,4 @@ class Partido():
     
     def esta_partido_listo(self):
         """Metodo que retornar boolean confirmando si ya se puede mostrar pantalla para iniciar el partido"""
-        return self.esta_partido_listo()
+        return self.__partido_listo
