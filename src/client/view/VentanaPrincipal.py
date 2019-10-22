@@ -96,8 +96,8 @@ class VentanaPrincipal():
                 self.pintar_fondo(menu = True)
                 while not self.controlador.esta_partido_listo():
                     self.dibujar_texto("Esperando jugadores...", int(ANCHO*0.06), (int(ANCHO*0.1855),int(ALTO*0.45)))
-                    self.controlador.iniciar_jugadores()
-                    self.jugando()
+                self.controlador.iniciar_jugadores()
+                self.jugando()
                 pg.display.update()
                 
         self.iniciar() #Para que se cierre la aplicacion solo cuando el usuario de clic en x de la ventana
