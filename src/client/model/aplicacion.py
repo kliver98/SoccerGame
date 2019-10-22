@@ -104,3 +104,9 @@ class Aplicacion():
     
     def jugador_cliente_colisionando_balon(self):
         return self.__partido.jugador_cliente_colisionando_balon()
+    
+    def esta_partido_listo(self):
+        return self.__partido.esta_partido_listo()
+    
+    def iniciar_jugadores(self):
+        self.__partido.iniciar_jugadores()

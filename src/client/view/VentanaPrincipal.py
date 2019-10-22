@@ -92,10 +92,13 @@ class VentanaPrincipal():
                 if not ip or not self.controlador.esta_formatoIP_bien(ip):
                     ip = None
                     continue
-                self.pintar_fondo(menu = True)
-                self.dibujar_texto("Esperando jugadores...", int(ANCHO*0.06), (int(ANCHO*0.1855),int(ALTO*0.45)))
-                pg.display.update()
                 self.controlador.iniciar_partido(self.usuario_de_jugador,2,ip) #DESCOMENTAR PARTE QUE INICIA EL SERVIDOR <-------------------- OJO. Ahi inicia conexion
+                self.pintar_fondo(menu = True)
+                while not self.controlador.esta_partido_listo():
+                    self.dibujar_texto("Esperando jugadores...", int(ANCHO*0.06), (int(ANCHO*0.1855),int(ALTO*0.45)))
+                    self.controlador.iniciar_jugadores()
+                    self.jugando()
+                pg.display.update()
                 
         self.iniciar() #Para que se cierre la aplicacion solo cuando el usuario de clic en x de la ventana
         

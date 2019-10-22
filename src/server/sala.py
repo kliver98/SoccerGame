@@ -8,7 +8,7 @@ from _thread import *
 
 class Sala:
     '''maximo de jugadores por equipo'''
-    MAX_JUGADORES_TEAM=2
+    MAX_JUGADORES_TEAM=1
     ''' atributos de una sala del servidor para representar un partido'''
     __balon=None
     '''map de jugadores Key=username,[team,..otros atributos]'''
@@ -81,7 +81,7 @@ class Sala:
                 lonA +=1
             else:
                 self.equipo_disponible='B' 
-                self.posicion_actual=lonA+lonB+1   
+                self.posicion_actual=lonA+lonB+1
     
     def esta_disponible(self):
         return self.disponible    

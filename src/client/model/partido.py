@@ -23,6 +23,7 @@ class Partido():
     __usuario_de_jugador = None
     """Atributo para representar un objeto de la clase Conexion si se esta jugando online"""
     __conexion = None
+    __partido_listo = None
     
     def __init__(self, usuario_de_jugador, numero_campo,ip):
         """Constructor que inicializa el balon, el campo y la lista de jugadores. Recibe el nombre de usuario que controla el cliente, 
@@ -31,6 +32,7 @@ class Partido():
         self.__balon = balon.Balon()
         self.__campo = campo.Campo(numero_campo)
         self.__jugadores = []
+        self.__partido_listo = False
         if ip is not None:
             self.__conexion = Conexion(ip)
             print("Conectado con el servidor")
@@ -42,21 +44,25 @@ class Partido():
             except Exception as e:
                 print(e.trace_call())
             
-    
-        
-    def agregar_jugador(self, usuario, equipo):
+    def agregar_jugador(self, usuario, equipo, coordenadas):
         """Metodo para agregar un jugador a la lista de jugadores"""
-        self.__jugadores.append(Jugador(usuario,equipo))
+        self.__jugadores.append(Jugador(usuario,equipo, coordenadas))
     
     def iniciar_bots(self, num_jugadores_equipo):
-        self.__jugadores.append(Jugador(f"{self.__usuario_de_jugador}","A")) #Jugador del usuario del cliente
+        self.__jugadores.append(Jugador(f"{self.__usuario_de_jugador}","A",None)) #Jugador del usuario del cliente
         for i in range(1,num_jugadores_equipo*2):
             if i<num_jugadores_equipo:
                 equipo = "A"
             else:
                 equipo = "B"
-            self.agregar_jugador(f"bot#{i}",equipo)
+            self.agregar_jugador(f"bot#{i}",equipo, None)
         return len(self.__jugadores)==(num_jugadores_equipo*2)
+    
+    def iniciar_jugadores(self):
+        datos_jugadores = None #Aqui se obtienen los datos de los jugadores que el servidor trajo
+        for i in datos_jugadores:
+            datos = i.split(";") #Como tengas tu separador lo separas (Recomiendo no separa por .)
+            self.agregar_jugador(datos[0], datos[1], datos[2]) #Suponiendo que en la 0 esta nombre user, en la 1 equipo y en la 2 coordenadas
     
     def set_coordenadas_jugador_cliente(self, coord,soltar_balon, anteriores):
         jugador = self.get_jugador(self.__usuario_de_jugador)
@@ -157,5 +163,8 @@ class Partido():
         if self.__balon.get_usuario():
             if self.__balon.get_usuario()!="":
                 return True
-        
         return False
+    
+    def esta_partido_listo(self):
+        """Metodo que retornar boolean confirmando si ya se puede mostrar pantalla para iniciar el partido"""
+        return self.esta_partido_listo()

@@ -81,3 +81,9 @@ class Controlador():
     
     def jugador_cliente_colisionando_balon(self):
         return self.aplicacion.jugador_cliente_colisionando_balon()
+    
+    def esta_partido_listo(self):
+        return self.aplicacion.esta_partido_listo()
+    
+    def iniciar_jugadores(self):
+        self.aplicacion.iniciar_jugadores()

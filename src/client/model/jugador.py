@@ -23,11 +23,12 @@ class Jugador():
     """Atributo numero para identificar el angulo de rotacion de la imagen del jugador"""
     __angulo_de_imagen = None
     
-    def __init__(self, usuario, equipo):
+    def __init__(self, usuario, equipo, coordenadas):
         """Constructor que recibe el nombre de usuario y el equipo al cual pertenece"""
         self.__usuario = usuario
         self.__equipo = equipo
-        self.__coordenadas = (random.randint(10,850),random.randint(10,500)) #Ver como se cuadra lo de las coordenadas que aparece el jugador
+        if not coordenadas:
+            self.__coordenadas = (random.randint(10,850),random.randint(10,500)) #Ver como se cuadra lo de las coordenadas que aparece el jugador
         self.__numero_de_imagen = 1
         self.__angulo_de_imagen = 270 if equipo=="A" else 90
     
