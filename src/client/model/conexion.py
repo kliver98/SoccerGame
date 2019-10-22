@@ -14,6 +14,7 @@ class Conexion():
         print(self.addr)
         self.info = self.conectar()
         print(f"info: {self.info}")
+        self.info_out="(0,0)"
      
     def  conectar(self):
         '''metodo para conectar el cliente con el servidor'''
@@ -25,8 +26,7 @@ class Conexion():
             print(e.trace_call())
     
     def correr(self):
-        _thread.start_new_thread(self.__threaded_conexion,())
-               
+        _thread.start_new_thread(self.__threaded_conexion,())   
       
     def getInfo(self):
         '''funcion que retorna la ultima cadena de informacion recibida'''
@@ -48,12 +48,15 @@ class Conexion():
         print("entro")
         while True:
             try:
-                
-                self.info=   self.enviar("(0,0)")
+                self.info=   self.enviar(self.info_out)
                 print(f"entrada = {self.info}")
             except Exception as e:
                 print(e.trace_call())        
+                self.close()
     
+    def set_info_out(self,info):
+        self.info_out=info
+                    
     def close(self):
         self.client.close()
         print("La conexion cliente se ha cerrado")    

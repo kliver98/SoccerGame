@@ -1,7 +1,7 @@
 from server import balon
 from server import estadisticas
 from _thread import *
-
+from tools import cronometro
 
 
 
@@ -33,6 +33,7 @@ class Sala:
         self.__estadisticas=estadisticas.Estadisticas()
         self.__jugadores={}
         self.posicion_actual=1
+        self.crono=cronometro.Cronometro()
         
     def add_player(self,net,playerid):
         self.equipos[self.equipo_disponible].append(playerid)
@@ -46,7 +47,7 @@ class Sala:
         while True:
             try:
                 info_in=self.leer(net)
-                info_out=f"{self.equipoA},{self.equipoB}"
+                info_out=f"{self.equipoA},{self.equipoB},{self.crono.get_cuenta()}"
                 if not(info_in):
                     print(f"Desconectado: {playerid} -> Sala {self.id}")
                 else:
@@ -73,8 +74,9 @@ class Sala:
     def __comprobar_disponibilidad(self):
         lonA=len(self.equipoA)
         lonB=len(self.equipoB)
-        if lonA+lonB==self.MAX_JUGADORES_TEAM*2:
+        if lonA+lonB==self.MAX_JUGADORES_TEAM*2: # indica que la sala esta completa
             self.disponible=False
+            self.crono.iniciar(self.DURACION_TIEMPO, self.crono.MODO_TEMPORIZADOR)
         else:
             if lonA < self.MAX_JUGADORES_TEAM:
                 self.equipo_disponible='A'
