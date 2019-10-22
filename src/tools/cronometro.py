@@ -9,7 +9,7 @@ class Cronometro:
         self.cuenta=-1
     
     def iniciar(self,tiempo,modo):
-        _thread.start_new_thread(self.__correr_hilo, (tiempo,modo))
+        _thread.start_new_thread(self.__correr_hilo, (tiempo+1,modo))
     
     def __correr_hilo(self,tiempo,modo):
         if modo == self.MODO_CRONOMETRO:

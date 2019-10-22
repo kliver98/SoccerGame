@@ -23,8 +23,8 @@ class Sala:
     
     def __init__(self,iden):
         
-        self.equipoA=[]
-        self.equipoB=[]
+        self.equipoA={}
+        self.equipoB={}
         self.equipos={'A':self.equipoA,'B':self.equipoB}
         self.equipo_disponible='A'
         self.id=iden
@@ -36,7 +36,7 @@ class Sala:
         self.crono=cronometro.Cronometro()
         
     def add_player(self,net,playerid):
-        self.equipos[self.equipo_disponible].append(playerid)
+        self.equipos[self.equipo_disponible][playerid]=None
         start_new_thread(self.__threaded_client,(net,playerid,self.equipo_disponible,self.posicion_actual))
         self.__comprobar_disponibilidad()
         
