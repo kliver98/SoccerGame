@@ -1,4 +1,5 @@
 import socket
+import _thread
 
 class Conexion():
     
@@ -22,8 +23,11 @@ class Conexion():
         except Exception as e:
             print('Error al intentar conectar el cliente con el servidor')
             print(e.trace_call())
-            
-       
+    
+    def correr(self):
+        _thread.start_new_thread(self.__threaded_conexion,())
+               
+      
     def getInfo(self):
         '''funcion que retorna la ultima cadena de informacion recibida'''
         return self.info
@@ -39,7 +43,16 @@ class Conexion():
             print("Error de conexion al enviar informacion")
             print(e)
             self.close()
-            
+    
+    def __threaded_conexion(self):
+        print("entro")
+        while True:
+            try:
+                
+                self.info=   self.enviar("(0,0)")
+                print(f"entrada = {self.info}")
+            except Exception as e:
+                print(e.trace_call())        
     
     def close(self):
         self.client.close()

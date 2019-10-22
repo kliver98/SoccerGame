@@ -1,7 +1,7 @@
 from client.model import balon, campo, aplicacion
 from client.model.jugador import Jugador
 from client.model.conexion import Conexion
-from _thread import *
+import _thread
 
 MODO_JUEGO_ONLINE = 1
 MODO_JUEGO_LOCAL = 2
@@ -35,20 +35,13 @@ class Partido():
             print("Conectado con el servidor")
             try:
                 print("try")
-                start_new_thread(self.__threaded_conexion(self.__conexion))
+                self.__conexion.correr()
+               # _thread.start_new_thread(self.__threaded_conexion(self.__conexion))
                 print("salio")
             except Exception as e:
                 print(e.trace_call())
             
-    def __threaded_conexion(self,con):
-        print("entro")
-        while True:
-            try:
-                
-                entrada=   con.enviar("(0,0)")
-                print(f"entrada = {entrada}")
-            except Exception as e:
-                print(e.trace_call())
+    
         
     def agregar_jugador(self, usuario, equipo):
         """Metodo para agregar un jugador a la lista de jugadores"""
