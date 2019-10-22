@@ -1,21 +1,36 @@
 import socket
 import _thread
+from client.model import partido
 
 class Conexion():
     
     BUFFER_SIZE=2048
     
-    def __init__(self,ip):
+    def __init__(self,ip,partido):
         '''inicializa la coneccion con el servidor'''
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server = ip
         self.port = 5558
         self.addr = (self.server, self.port)
         print(self.addr)
+        self.partido=partido
         self.info = self.conectar()
         print(f"info: {self.info}")
-        self.info_out="(0,0)"
+        params=self.info.split(';')
+        self.posicion_entrada=params[0]
+        self.equipo=params[1]
+        self.nombre=self.partido.get_usuario_de_jugador()
+        
+        
+        self.__iniciar_huesped(self.posicion_entrada,self.nombre,self.equipo)
+        self.coor=self.partido.get_coordenadas_cliente()
+        self.info_out=f"({self.nombre},{self.equipo},{self.coor}"
      
+    def __iniciar_huesped(self,posicion,nombre,equipo):
+        coordenadas=self.partido.coordenadas_defecto(posicion)
+        self.partido.agregar_jugador(nombre,equipo,coordenadas)
+    
+    
     def  conectar(self):
         '''metodo para conectar el cliente con el servidor'''
         try:

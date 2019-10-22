@@ -41,13 +41,13 @@ class Sala:
         self.__comprobar_disponibilidad()
         
     def __threaded_client(self,net,playerid,equipo,posicion):
-        info_out=f"sala:{self.id} equipo: {equipo} posicion: {posicion}"
+        info_out=f"{posicion};{equipo};{self.id}"# posicion,equipo,sala
         self.enviar(net,info_out)
         
         while True:
             try:
                 info_in=self.leer(net)
-                info_out=f"{self.equipoA},{self.equipoB},{self.crono.get_cuenta()}"
+                info_out=f"{self.equipoA.values()};{self.equipoB.values()};{self.crono.get_cuenta()}"
                 if not(info_in):
                     print(f"Desconectado: {playerid} -> Sala {self.id}")
                 else:

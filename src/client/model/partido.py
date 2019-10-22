@@ -34,7 +34,7 @@ class Partido():
         self.__jugadores = []
         self.__partido_listo = False
         if ip is not None:
-            self.__conexion = Conexion(ip)
+            self.__conexion = Conexion(ip,self)
             print("Conectado con el servidor")
             try:
                 print("try")
@@ -168,3 +168,8 @@ class Partido():
     def esta_partido_listo(self):
         """Metodo que retornar boolean confirmando si ya se puede mostrar pantalla para iniciar el partido"""
         return self.__partido_listo
+    
+    def coordenadas_defecto(self,posicion):
+        """"metodo que retorna las coordenadas por defecto, segun la posicion de ingreso"""
+        coordenadas={'1':(100,100),'2':(200,200),'3':(300,300),'4':(400,400)}
+        return coordenadas[posicion]
