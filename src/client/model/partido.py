@@ -89,6 +89,10 @@ class Partido():
             if self.jugador_cliente_colisionando_balon():
                 self.mover_balon(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR)
         jugador.set_coordenadas(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR)
+        if self.__conexion:
+            info_a = self.__conexion.get_info_out().split(",")
+            n_info = f"{info_a[0]},{info_a[1]},{jugador.get_coordenadas()}"
+            self.__conexion.set_info_out(n_info)
     
     def esta_jugador_dentro_campo(self, coordenadas_campo):
         """Metodo que verifica si un jugador esta dentro de las coordenadas del campo.
@@ -197,3 +201,7 @@ class Partido():
     def esta_partido_listo(self):
         """Metodo que retornar boolean confirmando si ya se puede mostrar pantalla para iniciar el partido"""
         return self.partido_listo
+    
+    def get_tiempo_juego_Online(self):
+        tiempo = int(self.__datos_servidor[2])
+        return tiempo

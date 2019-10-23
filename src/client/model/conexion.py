@@ -26,7 +26,7 @@ class Conexion():
         
         self.__iniciar_huesped(self.posicion_entrada,self.nombre,self.equipo)
         self.coor=self.partido.get_coordenadas_cliente()
-        self.info_out=f"({self.nombre},{self.equipo},{self.coor}"
+        self.info_out=f"({self.nombre},{self.equipo},{self.coor}" #Aqui en mandas un ( de mas pero ya hice la logica para borrarlo cuando obtengo estos datos, por ende NO BORRAR
      
     def __iniciar_huesped(self,posicion,nombre,equipo):
         coordenadas=self.partido.get_coordenadas_cliente()
@@ -76,13 +76,16 @@ class Conexion():
                     self.partido.set_patido_listo(self.partido_listo)
                 if self.guardar_datos_servidor>=5:
                     self.guardar_datos_servidor = 0
-                #print(f"entrada = {self.info}")
+                #print(f"entrada = {self.info} - out = {self.info_out}")
             except Exception as e:
                 print(e.trace_call())        
                 self.close()
     
     def set_info_out(self,info):
         self.info_out=info
+                    
+    def get_info_out(self):
+        return self.info_out
                     
     def close(self):
         self.client.close()

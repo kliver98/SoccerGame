@@ -47,7 +47,8 @@ class VentanaPrincipal():
     def actualizar_pantalla_jugando(self, jugadores):
         """Update the window with their new graphics"""
         self.pintar_fondo()
-        self.dibujar_texto(f"Tiempo: {int(self.sg)}", int(ANCHO*0.025), [ANCHO*0.43,ALTO*0.02], (0, 0, 0), True)
+        ####self.dibujar_texto(f"Tiempo: {int(self.sg)}", int(ANCHO*0.025), [ANCHO*0.43,ALTO*0.02], (0, 0, 0), True)
+        self.dibujar_texto(f"Tiempo: {int(self.controlador.get_tiempo_juego_Online())}", int(ANCHO*0.025), [ANCHO*0.43,ALTO*0.02], (0, 0, 0), True)
         #Pinto los jugadores. Todos
         separador = self.controlador.get_separador()
         for j in jugadores: #Pintando todos los jugadores
@@ -86,7 +87,6 @@ class VentanaPrincipal():
                 self.controlador.iniciar_partido(self.usuario_de_jugador,2)
                 self.controlador.iniciar_bots() #Crea los jugadores bots al igual que el jugador del equipo del cliente
                 self.jugando()
-                self.pintar_fondo(menu = True)
             else: #Quiere jugar online
                 ip = "localhost"#self.ventana_preguntar("Ingrese la direccion IP del servidor a conectarse: ")
                 if not ip or not self.controlador.esta_formatoIP_bien(ip):
@@ -102,8 +102,8 @@ class VentanaPrincipal():
                     self.dibujar_texto("Esperando jugadores...", int(ANCHO*0.06), (int(ANCHO*0.1855),int(ALTO*0.45)))
                     pg.display.update()
                 self.controlador.iniciar_jugadores()
-                self.jugando()
-                pg.display.update()
+                self.jugando(True)
+            self.pintar_fondo(menu = True)
                 
         self.iniciar() #Para que se cierre la aplicacion solo cuando el usuario de clic en x de la ventana
         
@@ -136,11 +136,13 @@ class VentanaPrincipal():
             
         return modo
         
-    def jugando(self):
+    def jugando(self, modoOnline = False):
         run = True
         start_ticks = pg.time.get_ticks()
         tiempos = self.controlador.get_tiempos() #Arreglo, en 0 esta tiempo juego de 1 tiempo partido, en 1 tiempo para anuncio
         while run:
+            if modoOnline:
+                self.controlador.iniciar_jugadores()
             self.clock.tick(FPS_JUGANDO)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -183,7 +185,7 @@ class VentanaPrincipal():
             self.clock.tick(5) #Dado que solo se reproducira audio no hay problema con 5fps
             sg = (pg.time.get_ticks()-start_ticks)/1000 #Segundos transcurridos del juego
             self.pintar_fondo(True)
-            self.dibujar_texto(f"Tiempo restante: {int(tiempo-sg)}", int(ANCHO*0.02), [ANCHO*0.42,10])
+            self.dibujar_texto(f"Tiempo restante: {int(tiempo-self.controlador.get_tiempo_juego_Online())}", int(ANCHO*0.02), [ANCHO*0.42,10])
             pg.display.update()
             for event in pg.event.get():
                 if event.type == pg.QUIT:

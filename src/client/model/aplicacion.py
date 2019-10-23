@@ -6,7 +6,7 @@ El separador sera tanto para modelo, vista y/o controlador"""
 SEPARADOR = ";"
 """Constante global, no ligada a la clase, que representa el nombre de la aplicacion"""
 NOMBRE_APLICACION = "Soccer Game"
-MAX_JUGADORES_SALA_EQUIPO = 2
+MAX_JUGADORES_SALA_EQUIPO = 1
 
 class Aplicacion():
     
@@ -110,3 +110,6 @@ class Aplicacion():
     
     def iniciar_jugadores(self):
         self.__partido.iniciar_jugadores()
+        
+    def get_tiempo_juego_Online(self):
+        return self.__partido.get_tiempo_juego_Online()

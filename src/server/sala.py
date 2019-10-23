@@ -8,7 +8,7 @@ import time
 
 class Sala:
     '''maximo de jugadores por equipo'''
-    MAX_JUGADORES_TEAM=2 #COn uno craseha, solo he probado con 2 y 1
+    MAX_JUGADORES_TEAM=1 #COn uno craseha, solo he probado con 2 y 1
     ''' atributos de una sala del servidor para representar un partido'''
     __balon=None
     '''map de jugadores Key=username,[team,..otros atributos]'''

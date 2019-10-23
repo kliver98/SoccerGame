@@ -87,3 +87,6 @@ class Controlador():
     
     def iniciar_jugadores(self):
         self.aplicacion.iniciar_jugadores()
+        
+    def get_tiempo_juego_Online(self):
+        return self.aplicacion.get_tiempo_juego_Online()
