@@ -3,6 +3,7 @@ from client.model.jugador import Jugador
 from client.model.conexion import Conexion
 from _thread import *
 from msvcrt import kbhit
+import random
 
 MODO_JUEGO_ONLINE = 1
 MODO_JUEGO_LOCAL = 2
@@ -23,7 +24,7 @@ class Partido():
     __usuario_de_jugador = None
     """Atributo para representar un objeto de la clase Conexion si se esta jugando online"""
     __conexion = None
-    __partido_listo = None
+    __datos_servidor = None
     
     def __init__(self, usuario_de_jugador, numero_campo,ip):
         """Constructor que inicializa el balon, el campo y la lista de jugadores. Recibe el nombre de usuario que controla el cliente, 
@@ -32,7 +33,7 @@ class Partido():
         self.__balon = balon.Balon()
         self.__campo = campo.Campo(numero_campo)
         self.__jugadores = []
-        self.__partido_listo = False
+        self.partido_listo = False
         if ip is not None:
             self.__conexion = Conexion(ip,self)
             print("Conectado con el servidor")
@@ -59,10 +60,25 @@ class Partido():
         return len(self.__jugadores)==(num_jugadores_equipo*2)
     
     def iniciar_jugadores(self):
-        datos_jugadores = None #Aqui se obtienen los datos de los jugadores que el servidor trajo
-        for i in datos_jugadores:
-            datos = i.split(";") #Como tengas tu separador lo separas (Recomiendo no separa por .)
-            self.agregar_jugador(datos[0], datos[1], datos[2]) #Suponiendo que en la 0 esta nombre user, en la 1 equipo y en la 2 coordenadas
+        self.__jugadores = []
+        A = self.__datos_servidor[0].split("['")[1].split("']")[0].split("', '")
+        B = self.__datos_servidor[1].split("['")[1].split("']")[0].split("', '")
+        for i in A:
+            aux = i.split("(")
+            coord = aux[2].split(")")[0].split(",")
+            x = int(coord[0])
+            y = int(coord[1])
+            user = aux[1].split(",")[0]
+            equipo = aux[1].split(",")[1]
+            self.agregar_jugador(user, equipo, (x,y)) #Suponiendo que en la 0 esta nombre user, en la 1 equipo y en la 2 coordenadas
+        for i in B:
+            aux = i.split("(")
+            coord = aux[2].split(")")[0].split(",")
+            x = int(coord[0])
+            y = int(coord[1])
+            user = aux[1].split(",")[0]
+            equipo = aux[1].split(",")[1]
+            self.agregar_jugador(user, equipo, (x,y)) #Suponiendo que en la 0 esta nombre user, en la 1 equipo y en la 2 coordenadas
     
     def set_coordenadas_jugador_cliente(self, coord,soltar_balon, anteriores):
         jugador = self.get_jugador(self.__usuario_de_jugador)
@@ -123,8 +139,8 @@ class Partido():
         datos = None
         if not self.__conexion: #Es LOCAL, contra PC
             datos = self.__balon.actualizar_datos(0,0,"",False)
-        else: #Debo traer datos de balon dle servidor
-            datos = None
+        else: #Debo traer datos de balon del servidor
+            datos = balon.Balon().actualizar_datos(300,300,"") #CAMBIAR ESTO!!!! DEBE TRAER POSICION DLE BALON DEL SERVIDOR
         coord = self.__balon.get_coordenadas()
         return f"{datos[0]}{aplicacion.SEPARADOR}{datos[1]}{aplicacion.SEPARADOR}{coord[0]}{aplicacion.SEPARADOR}{coord[1]}"
     
@@ -157,7 +173,14 @@ class Partido():
         return VELOCIDAD_JUGADOR
     
     def get_coordenadas_cliente(self):
-        return self.get_jugador(self.__usuario_de_jugador).get_coordenadas()
+        jugador = self.get_jugador(self.__usuario_de_jugador)
+        if not jugador:
+            return (random.randint(10,850),random.randint(10,500))
+        coord = jugador.get_coordenadas()
+        if not jugador.get_coordenadas():
+            coord = (random.randint(10,850),random.randint(10,500))
+        return coord
+        
     
     def alguien_tiene_balon(self):
         if self.__balon.get_usuario():
@@ -165,11 +188,12 @@ class Partido():
                 return True
         return False
     
+    def set_patido_listo(self, estado):
+        self.partido_listo = estado
+        
+    def set_datos_servidor(self, datos):
+        self.__datos_servidor = datos.split(";")
+    
     def esta_partido_listo(self):
         """Metodo que retornar boolean confirmando si ya se puede mostrar pantalla para iniciar el partido"""
-        return self.__partido_listo
-    
-    def coordenadas_defecto(self,posicion):
-        """"metodo que retorna las coordenadas por defecto, segun la posicion de ingreso"""
-        coordenadas={'1':(100,100),'2':(200,200),'3':(300,300),'4':(400,400)}
-        return coordenadas[posicion]
+        return self.partido_listo

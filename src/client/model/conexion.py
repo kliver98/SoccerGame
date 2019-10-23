@@ -1,6 +1,7 @@
 import socket
 import _thread
 from client.model import partido
+import time
 
 class Conexion():
     
@@ -20,14 +21,15 @@ class Conexion():
         self.posicion_entrada=params[0]
         self.equipo=params[1]
         self.nombre=self.partido.get_usuario_de_jugador()
-        
+        self.partido_listo = False
+        self.guardar_datos_servidor = 0 #Sirve  para que envie bien todos los datos a los clientes asociados
         
         self.__iniciar_huesped(self.posicion_entrada,self.nombre,self.equipo)
         self.coor=self.partido.get_coordenadas_cliente()
         self.info_out=f"({self.nombre},{self.equipo},{self.coor}"
      
     def __iniciar_huesped(self,posicion,nombre,equipo):
-        coordenadas=self.partido.coordenadas_defecto(posicion)
+        coordenadas=self.partido.get_coordenadas_cliente()
         self.partido.agregar_jugador(nombre,equipo,coordenadas)
     
     
@@ -64,7 +66,17 @@ class Conexion():
         while True:
             try:
                 self.info=   self.enviar(self.info_out)
-                print(f"entrada = {self.info}")
+                #self.partido.set_datos_servidor(self.info)
+                if self.guardar_datos_servidor<5:
+                    self.partido.set_datos_servidor(self.info)
+                    self.guardar_datos_servidor += 1
+                if not self.partido_listo:
+                    self.guardar_datos_servidor = 0
+                    self.partido_listo = int(self.info.split(";")[2])!=-1
+                    self.partido.set_patido_listo(self.partido_listo)
+                if self.guardar_datos_servidor>=5:
+                    self.guardar_datos_servidor = 0
+                #print(f"entrada = {self.info}")
             except Exception as e:
                 print(e.trace_call())        
                 self.close()

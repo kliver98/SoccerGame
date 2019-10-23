@@ -2,13 +2,13 @@ from server import balon
 from server import estadisticas
 from _thread import *
 from tools import cronometro
-
+import time
 
 
 
 class Sala:
     '''maximo de jugadores por equipo'''
-    MAX_JUGADORES_TEAM=1
+    MAX_JUGADORES_TEAM=2 #COn uno craseha, solo he probado con 2 y 1
     ''' atributos de una sala del servidor para representar un partido'''
     __balon=None
     '''map de jugadores Key=username,[team,..otros atributos]'''
@@ -47,7 +47,7 @@ class Sala:
         while True:
             try:
                 info_in=self.leer(net)
-                info_out=f"{self.equipoA.values()};{self.equipoB.values()};{self.crono.get_cuenta()}"
+                info_out=f"{list(self.equipoA.values())};{list(self.equipoB.values())};{self.crono.get_cuenta()}"
                 if not(info_in):
                     print(f"Desconectado: {playerid} -> Sala {self.id}")
                 else:
@@ -86,4 +86,4 @@ class Sala:
                 self.posicion_actual=lonA+lonB+1
     
     def esta_disponible(self):
-        return self.disponible    
+        return self.disponible  
