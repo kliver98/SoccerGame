@@ -5,6 +5,8 @@ import os
 from client.controller import controlador
 import sys
 import ctypes
+from tools import cronometro
+from tools.cronometro import Cronometro
 ALTO = 550
 ANCHO = 900
 MODO_JUEGO_ONLINE = 1
@@ -140,8 +142,15 @@ class VentanaPrincipal():
     def jugando(self, modoOnline = False):
         run = True
         tiempos = self.controlador.get_tiempos() #Arreglo, en 0 esta tiempo juego de 1 tiempo partido, en 1 tiempo para anuncio
+        self.cr = None
+        if not modoOnline:
+            self.cr = cronometro.Cronometro()
+            self.cr.iniciar((tiempos[0]*2)+tiempos[1],Cronometro.MODO_CRONOMETRO)
         while run:
-            self.sg = self.controlador.get_tiempo_juego_Online()
+            if modoOnline:
+                self.sg = self.controlador.get_tiempo_juego_Online()
+            else:
+                self.sg = self.cr.get_cuenta()
             if modoOnline:
                 self.controlador.iniciar_jugadores()
             self.clock.tick(FPS_JUGANDO)
@@ -171,19 +180,21 @@ class VentanaPrincipal():
                 self.controlador.set_coordenadas_jugador_cliente(c,soltar_balon)
             if not self.controlador.esta_jugador_dentro_campo((ANCHO,ALTO)): #No debe seguir pintando, debe regresar las coordenadas anteriores
                 self.controlador.set_coordenadas_jugador_cliente(coord_ant,soltar_balon,True)
-            print(f"self.sg:{self.sg} - timepos:{tiempos}")
             if int(self.sg)==tiempos[0]:
-                self.cargar_anuncio(tiempos)
+                self.cargar_anuncio(tiempos,modoOnline)
             elif int(self.sg)>=(tiempos[0]*2+tiempos[1]):
                 run = False
             self.actualizar_pantalla_jugando(self.controlador.get_datos_jugadores())
             pg.display.update()
     
-    def cargar_anuncio(self, tiempos):
+    def cargar_anuncio(self, tiempos, modoOnline = True):
         run = True
         while run:
             self.clock.tick(5) #Dado que solo se reproducira audio no hay problema con 5fps
-            self.sg = self.controlador.get_tiempo_juego_Online() #Segundos transcurridos del juego
+            if modoOnline:
+                self.sg = self.controlador.get_tiempo_juego_Online() #Segundos transcurridos del juego
+            else:
+                self.sg = self.cr.get_cuenta()
             self.pintar_fondo(True)
             self.dibujar_texto(f"Tiempo restante: {int(tiempos[0]+tiempos[1]-self.sg)}", int(ANCHO*0.02), [ANCHO*0.42,10])
             pg.display.update()
