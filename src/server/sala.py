@@ -3,7 +3,7 @@ from server import estadisticas
 from _thread import *
 from tools import cronometro
 import time
-
+import constantesCompartidas as cc #ESTO COMO ESTAMOS TRABAJANDO LOCAL FUNCIONA, YA SI SE DISTRIBUYE TOCA PONER LOS VALORES DE LAS CONSTANTES EN CADA CLASE
 
 
 class Sala:
@@ -18,8 +18,8 @@ class Sala:
     
     
     
-    '''duracion de un tiempo en el partido, expresado en segundos'''
-    DURACION_TIEMPO=60
+    '''duracion total que dura todo un partido'''
+    DURACION_TIEMPO = (cc.TIEMPO_CADA_JUEGO*2)+cc.TIEMPO_ANUNCIO
     
     def __init__(self,iden):
         
@@ -76,7 +76,7 @@ class Sala:
         lonB=len(self.equipoB)
         if lonA+lonB==self.MAX_JUGADORES_TEAM*2: # indica que la sala esta completa
             self.disponible=False
-            self.crono.iniciar(self.DURACION_TIEMPO, self.crono.MODO_TEMPORIZADOR)
+            self.crono.iniciar(self.DURACION_TIEMPO, self.crono.MODO_CRONOMETRO)
         else:
             if lonA < self.MAX_JUGADORES_TEAM:
                 self.equipo_disponible='A'

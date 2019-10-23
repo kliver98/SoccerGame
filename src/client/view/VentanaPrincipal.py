@@ -48,14 +48,14 @@ class VentanaPrincipal():
         """Update the window with their new graphics"""
         self.pintar_fondo()
         ####self.dibujar_texto(f"Tiempo: {int(self.sg)}", int(ANCHO*0.025), [ANCHO*0.43,ALTO*0.02], (0, 0, 0), True)
-        self.dibujar_texto(f"Tiempo: {int(self.controlador.get_tiempo_juego_Online())}", int(ANCHO*0.025), [ANCHO*0.43,ALTO*0.02], (0, 0, 0), True)
+        self.dibujar_texto(f"Tiempo: {self.sg}", int(ANCHO*0.025), [ANCHO*0.43,ALTO*0.02], (0, 0, 0), True)
         #Pinto los jugadores. Todos
         separador = self.controlador.get_separador()
         for j in jugadores: #Pintando todos los jugadores
             datos = j.split(separador)
             imagen = pg.image.load(datos[4])
             imagen = pg.transform.rotate(imagen, int(datos[5]))
-            eje_x = int(datos[2]) 
+            eje_x = int(datos[2])
             eje_y = int(datos[3])
             self.window.blit(imagen.convert_alpha(),[eje_x,eje_y])
         datos_balon = self.controlador.get_datos_balon()
@@ -104,6 +104,7 @@ class VentanaPrincipal():
                 self.controlador.iniciar_jugadores()
                 self.jugando(True)
             self.pintar_fondo(menu = True)
+            pg.display.update()
                 
         self.iniciar() #Para que se cierre la aplicacion solo cuando el usuario de clic en x de la ventana
         
@@ -138,9 +139,9 @@ class VentanaPrincipal():
         
     def jugando(self, modoOnline = False):
         run = True
-        start_ticks = pg.time.get_ticks()
         tiempos = self.controlador.get_tiempos() #Arreglo, en 0 esta tiempo juego de 1 tiempo partido, en 1 tiempo para anuncio
         while run:
+            self.sg = self.controlador.get_tiempo_juego_Online()
             if modoOnline:
                 self.controlador.iniciar_jugadores()
             self.clock.tick(FPS_JUGANDO)
@@ -170,28 +171,27 @@ class VentanaPrincipal():
                 self.controlador.set_coordenadas_jugador_cliente(c,soltar_balon)
             if not self.controlador.esta_jugador_dentro_campo((ANCHO,ALTO)): #No debe seguir pintando, debe regresar las coordenadas anteriores
                 self.controlador.set_coordenadas_jugador_cliente(coord_ant,soltar_balon,True)
-            self.sg = (pg.time.get_ticks()-start_ticks)/1000 #Segundos transcurridos del juego
+            print(f"self.sg:{self.sg} - timepos:{tiempos}")
             if int(self.sg)==tiempos[0]:
-                self.cargar_anuncio(tiempos[1])
-            elif int(self.sg)>(tiempos[0]*2+tiempos[1]):
+                self.cargar_anuncio(tiempos)
+            elif int(self.sg)>=(tiempos[0]*2+tiempos[1]):
                 run = False
             self.actualizar_pantalla_jugando(self.controlador.get_datos_jugadores())
             pg.display.update()
     
-    def cargar_anuncio(self, tiempo):
-        start_ticks = pg.time.get_ticks()
+    def cargar_anuncio(self, tiempos):
         run = True
         while run:
             self.clock.tick(5) #Dado que solo se reproducira audio no hay problema con 5fps
-            sg = (pg.time.get_ticks()-start_ticks)/1000 #Segundos transcurridos del juego
+            self.sg = self.controlador.get_tiempo_juego_Online() #Segundos transcurridos del juego
             self.pintar_fondo(True)
-            self.dibujar_texto(f"Tiempo restante: {int(tiempo-self.controlador.get_tiempo_juego_Online())}", int(ANCHO*0.02), [ANCHO*0.42,10])
+            self.dibujar_texto(f"Tiempo restante: {int(tiempos[0]+tiempos[1]-self.sg)}", int(ANCHO*0.02), [ANCHO*0.42,10])
             pg.display.update()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     run = False
                     pg.quit()
-            if sg>tiempo:
+            if (self.sg-tiempos[1])>tiempos[0]:
                 run = False
                 continue
     

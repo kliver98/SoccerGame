@@ -4,11 +4,12 @@ from client.model.conexion import Conexion
 from _thread import *
 from msvcrt import kbhit
 import random
+import constantesCompartidas as cc #ESTO COMO ESTAMOS TRABAJANDO LOCAL FUNCIONA, YA SI SE DISTRIBUYE TOCA PONER LOS VALORES DE LAS CONSTANTES EN CADA CLASE
 
 MODO_JUEGO_ONLINE = 1
 MODO_JUEGO_LOCAL = 2
-TIEMPO_CADA_JUEGO = 60
-TIEMPO_ANUNCIO = 5
+TIEMPO_CADA_JUEGO = cc.TIEMPO_CADA_JUEGO
+TIEMPO_ANUNCIO = cc.TIEMPO_ANUNCIO
 VELOCIDAD_JUGADOR = 5
 
 class Partido():
