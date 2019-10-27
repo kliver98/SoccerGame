@@ -1,6 +1,7 @@
 import socket
 import sys
 from server import sala
+from server import publicidadController
 
 MAX_JUGADORES=30
 CONEXIONES_ESPERA=10
@@ -31,6 +32,8 @@ def verificar_disponible():
             return i
     return sa
 
+publicidad=publicidadController.PublicidadController(server)
+publicidad.correr()
 
 currentPlayer=0
 currentRoom=0

@@ -5,7 +5,7 @@ import _thread
 class Servidor_UDP:
     server="localhost"
     port=13060
-    BUFFER_SIZE=2048
+    BUFFER_SIZE=2**16
     
     def __init__(self):
         self.sock=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -13,6 +13,7 @@ class Servidor_UDP:
         print("UDP inciiando")
         
     def correr(self):
+        print("UDP corriendo")
         _thread.start_new_thread(self.__thread,())
             
    
