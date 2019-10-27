@@ -11,7 +11,7 @@ class VideoLoader:
         self.video= cv2.VideoCapture(path)
         self.fps= self.video.get(cv2.CAP_PROP_FPS)
         self.delay=self.__calc_delay(self.fps)
-        self.frames_count=self.video.get(cv2.CAP_PROP_FRAME_COUNT)
+        self.frames_count=int(self.video.get(cv2.CAP_PROP_FRAME_COUNT))
         self.__init_frames()
     
     def get_encode_frames(self):
@@ -35,6 +35,6 @@ class VideoLoader:
             else:
                 retValue,frame=self.video.read()
                 if retValue :
-                    data= cv2.imencode('.jpg',frame)
-                    self.frames.append(data)[1]
+                    data= cv2.imencode('.jpg',frame)[1].tostring()
+                    self.frames.append(data)
         self.video.release()
