@@ -1,10 +1,12 @@
 from client.model import balon, campo, aplicacion
 from client.model.jugador import Jugador
 from client.model.conexion import Conexion
+from client.model import udp_capturador
 from _thread import *
 from msvcrt import kbhit
 import random
 import constantesCompartidas as cc #ESTO COMO ESTAMOS TRABAJANDO LOCAL FUNCIONA, YA SI SE DISTRIBUYE TOCA PONER LOS VALORES DE LAS CONSTANTES EN CADA CLASE
+
 
 MODO_JUEGO_ONLINE = 1
 MODO_JUEGO_LOCAL = 2
@@ -28,6 +30,7 @@ class Partido():
     """Atributo para representar un objeto de la clase Conexion si se esta jugando online"""
     __conexion = None
     __datos_servidor = None
+    __udp=None
     
     def __init__(self, usuario_de_jugador, numero_campo,ip):
         """Constructor que inicializa el balon, el campo y la lista de jugadores. Recibe el nombre de usuario que controla el cliente, 
@@ -40,11 +43,14 @@ class Partido():
         self.partido_listo = False
         if ip is not None:
             self.__conexion = Conexion(ip,self)
+            self.__udp=udp_capturador.CapturadorUDP()
             print("Conectado con el servidor")
             try:
                 print("try")
                 self.__conexion.correr()
+                self.__udp.correr()
                # _thread.start_new_thread(self.__threaded_conexion(self.__conexion))
+               
                 print("salio")
             except Exception as e:
                 print(e.trace_call())
