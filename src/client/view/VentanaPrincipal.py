@@ -7,8 +7,9 @@ import sys
 import ctypes
 from tools import cronometro
 from tools.cronometro import Cronometro
-ALTO = 550
-ANCHO = 900
+import constantesCompartidas as constantes
+ALTO = constantes.ALTO_VENTANA
+ANCHO = constantes.ANCHO_VENTANA
 MODO_JUEGO_ONLINE = 1
 MODO_JUEGO_LOCAL = 2
 FPS_JUGANDO = 60
@@ -49,7 +50,6 @@ class VentanaPrincipal():
     def actualizar_pantalla_jugando(self, jugadores):
         """Update the window with their new graphics"""
         self.pintar_fondo()
-        ####self.dibujar_texto(f"Tiempo: {int(self.sg)}", int(ANCHO*0.025), [ANCHO*0.43,ALTO*0.02], (0, 0, 0), True)
         self.dibujar_texto(f"Tiempo: {self.sg}", int(ANCHO*0.025), [ANCHO*0.43,ALTO*0.02], (0, 0, 0), True)
         #Pinto los jugadores. Todos
         separador = self.controlador.get_separador()
@@ -64,7 +64,7 @@ class VentanaPrincipal():
         datos = datos_balon.split(separador)
         imagen = pg.image.load(datos[0])
         imagen = pg.transform.rotate(imagen, int(datos[1]))
-        self.window.blit(imagen.convert_alpha(),[int(datos[2]),int(datos[3])])
+        self.window.blit(imagen.convert_alpha(),[float(datos[2]),float(datos[3])])
     
     def pintar_fondo(self, menu = False):
         if menu:
@@ -95,14 +95,24 @@ class VentanaPrincipal():
                     ip = None
                     continue
                 self.controlador.iniciar_partido(self.usuario_de_jugador,2,ip) #DESCOMENTAR PARTE QUE INICIA EL SERVIDOR <-------------------- OJO. Ahi inicia conexion
-                self.pintar_fondo(menu = True)
+                puntos = ["",".","..","..."]
+                puntos_idx = 0
                 while not self.controlador.esta_partido_listo():
+                    self.pintar_fondo(menu = True)
                     self.clock.tick(2)
                     for event in pg.event.get():
                         if event.type == pg.QUIT:
                             pg.quit()
-                    self.dibujar_texto("Esperando jugadores...", int(ANCHO*0.06), (int(ANCHO*0.1855),int(ALTO*0.45)))
+                    self.dibujar_texto(f"Esperando jugadores{puntos[puntos_idx]}", int(ANCHO*0.06), (int(ANCHO*0.1855),int(ALTO*0.45)))
                     pg.display.update()
+                    if puntos_idx==0:
+                        puntos_idx = 1
+                    elif puntos_idx==1:
+                        puntos_idx = 2
+                    elif puntos_idx==2:
+                        puntos_idx = 3
+                    else:
+                        puntos_idx = 0
                 self.controlador.iniciar_jugadores()
                 self.jugando(True)
             self.pintar_fondo(menu = True)

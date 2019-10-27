@@ -65,18 +65,17 @@ class Conexion():
         print("entro")
         while True:
             try:
-                self.info=   self.enviar(self.info_out)
-                #self.partido.set_datos_servidor(self.info)
+                self.info = self.enviar(self.info_out)
                 if self.guardar_datos_servidor<5:
-                    self.partido.set_datos_servidor(self.info)
+                    self.partido.set_datos_servidor(self.info) #Aquí debo recibir datos del balon
                     self.guardar_datos_servidor += 1
+                    #print(f"entrada = {self.info} - out = {self.info_out}")
                 if not self.partido_listo:
                     self.guardar_datos_servidor = 0
                     self.partido_listo = int(self.info.split(";")[2])!=-1
                     self.partido.set_patido_listo(self.partido_listo)
                 if self.guardar_datos_servidor>=5:
                     self.guardar_datos_servidor = 0
-                #print(f"entrada = {self.info} - out = {self.info_out}")
             except Exception as e:
                 print(e.trace_call())        
                 self.close()

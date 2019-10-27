@@ -10,7 +10,9 @@ MODO_JUEGO_ONLINE = 1
 MODO_JUEGO_LOCAL = 2
 TIEMPO_CADA_JUEGO = cc.TIEMPO_CADA_JUEGO
 TIEMPO_ANUNCIO = cc.TIEMPO_ANUNCIO
-VELOCIDAD_JUGADOR = 5
+VELOCIDAD_JUGADOR = 2
+ALTO_VENTANA = cc.ALTO_VENTANA
+ANCHO_VENTANA = cc.ANCHO_VENTANA
 
 class Partido():
     
@@ -32,6 +34,7 @@ class Partido():
         numero (entero positivo) de la imagen del campo a cargar"""
         self.__usuario_de_jugador = usuario_de_jugador
         self.__balon = balon.Balon()
+        self.__balon.update_coordenadas(((ANCHO_VENTANA/2)-8,(ALTO_VENTANA/2)-8))
         self.__campo = campo.Campo(numero_campo)
         self.__jugadores = []
         self.partido_listo = False
@@ -64,6 +67,8 @@ class Partido():
         self.__jugadores = []
         A = self.__datos_servidor[0].split("['")[1].split("']")[0].split("', '")
         B = self.__datos_servidor[1].split("['")[1].split("']")[0].split("', '")
+        coord = (float(self.__datos_servidor[3]),float(self.__datos_servidor[4]))
+        self.__balon.update_coordenadas(coord)
         for i in A:
             aux = i.split("(")
             coord = aux[2].split(")")[0].split(",")
@@ -87,7 +92,7 @@ class Partido():
             jugador.reset_coordenadas(coord)
             return
         if not self.__conexion and not soltar_balon: #Esta jugando LOCAL
-            if self.jugador_cliente_colisionando_balon():
+            if self.jugador_colisionando_balon(self.get_jugador(self.__usuario_de_jugador)):
                 self.mover_balon(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR)
         jugador.set_coordenadas(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR)
         if self.__conexion:
@@ -142,21 +147,22 @@ class Partido():
     def get_datos_balon(self):
         """Metodo que retorna un string con la posicion (x,y) del balon separado por: aplicacion.SEPARADOR"""
         datos = None
+        coord = None
         if not self.__conexion: #Es LOCAL, contra PC
             datos = self.__balon.actualizar_datos(0,0,"",False)
-        else: #Debo traer datos de balon del servidor
-            datos = balon.Balon().actualizar_datos(300,300,"") #CAMBIAR ESTO!!!! DEBE TRAER POSICION DLE BALON DEL SERVIDOR
-        coord = self.__balon.get_coordenadas()
+            coord = self.__balon.get_coordenadas()
+        else:
+            coord = self.__balon.get_coordenadas()
+            datos = balon.Balon().actualizar_datos(coord[0],coord[1],self.__balon.get_usuario())
         return f"{datos[0]}{aplicacion.SEPARADOR}{datos[1]}{aplicacion.SEPARADOR}{coord[0]}{aplicacion.SEPARADOR}{coord[1]}"
     
     def mover_balon(self,x,y): #Solo se llama en modo de juego LOCAL
         self.__balon.set_coordenadas(x, y)
     
-    def jugador_cliente_colisionando_balon(self): #Dado que es el cliente, se que sera del equipo A y solo sera llamado cuando este jugano local
-        cliente = self.get_jugador(self.__usuario_de_jugador)
-        coord_c = cliente.get_coordenadas()
+    def jugador_colisionando_balon(self,jugador): #Dado que es el cliente, se que sera del equipo A y solo sera llamado cuando este jugano local
+        coord_c = jugador.get_coordenadas()
         coord_b = self.__balon.get_coordenadas()
-        if cliente.get_usuario()==self.__balon.get_usuario():
+        if jugador.get_usuario()==self.__balon.get_usuario():
             return True
         if coord_c[0]+30>coord_b[0] and coord_c[0]+10<coord_b[0]:
             if coord_c[1]+40>coord_b[1] and coord_c[1]+5<coord_b[1]:
@@ -179,11 +185,12 @@ class Partido():
     
     def get_coordenadas_cliente(self):
         jugador = self.get_jugador(self.__usuario_de_jugador)
+        margen_ventana = 20
         if not jugador:
-            return (random.randint(10,850),random.randint(10,500))
+            return (random.randint(margen_ventana,ANCHO_VENTANA-margen_ventana),random.randint(margen_ventana,ALTO_VENTANA-margen_ventana))
         coord = jugador.get_coordenadas()
         if not jugador.get_coordenadas():
-            coord = (random.randint(10,850),random.randint(10,500))
+            coord = (random.randint(margen_ventana,ANCHO_VENTANA-margen_ventana),random.randint(margen_ventana,ALTO_VENTANA-margen_ventana))
         return coord
         
     

@@ -4,7 +4,10 @@ from _thread import *
 from tools import cronometro
 import time
 import constantesCompartidas as cc #ESTO COMO ESTAMOS TRABAJANDO LOCAL FUNCIONA, YA SI SE DISTRIBUYE TOCA PONER LOS VALORES DE LAS CONSTANTES EN CADA CLASE
-
+TIEMPO_CADA_JUEGO = cc.TIEMPO_CADA_JUEGO
+TIEMPO_ANUNCIO = cc.TIEMPO_ANUNCIO
+ALTO_VENTANA = cc.ALTO_VENTANA
+ANCHO_VENTANA = cc.ANCHO_VENTANA
 
 class Sala:
     '''maximo de jugadores por equipo'''
@@ -16,10 +19,8 @@ class Sala:
     __timer =None
     __estadisticas=None
     
-    
-    
     '''duracion total que dura todo un partido'''
-    DURACION_TIEMPO = (cc.TIEMPO_CADA_JUEGO*2)+cc.TIEMPO_ANUNCIO
+    DURACION_TIEMPO = (TIEMPO_CADA_JUEGO*2)+TIEMPO_ANUNCIO
     
     def __init__(self,iden):
         
@@ -29,7 +30,7 @@ class Sala:
         self.equipo_disponible='A'
         self.id=iden
         self.disponible=True
-        self.__balon=balon.Balon()
+        self.__balon=balon.Balon(( (ANCHO_VENTANA/2)-8 , (ALTO_VENTANA/2)-8 ))
         self.__estadisticas=estadisticas.Estadisticas()
         self.__jugadores={}
         self.posicion_actual=1
@@ -41,13 +42,14 @@ class Sala:
         self.__comprobar_disponibilidad()
         
     def __threaded_client(self,net,playerid,equipo,posicion):
-        info_out=f"{posicion};{equipo};{self.id}"# posicion,equipo,sala
+        info_out=f"{posicion};{equipo};{self.id}" #Aqui se envian los datos
         self.enviar(net,info_out)
         
         while True:
             try:
                 info_in=self.leer(net)
-                info_out=f"{list(self.equipoA.values())};{list(self.equipoB.values())};{self.crono.get_cuenta()}"
+                coord_balon = self.__balon.get_coordenadas()
+                info_out=f"{list(self.equipoA.values())};{list(self.equipoB.values())};{self.crono.get_cuenta()};{coord_balon[0]};{coord_balon[1]}"
                 if not(info_in):
                     print(f"Desconectado: {playerid} -> Sala {self.id}")
                 else:

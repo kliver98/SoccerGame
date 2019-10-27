@@ -17,12 +17,15 @@ class Balon():
     __usuario = None
     """Atributo numero entero que tiene el angulo de rotacion del balon"""
     __angulo = None
+    VECES_CAMBIAR_IMAGEN = 500
+    __contador_cambiar_imagen = None
     
     def __init__(self):
         """Constructor que inicializa numero de imagen, usuario y angulo del balon"""
         self.__numero_de_imagen = 1
         self.__usuario = ""
         self.__angulo = 0
+        self.__contador_cambiar_imagen = 0
         
     def configurar_imagen(self):
         """Metodo que crea la ruta de imagen del jugador dependiendo de que imagen cargar, de las tres disponibles, y retorna la ruta generada"""
@@ -36,19 +39,24 @@ class Balon():
             balon y retorna ruta generada con angulo de imagen"""
         if not tipo:
             return (self.configurar_imagen(),self.__angulo)
-        self.__angulo = 0 if self.__angulo>360 else self.__angulo+5
+        if self.VECES_CAMBIAR_IMAGEN==self.__contador_cambiar_imagen:
+            self.__angulo = 0 if self.__angulo>360 else self.__angulo+5
+        else:
+            self.__contador_cambiar_imagen = self.__contador_cambiar_imagen+1 if self.__contador_cambiar_imagen<self.VECES_CAMBIAR_IMAGEN else 0
+        
         self.__coordenadas = (x,y)
         imagen = self.configurar_imagen()
         self.__usuario = usuario
         return (imagen,self.__angulo)
+    
+    def update_coordenadas(self,coord):
+        self.__coordenadas = (coord[0],coord[1])
     
     def set_coordenadas(self,x,y):
         self.__coordenadas = (self.__coordenadas[0]+x,self.__coordenadas[1]+y)
     
     def get_coordenadas(self):
         """Metodo que retorna tupla de las coordenadas x,y del balon"""
-        if self.__coordenadas == None:
-            self.__coordenadas = (350,300)
         return self.__coordenadas
     
     def get_usuario(self):
