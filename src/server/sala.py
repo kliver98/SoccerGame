@@ -48,12 +48,18 @@ class Sala:
         while True:
             try:
                 info_in=self.leer(net) #Aqui esta informacion de 1 jugador "Nombre-Equipo-Coordenadas-SoltarBalon"
+                
                 aux = info_in.split(",")
+                usuario = aux[0]
+                equipo = aux[1]
+                soltar_balon = aux[4]=="True"
                 coord_balon = self.__balon.get_coordenadas()
                 coord_u = (float(aux[2].split("(")[1]),float(aux[3].split(")")[0]))
-                c = self.jugador_colisionando_balon(aux[0],aux[1],coord_u,aux[3]=="True")
-                if c:
-                    print(f"({info_in.split(',')[0]}) esta colisionando con el balon")
+                colisionando = self.jugador_colisionando_balon(usuario,equipo,coord_u,soltar_balon)
+                if soltar_balon and usuario==self.__balon.get_usuario():
+                    self.mover_balon(0, 0, "", "")
+                if colisionando:
+                    self.mover_balon(coord_u[0], coord_u[1],equipo,usuario)
                 info_out=f"{list(self.equipoA.values())};{list(self.equipoB.values())};{self.crono.get_cuenta()};{coord_balon[0]};{coord_balon[1]};{self.__balon.get_usuario()}"
                 if not(info_in):
                     print(f"Desconectado: {playerid} -> Sala {self.id}")
@@ -124,7 +130,13 @@ class Sala:
                 if coord_u[1]+40>coord_b[1] and coord_u[1]+5<coord_b[1]: #Esta colisionando
                     return True
                 return False
+        return False
     
-    def mover_balon(self,x,y,nuevo_usuario = ""):
-        self.__balon.set_coordenadas(x, y)
+    def mover_balon(self,x,y,equipo,nuevo_usuario = ""):
         self.__balon.set_usuario(nuevo_usuario)
+        if nuevo_usuario=="":
+            return
+        if equipo=="A":
+            self.__balon.set_coordenadas(x+30, y+20)
+        elif equipo=="B":
+            self.__balon.set_coordenadas(x-15, y+20)
