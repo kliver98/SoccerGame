@@ -26,7 +26,7 @@ class Conexion():
         
         self.__iniciar_huesped(self.posicion_entrada,self.nombre,self.equipo)
         self.coor=self.partido.get_coordenadas_cliente()
-        self.info_out=f"({self.nombre},{self.equipo},{self.coor}" #Aqui en mandas un ( de mas pero ya hice la logica para borrarlo cuando obtengo estos datos, por ende NO BORRAR
+        self.info_out=f"{self.nombre},{self.equipo},{self.coor},False"
      
     def __iniciar_huesped(self,posicion,nombre,equipo):
         coordenadas=self.partido.get_coordenadas_cliente()
@@ -66,10 +66,10 @@ class Conexion():
         while True:
             try:
                 self.info = self.enviar(self.info_out)
+                #print(f"entrada = {self.info} - out = {self.info_out}")
                 if self.guardar_datos_servidor<5:
                     self.partido.set_datos_servidor(self.info) #Aquí debo recibir datos del balon
                     self.guardar_datos_servidor += 1
-                    #print(f"entrada = {self.info} - out = {self.info_out}")
                 if not self.partido_listo:
                     self.guardar_datos_servidor = 0
                     self.partido_listo = int(self.info.split(";")[2])!=-1

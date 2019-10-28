@@ -47,9 +47,14 @@ class Sala:
         
         while True:
             try:
-                info_in=self.leer(net)
+                info_in=self.leer(net) #Aqui esta informacion de 1 jugador "Nombre-Equipo-Coordenadas-SoltarBalon"
+                aux = info_in.split(",")
                 coord_balon = self.__balon.get_coordenadas()
-                info_out=f"{list(self.equipoA.values())};{list(self.equipoB.values())};{self.crono.get_cuenta()};{coord_balon[0]};{coord_balon[1]}"
+                coord_u = (float(aux[2].split("(")[1]),float(aux[3].split(")")[0]))
+                c = self.jugador_colisionando_balon(aux[0],aux[1],coord_u,aux[3]=="True")
+                if c:
+                    print(f"({info_in.split(',')[0]}) esta colisionando con el balon")
+                info_out=f"{list(self.equipoA.values())};{list(self.equipoB.values())};{self.crono.get_cuenta()};{coord_balon[0]};{coord_balon[1]};{self.__balon.get_usuario()}"
                 if not(info_in):
                     print(f"Desconectado: {playerid} -> Sala {self.id}")
                 else:
@@ -88,4 +93,38 @@ class Sala:
                 self.posicion_actual=lonA+lonB+1
     
     def esta_disponible(self):
-        return self.disponible  
+        return self.disponible
+    
+    def hizo_gol(self): #retorna -1 si hizo gol en la porteria izquierda, 1 gol en la de la derecha y 0 no hizo gol
+        coord_b = self.__balon.get_coordenadas()
+        coord_a0 = (ANCHO_VENTANA*0.038, ALTO_VENTANA*0.425)
+        coord_a1 = (ANCHO_VENTANA*0.038, ALTO_VENTANA*0.575)
+        coord_b0 = (ANCHO_VENTANA*0.962, ALTO_VENTANA*0.425)
+        coord_b1 = (ANCHO_VENTANA*0.962, ALTO_VENTANA*0.575)
+        if coord_b[0]<=coord_a0[0] and coord_b[1]>=coord_a0[1] and coord_b[1]<=coord_a1[1]:
+            return -1
+        elif coord_b[0]>=coord_b0[0] and coord_b[1]>=coord_b0[1] and coord_b[1]<=coord_b1[1]:
+            return 1
+        else:
+            return 0
+    
+    def jugador_colisionando_balon(self,usuario,equipo,coord_u,soltar_balon): #Dado que es el cliente, se que sera del equipo A y solo sera llamado cuando este jugano local
+        if soltar_balon:
+            return False
+        coord_b = self.__balon.get_coordenadas()
+        if usuario==self.__balon.get_usuario():
+            return True
+        if equipo=="A":
+            if coord_u[0]+30>coord_b[0] and coord_u[0]+10<coord_b[0]:
+                if coord_u[1]+40>coord_b[1] and coord_u[1]+5<coord_b[1]: #Esta colisionando
+                    return True
+                return False
+        elif equipo=="B":
+            if coord_u[0]+5>coord_b[0] and coord_u[0]-15<coord_b[0]:
+                if coord_u[1]+40>coord_b[1] and coord_u[1]+5<coord_b[1]: #Esta colisionando
+                    return True
+                return False
+    
+    def mover_balon(self,x,y,nuevo_usuario = ""):
+        self.__balon.set_coordenadas(x, y)
+        self.__balon.set_usuario(nuevo_usuario)

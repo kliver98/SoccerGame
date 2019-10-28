@@ -61,3 +61,6 @@ class Balon():
     
     def get_usuario(self):
         return self.__usuario
+    
+    def set_usuario(self,nuevo_usuario):
+        self.__usuario = nuevo_usuario

@@ -12,7 +12,7 @@ MODO_JUEGO_ONLINE = 1
 MODO_JUEGO_LOCAL = 2
 TIEMPO_CADA_JUEGO = cc.TIEMPO_CADA_JUEGO
 TIEMPO_ANUNCIO = cc.TIEMPO_ANUNCIO
-VELOCIDAD_JUGADOR = 2
+VELOCIDAD_JUGADOR = cc.VELOCIDAD_JUGADOR
 ALTO_VENTANA = cc.ALTO_VENTANA
 ANCHO_VENTANA = cc.ANCHO_VENTANA
 
@@ -75,21 +75,22 @@ class Partido():
         B = self.__datos_servidor[1].split("['")[1].split("']")[0].split("', '")
         coord = (float(self.__datos_servidor[3]),float(self.__datos_servidor[4]))
         self.__balon.update_coordenadas(coord)
+        self.__balon.set_usuario(self.__datos_servidor[5])
         for i in A:
-            aux = i.split("(")
-            coord = aux[2].split(")")[0].split(",")
+            coord = i.split("(")[1].split(")")[0].split(", ")
             x = int(coord[0])
             y = int(coord[1])
-            user = aux[1].split(",")[0]
-            equipo = aux[1].split(",")[1]
+            aux = i.split(",")
+            user = aux[0]
+            equipo = aux[1]
             self.agregar_jugador(user, equipo, (x,y)) #Suponiendo que en la 0 esta nombre user, en la 1 equipo y en la 2 coordenadas
         for i in B:
-            aux = i.split("(")
-            coord = aux[2].split(")")[0].split(",")
+            coord = i.split("(")[1].split(")")[0].split(", ")
             x = int(coord[0])
             y = int(coord[1])
-            user = aux[1].split(",")[0]
-            equipo = aux[1].split(",")[1]
+            aux = i.split(",")
+            user = aux[0]
+            equipo = aux[1]
             self.agregar_jugador(user, equipo, (x,y)) #Suponiendo que en la 0 esta nombre user, en la 1 equipo y en la 2 coordenadas
     
     def set_coordenadas_jugador_cliente(self, coord,soltar_balon, anteriores):
@@ -99,11 +100,13 @@ class Partido():
             return
         if not self.__conexion and not soltar_balon: #Esta jugando LOCAL
             if self.jugador_colisionando_balon(self.get_jugador(self.__usuario_de_jugador)):
-                self.mover_balon(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR)
+                self.mover_balon(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR,jugador.get_usuario())
+        elif not self.__conexion and soltar_balon:
+            self.__balon.set_usuario("")
         jugador.set_coordenadas(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR)
         if self.__conexion:
             info_a = self.__conexion.get_info_out().split(",")
-            n_info = f"{info_a[0]},{info_a[1]},{jugador.get_coordenadas()}"
+            n_info = f"{info_a[0]},{info_a[1]},{jugador.get_coordenadas()},{soltar_balon}"
             self.__conexion.set_info_out(n_info)
     
     def esta_jugador_dentro_campo(self, coordenadas_campo):
@@ -162,8 +165,9 @@ class Partido():
             datos = balon.Balon().actualizar_datos(coord[0],coord[1],self.__balon.get_usuario())
         return f"{datos[0]}{aplicacion.SEPARADOR}{datos[1]}{aplicacion.SEPARADOR}{coord[0]}{aplicacion.SEPARADOR}{coord[1]}"
     
-    def mover_balon(self,x,y): #Solo se llama en modo de juego LOCAL
+    def mover_balon(self,x,y,nuevo_usuario = ""): #Solo se llama en modo de juego LOCAL
         self.__balon.set_coordenadas(x, y)
+        self.__balon.set_usuario(nuevo_usuario)
     
     def jugador_colisionando_balon(self,jugador): #Dado que es el cliente, se que sera del equipo A y solo sera llamado cuando este jugano local
         coord_c = jugador.get_coordenadas()

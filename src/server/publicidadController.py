@@ -32,7 +32,7 @@ class PublicidadController:
     def __gestionar_clientes(self):
         while True:
             data,address =self.udp.recibir()
-            print(f'{address} dice {data}')
+            #print(f'{address} dice {data}')
             if 'close' in str(data):
                 self.clientes_activos.remove(address)
             elif not address in self.clientes_activos :

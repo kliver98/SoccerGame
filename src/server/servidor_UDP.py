@@ -10,10 +10,10 @@ class Servidor_UDP:
     def __init__(self):
         self.sock=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         self.sock.bind((self.server,self.port))
-        print("UDP inciiando")
+        #print("UDP inciando")
         
     def correr(self):
-        print("UDP corriendo")
+        #print("UDP corriendo")
         _thread.start_new_thread(self.__thread,())
             
    

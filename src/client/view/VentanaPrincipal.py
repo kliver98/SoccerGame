@@ -75,6 +75,13 @@ class VentanaPrincipal():
         imagen= pg.image.load(self.controlador.get_ruta_imagen_campo())
         imagen = pg.transform.scale(imagen,(ANCHO,ALTO))
         self.window.blit(imagen,[0,0])
+        shape_color = (40, 210, 250)
+        coord_a0 = (ANCHO*0.038, ALTO*0.425)
+        coord_a1 = (ANCHO*0.038, ALTO*0.575)
+        coord_b0 = (ANCHO*0.962, ALTO*0.425)
+        coord_b1 = (ANCHO*0.962, ALTO*0.575)
+        pg.draw.line(self.window, shape_color, coord_a0, coord_a1, 4)
+        pg.draw.line(self.window, shape_color, coord_b0, coord_b1, 4)
     
     def iniciar(self):
         if not self.usuario_de_jugador:
@@ -137,7 +144,7 @@ class VentanaPrincipal():
                                 "Guia rapida: Esta pantalla te permite seleccionar el modo de juego, presione la tecla correspondiente."
                                 ,int(ANCHO*0.02) , (ANCHO*0.05,ALTO*0.8))
             self.dibujar_texto(
-                                "Los controles en el juego son: teclas arriba, abajo, izquierda, derecha. Para patear/robar: x/z"
+                                "Los controles en el juego son: teclas arriba, abajo, izquierda, derecha. Para patear presiona x"
                                 ,int(ANCHO*0.02) , (ANCHO*0.05,ALTO*0.85))
             pg.display.update()
             if pg.key.get_pressed()[pg.K_a]:
@@ -174,8 +181,6 @@ class VentanaPrincipal():
             soltar_balon = False
             if keys[pg.K_x]:
                 soltar_balon = True
-            if keys[pg.K_z]:
-                pass
             if keys[pg.K_UP]:
                 c = (0,-1)
                 self.controlador.set_coordenadas_jugador_cliente(c,soltar_balon)

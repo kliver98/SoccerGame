@@ -21,7 +21,7 @@ class CapturadorUDP():
         try:
             while True:
                 data,address=self.cliente.recibir()
-                print(data)
+                #print(data)
                 if data is None:
                     break
                 raw = numpy.frombuffer(pickle.loads(data),numpy.uint8)
