@@ -27,8 +27,8 @@ class Jugador():
         """Constructor que recibe el nombre de usuario y el equipo al cual pertenece"""
         self.__usuario = usuario
         self.__equipo = equipo
-        if not coordenadas:
-            self.__coordenadas = (random.randint(10,850),random.randint(10,500)) #Ver como se cuadra lo de las coordenadas que aparece el jugador
+        if len(coordenadas)==3:
+            self.__coordenadas = (random.randint(100,coordenadas[0]-100),random.randint(100,coordenadas[1]-100)) #Ver como se cuadra lo de las coordenadas que aparece el jugador
         else:
             self.__coordenadas = coordenadas
         self.__numero_de_imagen = 1
@@ -72,4 +72,7 @@ class Jugador():
     def get_coordenadas(self):
         """Metodo que retorna una tupla con las coordenadas del jugador"""
         return self.__coordenadas
+    
+    def get_equipo(self):
+        return self.__equipo
     

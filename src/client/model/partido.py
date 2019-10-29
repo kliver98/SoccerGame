@@ -60,13 +60,13 @@ class Partido():
         self.__jugadores.append(Jugador(usuario,equipo, coordenadas))
     
     def iniciar_bots(self, num_jugadores_equipo):
-        self.__jugadores.append(Jugador(f"{self.__usuario_de_jugador}","A",None)) #Jugador del usuario del cliente
+        self.__jugadores.append(Jugador(f"{self.__usuario_de_jugador}","A",(ANCHO_VENTANA,ALTO_VENTANA,-1))) #Jugador del usuario del cliente
         for i in range(1,num_jugadores_equipo*2):
             if i<num_jugadores_equipo:
                 equipo = "A"
             else:
                 equipo = "B"
-            self.agregar_jugador(f"bot#{i}",equipo, None)
+            self.agregar_jugador(f"bot#{i}",equipo, (ANCHO_VENTANA,ALTO_VENTANA,-1))
         return len(self.__jugadores)==(num_jugadores_equipo*2)
     
     def iniciar_jugadores(self):
@@ -98,22 +98,27 @@ class Partido():
         if anteriores:
             jugador.reset_coordenadas(coord)
             return
+        coor_ant_b = self.__balon.get_coordenadas()
         if not self.__conexion and not soltar_balon: #Esta jugando LOCAL
             if self.jugador_colisionando_balon(self.get_jugador(self.__usuario_de_jugador)):
                 self.mover_balon(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR,jugador.get_usuario())
         elif not self.__conexion and soltar_balon:
             self.__balon.set_usuario("")
+        coord_anteriores = jugador.get_coordenadas()
         jugador.set_coordenadas(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR)
-        if self.__conexion:
+        if not self.esta_jugador_dentro_campo((ANCHO_VENTANA,ALTO_VENTANA),jugador):
+            self.__balon.update_coordenadas(coor_ant_b)
+            jugador.reset_coordenadas(coord_anteriores)
+            return
+        if self.__conexion: #Esta jugando online
             info_a = self.__conexion.get_info_out().split(",")
             n_info = f"{info_a[0]},{info_a[1]},{jugador.get_coordenadas()},{soltar_balon}"
             self.__conexion.set_info_out(n_info)
     
-    def esta_jugador_dentro_campo(self, coordenadas_campo):
+    def esta_jugador_dentro_campo(self, coordenadas_campo,jugador):
         """Metodo que verifica si un jugador esta dentro de las coordenadas del campo.
         Recibe coordenadas_campo y coordenadas_jugador que son un arreglo conteniendo informacion respectiva de las coordenas [x,y]"""
-        coordenadas_jugador = self.get_jugador(self.__usuario_de_jugador).get_coordenadas()
-        return self.__campo.esta_jugador_dentro_campo(coordenadas_campo, coordenadas_jugador)
+        return self.__campo.esta_jugador_dentro_campo(coordenadas_campo, jugador.get_coordenadas(),jugador.get_equipo())
     
     def mover_jugador(self, izquierda, derecha, arriba, abajo):
         jugador = self.get_jugador(self.__usuario_de_jugador)

@@ -122,12 +122,12 @@ class Sala:
             return True
         if equipo=="A":
             if coord_u[0]+30>coord_b[0] and coord_u[0]+10<coord_b[0]:
-                if coord_u[1]+40>coord_b[1] and coord_u[1]+5<coord_b[1]: #Esta colisionando
+                if coord_u[1]+40>coord_b[1] and coord_u[1]+5<coord_b[1]:
                     return True
                 return False
         elif equipo=="B":
-            if coord_u[0]+5>coord_b[0] and coord_u[0]-15<coord_b[0]:
-                if coord_u[1]+40>coord_b[1] and coord_u[1]+5<coord_b[1]: #Esta colisionando
+            if coord_u[0]+5>coord_b[0] and coord_u[0]-17<coord_b[0]:
+                if coord_u[1]+40>coord_b[1] and coord_u[1]+5<coord_b[1]:
                     return True
                 return False
         return False
@@ -136,7 +136,9 @@ class Sala:
         self.__balon.set_usuario(nuevo_usuario)
         if nuevo_usuario=="":
             return
+        self.__balon.set_posesion(equipo)
         if equipo=="A":
-            self.__balon.set_coordenadas(x+30, y+20)
+            self.__balon.set_coordenadas(x+28, y+20)
         elif equipo=="B":
             self.__balon.set_coordenadas(x-15, y+20)
+            

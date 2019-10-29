@@ -175,7 +175,6 @@ class VentanaPrincipal():
                 if event.type == pg.QUIT:
                     run = False
                     pg.quit()
-            coord_ant = self.controlador.get_coordenadas_cliente()
             c = (0,0)
             keys = pg.key.get_pressed()
             soltar_balon = False
@@ -193,8 +192,6 @@ class VentanaPrincipal():
             if keys[pg.K_RIGHT]:
                 c = (1,0)
                 self.controlador.set_coordenadas_jugador_cliente(c,soltar_balon)
-            if not self.controlador.esta_jugador_dentro_campo((ANCHO,ALTO)): #No debe seguir pintando, debe regresar las coordenadas anteriores
-                self.controlador.set_coordenadas_jugador_cliente(coord_ant,soltar_balon,True)
             if int(self.sg)==tiempos[0]:
                 self.cargar_anuncio(tiempos,modoOnline)
             elif int(self.sg)>=(tiempos[0]*2+tiempos[1]):

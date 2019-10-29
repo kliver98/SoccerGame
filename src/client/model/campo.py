@@ -18,18 +18,27 @@ class Campo():
         numero_campo = numero_campo if (numero_campo>0 and numero_campo<3) else 1
         self.__ruta_imagen = f"{self.IMAGEN_CAMPO}{numero_campo}{self.EXTENCION_DE_IMAGEN}"
     
-    def esta_jugador_dentro_campo(self, coordenadas_campo, coordenadas_jugador):
+    def esta_jugador_dentro_campo(self, coordenadas_campo, coordenadas_jugador, equipo):
         """Metodo que verifica si un jugador esta dentro de las coordenadas del campo.
         Recibe coordenadas_campo y coordenadas_jugador que son un arreglo conteniendo informacion respectiva de las coordenas [x,y]"""
-        campo_x = coordenadas_campo[0]
-        campo_y = coordenadas_campo[1]
-        jugador_x = coordenadas_jugador[0]
-        jugador_y = coordenadas_jugador[1]
-        if jugador_x>0 and jugador_x+30<campo_x:
-            if jugador_y>5 and jugador_y+50<campo_y:
-                return True
-        return False
-        
+        if equipo=="A":
+            campo_x = coordenadas_campo[0]
+            campo_y = coordenadas_campo[1]
+            jugador_x = coordenadas_jugador[0]
+            jugador_y = coordenadas_jugador[1]
+            if jugador_x>0 and jugador_x+65<campo_x:
+                if jugador_y>3 and jugador_y+60<campo_y:
+                    return True
+            return False
+        elif equipo=="B":
+            campo_x = coordenadas_campo[0]
+            campo_y = coordenadas_campo[1]
+            jugador_x = coordenadas_jugador[0]
+            jugador_y = coordenadas_jugador[1]
+            if jugador_x>38 and jugador_x+30<campo_x:
+                if jugador_y>3 and jugador_y+60<campo_y:
+                    return True
+            return False
     
     def get_ruta_imagen(self):
         """Metodo que retorna la ruta de la imagen que representa el campo"""
