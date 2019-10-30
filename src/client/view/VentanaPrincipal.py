@@ -13,6 +13,7 @@ ANCHO = constantes.ANCHO_VENTANA
 MODO_JUEGO_ONLINE = 1
 MODO_JUEGO_LOCAL = 2
 FPS_JUGANDO = 60
+DISTANCIA_PATEO = 100
 
 class VentanaPrincipal():
     
@@ -51,6 +52,9 @@ class VentanaPrincipal():
         """Update the window with their new graphics"""
         self.pintar_fondo()
         self.dibujar_texto(f"Tiempo: {self.sg}", int(ANCHO*0.025), [ANCHO*0.43,ALTO*0.02], (0, 0, 0), True)
+        goles = self.controlador.get_goles()
+        self.dibujar_texto(f"Goles equipo A: {goles[0]}", int(ANCHO*0.025), [ANCHO*0.10,ALTO*0.02], (0, 0, 0), True)
+        self.dibujar_texto(f"Goles equipo B: {goles[1]}", int(ANCHO*0.025), [ANCHO*0.65,ALTO*0.02], (0, 0, 0), True)
         #Pinto los jugadores. Todos
         separador = self.controlador.get_separador()
         for j in jugadores: #Pintando todos los jugadores
@@ -144,7 +148,7 @@ class VentanaPrincipal():
                                 "Guia rapida: Esta pantalla te permite seleccionar el modo de juego, presione la tecla correspondiente."
                                 ,int(ANCHO*0.02) , (ANCHO*0.05,ALTO*0.8))
             self.dibujar_texto(
-                                "Los controles en el juego son: teclas arriba, abajo, izquierda, derecha. Para patear presiona x"
+                                "Los controles en el juego son: teclas arriba, abajo, izquierda, derecha. Para soltar/patear presiona x/z"
                                 ,int(ANCHO*0.02) , (ANCHO*0.05,ALTO*0.85))
             pg.display.update()
             if pg.key.get_pressed()[pg.K_a]:

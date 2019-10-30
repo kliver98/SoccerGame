@@ -27,6 +27,7 @@ class Partido():
     __jugadores = None
     """Atributo string que tiene el nombre del jugador del cliente, el unico jugador que puede controlar"""
     __usuario_de_jugador = None
+    __goles_equipos = None
     """Atributo para representar un objeto de la clase Conexion si se esta jugando online"""
     __conexion = None
     __datos_servidor = None
@@ -41,6 +42,7 @@ class Partido():
         self.__campo = campo.Campo(numero_campo)
         self.__jugadores = []
         self.partido_listo = False
+        self.__goles_equipos = (0,0)
         if ip is not None:
             self.__conexion = Conexion(ip,self)
             self.__udp=udp_capturador.CapturadorUDP()
@@ -102,23 +104,51 @@ class Partido():
         if not self.__conexion and not soltar_balon: #Esta jugando LOCAL
             if self.jugador_colisionando_balon(self.get_jugador(self.__usuario_de_jugador)):
                 self.mover_balon(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR,jugador.get_usuario())
-        elif not self.__conexion and soltar_balon:
-            self.__balon.set_usuario("")
+        elif not self.__conexion and soltar_balon and self.__balon.get_usuario()==self.__usuario_de_jugador:
+            self.mover_balon(ANCHO_VENTANA*0.15, 0, "")
         coord_anteriores = jugador.get_coordenadas()
         jugador.set_coordenadas(coord[0]*VELOCIDAD_JUGADOR,coord[1]*VELOCIDAD_JUGADOR)
         if not self.esta_jugador_dentro_campo((ANCHO_VENTANA,ALTO_VENTANA),jugador):
             self.__balon.update_coordenadas(coor_ant_b)
             jugador.reset_coordenadas(coord_anteriores)
             return
+        if not self.__conexion: #Regreso balon si no esta dentr del campo
+            if not self.esta_balon_dentro_campo((ANCHO_VENTANA,ALTO_VENTANA), self.__balon.get_coordenadas()):
+                gol = self.hizo_gol() #1 hizo gol equipo A, -1 equipo B y 0 nadie
+                goles = self.get_goles()
+                if gol==0:
+                    self.__balon.update_coordenadas(coor_ant_b)
+                    return
+                elif gol==1:
+                    self.__goles_equipos = (goles[0]+1,goles[1])
+                elif gol==-1:
+                    self.__goles_equipos = (goles[0],goles[1]+1)
+                self.__balon.update_coordenadas(((ANCHO_VENTANA/2)-8,(ALTO_VENTANA/2)-8))
         if self.__conexion: #Esta jugando online
             info_a = self.__conexion.get_info_out().split(",")
             n_info = f"{info_a[0]},{info_a[1]},{jugador.get_coordenadas()},{soltar_balon}"
             self.__conexion.set_info_out(n_info)
+            
+    def hizo_gol(self): #retorna -1 si hizo gol en la porteria izquierda, 1 gol en la de la derecha y 0 no hizo gol
+        coord_b = self.__balon.get_coordenadas()
+        coord_a0 = (ANCHO_VENTANA*0.038, ALTO_VENTANA*0.425)
+        coord_a1 = (ANCHO_VENTANA*0.038, ALTO_VENTANA*0.575)
+        coord_b0 = (ANCHO_VENTANA*0.962, ALTO_VENTANA*0.425)
+        coord_b1 = (ANCHO_VENTANA*0.962, ALTO_VENTANA*0.575)
+        if coord_b[0]<=coord_a0[0] and coord_b[1]>=coord_a0[1] and coord_b[1]<=coord_a1[1]:
+            return -1
+        elif coord_b[0]>=coord_b0[0] and coord_b[1]>=coord_b0[1] and coord_b[1]<=coord_b1[1]:
+            return 1
+        else:
+            return 0
     
     def esta_jugador_dentro_campo(self, coordenadas_campo,jugador):
         """Metodo que verifica si un jugador esta dentro de las coordenadas del campo.
         Recibe coordenadas_campo y coordenadas_jugador que son un arreglo conteniendo informacion respectiva de las coordenas [x,y]"""
         return self.__campo.esta_jugador_dentro_campo(coordenadas_campo, jugador.get_coordenadas(),jugador.get_equipo())
+    
+    def esta_balon_dentro_campo(self,coordenadas_campo, coordenadas_balon):
+        return self.__campo.esta_balon_dentro_campo(coordenadas_campo, coordenadas_balon)
     
     def mover_jugador(self, izquierda, derecha, arriba, abajo):
         jugador = self.get_jugador(self.__usuario_de_jugador)
@@ -173,6 +203,7 @@ class Partido():
     def mover_balon(self,x,y,nuevo_usuario = ""): #Solo se llama en modo de juego LOCAL
         self.__balon.set_coordenadas(x, y)
         self.__balon.set_usuario(nuevo_usuario)
+            
     
     def jugador_colisionando_balon(self,jugador): #Dado que es el cliente, se que sera del equipo A y solo sera llamado cuando este jugano local
         coord_c = jugador.get_coordenadas()
@@ -206,7 +237,7 @@ class Partido():
         coord = jugador.get_coordenadas()
         if not jugador.get_coordenadas():
             coord = (random.randint(margen_ventana,ANCHO_VENTANA-margen_ventana),random.randint(margen_ventana,ALTO_VENTANA-margen_ventana))
-        return coord
+        return coord    
         
     
     def alguien_tiene_balon(self):
@@ -228,3 +259,6 @@ class Partido():
     def get_tiempo_juego_Online(self):
         tiempo = int(self.__datos_servidor[2])
         return tiempo
+    
+    def get_goles(self):
+        return self.__goles_equipos

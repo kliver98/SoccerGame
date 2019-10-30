@@ -39,6 +39,16 @@ class Campo():
                 if jugador_y>3 and jugador_y+60<campo_y:
                     return True
             return False
+        
+    def esta_balon_dentro_campo(self,coordenadas_campo, coordenadas_balon):
+        campo_x = coordenadas_campo[0]
+        campo_y = coordenadas_campo[1]
+        balon_x = coordenadas_balon[0]
+        balon_y = coordenadas_balon[1]
+        if balon_x>30 and balon_x+40<campo_x:
+            if balon_y>4 and balon_y<campo_y:
+                return True
+        return False
     
     def get_ruta_imagen(self):
         """Metodo que retorna la ruta de la imagen que representa el campo"""

@@ -111,5 +111,11 @@ class Aplicacion():
     def iniciar_jugadores(self):
         self.__partido.iniciar_jugadores()
         
+    def mover_balon(self, x, y, nuevo_usuario):
+        self.__partido.mover_balon(x, y, nuevo_usuario)
+        
     def get_tiempo_juego_Online(self):
         return self.__partido.get_tiempo_juego_Online()
+    
+    def get_goles(self):
+        return self.__partido.get_goles()

@@ -88,5 +88,11 @@ class Controlador():
     def iniciar_jugadores(self):
         self.aplicacion.iniciar_jugadores()
         
+    def mover_balon(self, x, y, nuevo_usuario):
+        self.aplicacion.mover_balon(x, y, nuevo_usuario)
+        
     def get_tiempo_juego_Online(self):
         return self.aplicacion.get_tiempo_juego_Online()
+    
+    def get_goles(self):
+        return self.aplicacion.get_goles()
