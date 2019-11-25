@@ -6,7 +6,6 @@ El separador sera tanto para modelo, vista y/o controlador"""
 SEPARADOR = ";"
 """Constante global, no ligada a la clase, que representa el nombre de la aplicacion"""
 NOMBRE_APLICACION = "Soccer Game"
-MAX_JUGADORES_SALA_EQUIPO = 1
 
 class Aplicacion():
     
@@ -28,7 +27,7 @@ class Aplicacion():
         self.__partido.agregar_jugador(usuario, equipo)
     
     def iniciar_bots(self):
-        return self.__partido.iniciar_bots(MAX_JUGADORES_SALA_EQUIPO)
+        return self.__partido.iniciar_bots()
     
     def esta_jugador_dentro_campo(self, coordenadas_campo):
         """Metodo que verifica si un jugador esta dentro de las coordenadas del campo.
@@ -73,7 +72,7 @@ class Aplicacion():
         return NOMBRE_APLICACION
 
     def get_max_jugadores_equipo(self):
-        return MAX_JUGADORES_SALA_EQUIPO
+        return partido.MAX_JUGADORES_TEAM
     
     def esta_formatoIP_bien(self,ip):
         if ip=="localhost":

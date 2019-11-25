@@ -31,3 +31,6 @@ class Balon:
             self.__posesionA+=1
         elif equipo=="B":
             self.__posesionB+=1
+            
+    def update_coordenadas(self,coord):
+        self.__coordenadas = (coord[0],coord[1])

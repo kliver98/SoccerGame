@@ -15,6 +15,7 @@ TIEMPO_ANUNCIO = cc.TIEMPO_ANUNCIO
 VELOCIDAD_JUGADOR = cc.VELOCIDAD_JUGADOR
 ALTO_VENTANA = cc.ALTO_VENTANA
 ANCHO_VENTANA = cc.ANCHO_VENTANA
+MAX_JUGADORES_TEAM = cc.MAX_JUGADORES_TEAM
 
 class Partido():
     
@@ -61,15 +62,15 @@ class Partido():
         """Metodo para agregar un jugador a la lista de jugadores"""
         self.__jugadores.append(Jugador(usuario,equipo, coordenadas))
     
-    def iniciar_bots(self, num_jugadores_equipo):
+    def iniciar_bots(self): #Ya se que selecciono modo Local
         self.__jugadores.append(Jugador(f"{self.__usuario_de_jugador}","A",(ANCHO_VENTANA,ALTO_VENTANA,-1))) #Jugador del usuario del cliente
-        for i in range(1,num_jugadores_equipo*2):
-            if i<num_jugadores_equipo:
+        for i in range(1,MAX_JUGADORES_TEAM*2):
+            if i<MAX_JUGADORES_TEAM:
                 equipo = "A"
             else:
                 equipo = "B"
             self.agregar_jugador(f"bot#{i}",equipo, (ANCHO_VENTANA,ALTO_VENTANA,-1))
-        return len(self.__jugadores)==(num_jugadores_equipo*2)
+        return len(self.__jugadores)==(MAX_JUGADORES_TEAM*2)
     
     def iniciar_jugadores(self):
         self.__jugadores = []
@@ -231,12 +232,11 @@ class Partido():
     
     def get_coordenadas_cliente(self):
         jugador = self.get_jugador(self.__usuario_de_jugador)
-        margen_ventana = 20
         if not jugador:
-            return (random.randint(margen_ventana,ANCHO_VENTANA-margen_ventana),random.randint(margen_ventana,ALTO_VENTANA-margen_ventana))
+            return (random.randint(100,ANCHO_VENTANA-100),random.randint(100,ALTO_VENTANA-100))
         coord = jugador.get_coordenadas()
-        if not jugador.get_coordenadas():
-            coord = (random.randint(margen_ventana,ANCHO_VENTANA-margen_ventana),random.randint(margen_ventana,ALTO_VENTANA-margen_ventana))
+        #if not jugador.get_coordenadas():
+        #    coord = (random.randint(100,ANCHO_VENTANA-100),random.randint(100,ALTO_VENTANA-100))
         return coord    
         
     
@@ -261,4 +261,7 @@ class Partido():
         return tiempo
     
     def get_goles(self):
-        return self.__goles_equipos
+        if not self.__conexion:
+            return self.__goles_equipos
+        elif self.__conexion:
+            return (float(self.__datos_servidor[6]),float(self.__datos_servidor[7]))

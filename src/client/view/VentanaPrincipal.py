@@ -53,8 +53,8 @@ class VentanaPrincipal():
         self.pintar_fondo()
         self.dibujar_texto(f"Tiempo: {self.sg}", int(ANCHO*0.025), [ANCHO*0.43,ALTO*0.02], (0, 0, 0), True)
         goles = self.controlador.get_goles()
-        self.dibujar_texto(f"Goles equipo A: {goles[0]}", int(ANCHO*0.025), [ANCHO*0.10,ALTO*0.02], (0, 0, 0), True)
-        self.dibujar_texto(f"Goles equipo B: {goles[1]}", int(ANCHO*0.025), [ANCHO*0.65,ALTO*0.02], (0, 0, 0), True)
+        self.dibujar_texto(f"Goles equipo A: {int(goles[0])}", int(ANCHO*0.025), [ANCHO*0.10,ALTO*0.02], (0, 0, 0), True)
+        self.dibujar_texto(f"Goles equipo B: {int(goles[1])}", int(ANCHO*0.025), [ANCHO*0.65,ALTO*0.02], (0, 0, 0), True)
         #Pinto los jugadores. Todos
         separador = self.controlador.get_separador()
         for j in jugadores: #Pintando todos los jugadores
@@ -228,7 +228,7 @@ class VentanaPrincipal():
         self.window = pg.display.set_mode((ANCHO,ALTO))
         self.controlador = controlador.Controlador()
         pg.display.set_caption(self.controlador.get_nombre_aplicacion())
-        self.usuario_de_jugador = self.ventana_preguntar("Ingrese su nombre de usuario con el cual se identificara: ")
+        self.usuario_de_jugador = "User"#self.ventana_preguntar("Ingrese su nombre de usuario con el cual se identificara: ")
         self.clock = pg.time.Clock()
         pg.init()
 
@@ -236,5 +236,4 @@ class VentanaPrincipal():
 try:
     VentanaPrincipal()
 except Exception as e:
-    print(e.trace())
     pass
