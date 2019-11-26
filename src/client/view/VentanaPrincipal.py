@@ -170,10 +170,11 @@ class VentanaPrincipal():
         while run:
             if modoOnline:
                 self.sg = self.controlador.get_tiempo_juego_Online()
+                self.controlador.iniciar_jugadores()
             else:
                 self.sg = self.cr.get_cuenta()
-            if modoOnline:
-                self.controlador.iniciar_jugadores()
+            if not modoOnline: #Ocurre magia para jugadores bot
+                pass
             self.clock.tick(FPS_JUGANDO)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
