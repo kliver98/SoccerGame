@@ -38,8 +38,21 @@ def calcular(jugadores, balon, modelos):
             y = mover if salida[0][1]<0 else -mover if salida[0][1]>0 else 0
             jugador.set_coordenadas(x,y)
     else: #la red 2 tiene que hacer gol
+        mover = cc.VELOCIDAD_JUGADOR
+        for i,jugador in enumerate(jugadores):
+            if i==0 :
+                continue
+            entrada = np.array(convertir_a_entrada_gol(jugador,jugador))
+            salida = modelos[1].predict(entrada)
+            y = mover if salida[0][0]>0 else -mover if salida[0][0]<0 else 0
+            x = mover if salida[0][1]<0 else -mover if salida[0][1]>0 else 0
+            jugador.set_coordenadas(x,0)
         pass
 
+def convertir_a_entrada_gol(user,bot):
+    return [[0,0,0]]
+    
+    
 def convertir_a_entrada(tipo,jugador,balon):
     #de acuerdo al tipo (0 para agarrar balon, 1 para hacer gol) devuelve un arreglo en formato de  estimulo
     if tipo==0:
