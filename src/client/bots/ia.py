@@ -1,6 +1,8 @@
 #librerias
+import numpy as np
 from keras.models import model_from_json
 from client.bots import red_neuronal_1 as rn1
+import constantesCompartidas as cc
 
 NOMBRE_ARCHIVO_1 = "modeloAgarrar"
 NOMBRE_ARCHIVO_2 = "modeloGol"
@@ -17,16 +19,26 @@ def iniciar():
 
 def calcular(jugadores, balon, modelos):
     #Este metodo es el encargado de actualizar las posicinoes de los jugadores pasados por parametro. No devuelve nada, actualiza los mismo objetos del model
-    print(f"{jugadores==None}-{balon==None}-{modelos==None}")
+    print(f"b:{balon.get_usuario()}")
     if balon.get_usuario()=="": #la red 1 tiene que hacer que atrape el balon
-        pass
+        mover = cc.VELOCIDAD_JUGADOR
+        for i,jugador in enumerate(jugadores):
+            if i==0 or balon.get_usuario()==jugador.get_usuario():
+                continue
+            entrada = np.array(convertir_a_entrada(0,jugador,balon))
+            salida = modelos[0].predict(entrada)
+            x = mover if salida[0][0]>0 else -mover if salida[0][0]<0 else 0
+            y = mover if salida[0][1]<0 else -mover if salida[0][1]>0 else 0
+            jugador.set_coordenadas(x,y)
     else: #la red 2 tiene que hacer gol
         pass
 
-def convertir_a_entrada(tipo,jugador):
+def convertir_a_entrada(tipo,jugador,balon):
     #de acuerdo al tipo (0 para agarrar balon, 1 para hacer gol) devuelve un arreglo en formato de  estimulo
     if tipo==0:
-        pass
+        distX = (jugador.get_coordenadas()[0]-balon.get_coordenadas()[0])/cc.ANCHO_VENTANA
+        distY = (jugador.get_coordenadas()[1]-balon.get_coordenadas()[1])/cc.ALTO_VENTANA
+        return [[distX,distY]]
     elif tipo==1:
         pass
 

@@ -18,6 +18,7 @@ VELOCIDAD_JUGADOR = cc.VELOCIDAD_JUGADOR
 ALTO_VENTANA = cc.ALTO_VENTANA
 ANCHO_VENTANA = cc.ANCHO_VENTANA
 MAX_JUGADORES_TEAM = cc.MAX_JUGADORES_TEAM
+JUGADORES_BOT_EQUIPO = 1
 
 class Partido():
     
@@ -47,6 +48,7 @@ class Partido():
         self.__jugadores = []
         self.partido_listo = False
         self.__goles_equipos = (0,0)
+        self.__ia_modelos = ia.iniciar()
         if ip is not None:
             self.__conexion = Conexion(ip,self)
             self.__udp=udp_capturador.CapturadorUDP()
@@ -67,14 +69,13 @@ class Partido():
     
     def iniciar_bots(self): #Ya se que selecciono modo Local
         self.__jugadores.append(Jugador(f"{self.__usuario_de_jugador}","A",(ANCHO_VENTANA,ALTO_VENTANA,-1))) #Jugador del usuario del cliente
-        for i in range(1,MAX_JUGADORES_TEAM*2):
-            if i<MAX_JUGADORES_TEAM:
+        for i in range(1,JUGADORES_BOT_EQUIPO*2):
+            if i<JUGADORES_BOT_EQUIPO:
                 equipo = "A"
             else:
                 equipo = "B"
             self.agregar_jugador(f"bot#{i}",equipo, (ANCHO_VENTANA,ALTO_VENTANA,-1))
-        self.__ia_modelos = ia.iniciar()
-        return len(self.__jugadores)==(MAX_JUGADORES_TEAM*2)
+        return len(self.__jugadores)==(JUGADORES_BOT_EQUIPO*2)
     
     def iniciar_jugadores(self):
         self.__jugadores = []
@@ -209,15 +210,19 @@ class Partido():
         self.__balon.set_coordenadas(x, y)
         self.__balon.set_usuario(nuevo_usuario)
             
-    
     def jugador_colisionando_balon(self,jugador): #Dado que es el cliente, se que sera del equipo A y solo sera llamado cuando este jugano local
         coord_c = jugador.get_coordenadas()
         coord_b = self.__balon.get_coordenadas()
-        if jugador.get_usuario()==self.__balon.get_usuario():
-            return True
-        if coord_c[0]+30>coord_b[0] and coord_c[0]+10<coord_b[0]:
-            if coord_c[1]+40>coord_b[1] and coord_c[1]+5<coord_b[1]:
+        if jugador.get_equipo()=="A":
+            if jugador.get_usuario()==self.__balon.get_usuario():
                 return True
+            if coord_c[0]+30>coord_b[0] and coord_c[0]+10<coord_b[0]:
+                if coord_c[1]+40>coord_b[1] and coord_c[1]+5<coord_b[1]:
+                    return True
+        else:
+            if coord_c[0]+5>coord_b[0] and coord_c[0]-15<coord_b[0]:
+                if coord_c[1]+40>coord_b[1] and coord_c[1]+5<coord_b[1]:
+                    return True
         return False
     
     def get_ruta_imagen_campo(self):
@@ -272,3 +277,14 @@ class Partido():
         
     def mover_bots(self):
         ia.calcular(self.__jugadores, self.__balon, self.__ia_modelos)
+        col = self.jugador_colisionando_balon(self.__jugadores[1])
+        if col:
+            self.__balon.set_usuario(self.__jugadores[1].get_usuario())
+        """if self.__balon.get_usuario()=="":
+            return
+        if self.__balon.get_usuario()!="" and self.__balon.get_usuario()==self.__usuario_de_jugador:
+            return
+        jug = self.get_jugador(self.__balon.get_usuario())
+        coord = jug.get_coordenadas()
+        coord = (coord[0]-50,coord[1])
+        self.__balon.update_coordenadas(coord)"""

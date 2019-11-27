@@ -143,7 +143,7 @@ class VentanaPrincipal():
             self.dibujar_texto("Seleccione el modo para jugar", int(ANCHO*0.055), (int((ANCHO/2)-ANCHO*0.37),ALTO*0.15))
             max_jug_equipo = self.controlador.get_max_jugadores_equipo()
             self.dibujar_texto(f"a. {max_jug_equipo} vs {max_jug_equipo}", int(ANCHO*0.053) , (int((ANCHO/2)-ANCHO*0.102),ALTO*0.35) )
-            self.dibujar_texto(f"b. {max_jug_equipo} vs PC", int(ANCHO*0.05) , (int((ANCHO/2)-ANCHO*0.112),ALTO*0.55) )
+            self.dibujar_texto(f"b. {1} vs PC", int(ANCHO*0.05) , (int((ANCHO/2)-ANCHO*0.112),ALTO*0.55) )
             self.dibujar_texto(
                                 "Guia rapida: Esta pantalla te permite seleccionar el modo de juego, presione la tecla correspondiente."
                                 ,int(ANCHO*0.02) , (ANCHO*0.05,ALTO*0.8))
