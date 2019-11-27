@@ -174,7 +174,7 @@ class VentanaPrincipal():
             else:
                 self.sg = self.cr.get_cuenta()
             if not modoOnline: #Ocurre magia para jugadores bot
-                pass
+                self.controlador.mover_bots()
             self.clock.tick(FPS_JUGANDO)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -237,4 +237,4 @@ class VentanaPrincipal():
 try:
     VentanaPrincipal()
 except Exception as e:
-    pass
+    print(e)

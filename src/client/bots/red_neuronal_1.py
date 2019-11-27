@@ -18,7 +18,7 @@ def entrenar():
                   optimizer='adam',
                   metrics=['binary_accuracy'])
     
-    model.fit(training_data, target_data, epochs=2500)
+    model.fit(training_data, target_data, epochs=1500)
 
     # evaluamos el modelo
     #scores = model.evaluate(training_data, target_data)

@@ -2,6 +2,8 @@ from client.model import balon, campo, aplicacion
 from client.model.jugador import Jugador
 from client.model.conexion import Conexion
 from client.model import udp_capturador
+from client.bots import ia
+from client.model.balon import Balon
 from _thread import *
 from msvcrt import kbhit
 import random
@@ -33,6 +35,7 @@ class Partido():
     __conexion = None
     __datos_servidor = None
     __udp=None
+    __ia_modelos = None #En pos 0 guarda modelo 1 (agarrar balon) y en pos 1 modelo 2 (hacer gol)
     
     def __init__(self, usuario_de_jugador, numero_campo,ip):
         """Constructor que inicializa el balon, el campo y la lista de jugadores. Recibe el nombre de usuario que controla el cliente, 
@@ -70,6 +73,7 @@ class Partido():
             else:
                 equipo = "B"
             self.agregar_jugador(f"bot#{i}",equipo, (ANCHO_VENTANA,ALTO_VENTANA,-1))
+        self.__ia_modelos = ia.iniciar()
         return len(self.__jugadores)==(MAX_JUGADORES_TEAM*2)
     
     def iniciar_jugadores(self):
@@ -265,3 +269,6 @@ class Partido():
             return self.__goles_equipos
         elif self.__conexion:
             return (float(self.__datos_servidor[6]),float(self.__datos_servidor[7]))
+        
+    def mover_bots(self):
+        ia.calcular(self.__jugadores, self.__balon, self.__ia_modelos)

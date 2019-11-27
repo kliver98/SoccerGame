@@ -1,29 +1,25 @@
 #librerias
-import numpy as np
 from keras.models import model_from_json
 from client.bots import red_neuronal_1 as rn1
-from client.model.balon import Balon
 
 NOMBRE_ARCHIVO_1 = "modeloAgarrar"
 NOMBRE_ARCHIVO_2 = "modeloGol"
 
-def calcular(jugadores, balon):
+def iniciar():
+    modelos = []
+    mod_1 = cargar_modelo(NOMBRE_ARCHIVO_1)
+    if mod_1==None: #Si no habia ningun modelo guardado, se crea
+            mod_1 = rn1.entrenar()
+            guardar_modelo(mod_1,NOMBRE_ARCHIVO_1)
+    modelos.append(mod_1)
+    #Poner el otro modelo por que se deben cargar una sola vez, si no el juego se ve lagueado
+    return modelos
+
+def calcular(jugadores, balon, modelos):
     #Este metodo es el encargado de actualizar las posicinoes de los jugadores pasados por parametro. No devuelve nada, actualiza los mismo objetos del model
-    modelo = None
+    print(f"{jugadores==None}-{balon==None}-{modelos==None}")
     if balon.get_usuario()=="": #la red 1 tiene que hacer que atrape el balon
-        modelo = cargar_modelo(NOMBRE_ARCHIVO_1)
-        if modelo==None: #Si no habia ningun modelo guardado, se crea
-            modelo = rn1.entrenar()
-            guardar_modelo(modelo,NOMBRE_ARCHIVO_1)
-        #print("Prediciendo valores....")
-        #for i in range(0,101):
-        #    yy = -i/100
-        #    xx = 0
-        #    val = modelo.predict(np.array(np.array([[xx,yy]])))
-        #    speed = 1
-        #    decimals = 2
-        #    print(f"[{xx}    {yy}] -> x:{str(round((val[0][0])*speed, decimals))} - y:{str(round((val[0][1])*speed, decimals))}")
-        #print("fin prediccion de valores....")
+        pass
     else: #la red 2 tiene que hacer gol
         pass
 
@@ -59,7 +55,3 @@ def cargar_modelo(nombre_archivo):
     except Exception as e:
         return None
     return loaded_model
-
-b = Balon()
-b.set_usuario("") #Llamaria a red neuronal 1
-calcular(None,b)

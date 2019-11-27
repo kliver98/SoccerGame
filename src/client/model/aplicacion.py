@@ -118,3 +118,6 @@ class Aplicacion():
     
     def get_goles(self):
         return self.__partido.get_goles()
+    
+    def mover_bots(self):
+        self.__partido.mover_bots()

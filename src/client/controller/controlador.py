@@ -96,3 +96,6 @@ class Controlador():
     
     def get_goles(self):
         return self.aplicacion.get_goles()
+    
+    def mover_bots(self):
+        self.aplicacion.mover_bots()
