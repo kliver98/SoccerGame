@@ -278,13 +278,11 @@ class Partido():
     def mover_bots(self):
         ia.calcular(self.__jugadores, self.__balon, self.__ia_modelos)
         col = self.jugador_colisionando_balon(self.__jugadores[1])
-        if col:
+        if col: #Cambia el nombre de usuario al bot
             self.__balon.set_usuario(self.__jugadores[1].get_usuario())
-        """if self.__balon.get_usuario()=="":
+        if self.__balon.get_usuario()=="" or self.__balon.get_usuario()==self.__usuario_de_jugador:
             return
-        if self.__balon.get_usuario()!="" and self.__balon.get_usuario()==self.__usuario_de_jugador:
-            return
-        jug = self.get_jugador(self.__balon.get_usuario())
+        jug = self.__jugadores[1]
         coord = jug.get_coordenadas()
-        coord = (coord[0]-50,coord[1])
-        self.__balon.update_coordenadas(coord)"""
+        coord = (coord[0]-15,coord[1]+20)
+        self.__balon.update_coordenadas(coord)

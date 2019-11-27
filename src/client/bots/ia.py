@@ -27,8 +27,8 @@ def iniciar():
 def calcular(jugadores, balon, modelos):
     #Este metodo es el encargado de actualizar las posicinoes de los jugadores pasados por parametro. No devuelve nada, actualiza los mismo objetos del model
     print(f"has ball:{balon.get_usuario()}")
+    mover = cc.DIFICULTAD[0]
     if balon.get_usuario()=="": #la red 1 tiene que hacer que atrape el balon
-        mover = cc.VELOCIDAD_JUGADOR
         for i,jugador in enumerate(jugadores):
             if i==0 or balon.get_usuario()==jugador.get_usuario():
                 continue
@@ -38,7 +38,6 @@ def calcular(jugadores, balon, modelos):
             y = mover if salida[0][1]<0 else -mover if salida[0][1]>0 else 0
             jugador.set_coordenadas(x,y)
     else: #la red 2 tiene que hacer gol
-        mover = cc.VELOCIDAD_JUGADOR
         for i,jugador in enumerate(jugadores):
             if i==0 :
                 continue
