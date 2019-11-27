@@ -3,6 +3,7 @@ import numpy as np
 from keras.models import model_from_json
 from client.bots import red_neuronal_1 as rn1
 import constantesCompartidas as cc
+from client.bots import entreno_red_gol as rn2
 
 NOMBRE_ARCHIVO_1 = "modeloAgarrar"
 NOMBRE_ARCHIVO_2 = "modeloGol"
@@ -14,12 +15,18 @@ def iniciar():
             mod_1 = rn1.entrenar()
             guardar_modelo(mod_1,NOMBRE_ARCHIVO_1)
     modelos.append(mod_1)
+    
+    mod_2 = cargar_modelo(NOMBRE_ARCHIVO_2)
+    if mod_2==None: #Si no habia ningun modelo guardado, se crea
+            mod_2 = rn2.entrenar()
+            guardar_modelo(mod_2,NOMBRE_ARCHIVO_2)
+    modelos.append(mod_2)
     #Poner el otro modelo por que se deben cargar una sola vez, si no el juego se ve lagueado
     return modelos
 
 def calcular(jugadores, balon, modelos):
     #Este metodo es el encargado de actualizar las posicinoes de los jugadores pasados por parametro. No devuelve nada, actualiza los mismo objetos del model
-    print(f"b:{balon.get_usuario()}")
+    print(f"has ball:{balon.get_usuario()}")
     if balon.get_usuario()=="": #la red 1 tiene que hacer que atrape el balon
         mover = cc.VELOCIDAD_JUGADOR
         for i,jugador in enumerate(jugadores):
