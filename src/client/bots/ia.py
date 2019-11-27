@@ -1,6 +1,7 @@
 #librerias
 from keras.models import model_from_json
 from client.bots import red_neuronal_1 as rn1
+from client.bots import entreno_red_gol as rn2
 
 NOMBRE_ARCHIVO_1 = "modeloAgarrar"
 NOMBRE_ARCHIVO_2 = "modeloGol"
@@ -12,6 +13,12 @@ def iniciar():
             mod_1 = rn1.entrenar()
             guardar_modelo(mod_1,NOMBRE_ARCHIVO_1)
     modelos.append(mod_1)
+    
+    mod_2 = cargar_modelo(NOMBRE_ARCHIVO_2)
+    if mod_2==None: #Si no habia ningun modelo guardado, se crea
+            mod_2 = rn2.entrenar()
+            guardar_modelo(mod_2,NOMBRE_ARCHIVO_2)
+    modelos.append(mod_2)
     #Poner el otro modelo por que se deben cargar una sola vez, si no el juego se ve lagueado
     return modelos
 
