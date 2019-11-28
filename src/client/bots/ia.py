@@ -5,9 +5,24 @@ from client.bots import red_neuronal_1 as rn1
 import constantesCompartidas as cc
 from client.bots import entreno_red_gol as rn2
 from math import fabs
+import time
 
 NOMBRE_ARCHIVO_1 = "modeloAgarrar"
 NOMBRE_ARCHIVO_2 = "modeloGol"
+
+import tensorflow as tf
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+  # Restrict TensorFlow to only allocate 1GB of memory on the first GPU
+  try:
+    tf.config.experimental.set_virtual_device_configuration(
+        gpus[0],
+        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)])
+    logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+    print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+  except RuntimeError as e:
+    # Virtual devices must be set before GPUs have been initialized
+    print(e)
 
 def iniciar():
     modelos = []
@@ -44,13 +59,13 @@ def calcular(jugadores, balon, modelos):
                 continue
             entrada = np.array(convertir_a_entrada_gol(jugadores))
             salida = modelos[1].predict(entrada)
-            print(salida)
             y = 1 if salida[0][0]>0.25 else -mover
             x = -mover if salida[0][1]> 0.25 else mover*2 if salida[0][1]< -0.25 else 0
             patear= True if salida[0][2]>=0.5 else False
-            print(jugador.get_coordenadas())
             if patear:
-                    balon.set_coordenadas(100,0)
+                balon.set_coordenadas(cc.ANCHO_VENTANA*0.15, 0)
+                balon.set_usuario("/")
+                time.sleep(0.15)
             else:
                 mover_a_porteria(jugador, x, y, mover)
                 

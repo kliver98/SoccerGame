@@ -4,22 +4,23 @@ from keras.layers.core import Dense
 
 def entrenar():
     # datos de entreno
+    print("Hola")
     training_data = np.array([[1,-1],[1,0],[1,1],
                           [0,-1],[0,0],[0,1],
-                          [-1,-1],[-1,0],[-1,1],
-                          [-0.1,0.05],[-0.14,0.01],[-0.05,0.08]],"float32")
+                          [-1,-1],[-1,0],[-1,1]],"float32")
 
     # resultados que se obtienen, en el mismo orden
-    target_data = np.array([[-1,-1],[-1,0],[-1,1],[0,-1],[0.045,0.13],[0,1],[1,-1],[1,0],[1,1],[0.2,0],[0.15,0],[0.178,0]], "float32")
+    target_data = np.array([[-1,-1],[-1,0],[-1,1],[0,-1],[0.045,0.13],[0,1],[1,-1],[1,0],[1,1]], "float32")
     model = Sequential()
-    model.add(Dense(16, input_dim=2, activation='tanh'))
+    model.add(Dense(3, input_dim=2, activation='tanh'))
     model.add(Dense(2, activation='tanh'))
-
     model.compile(loss='mean_squared_error',
                   optimizer='adam',
                   metrics=['binary_accuracy'])
     
+    print("Chiax1")
     model.fit(training_data, target_data, epochs=1500)
+    print("Chia")
 
     # evaluamos el modelo
     #scores = model.evaluate(training_data, target_data)

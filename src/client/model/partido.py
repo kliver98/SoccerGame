@@ -127,19 +127,22 @@ class Partido():
         if not self.__conexion: #Regreso balon si no esta dentr del campo
             if not self.esta_balon_dentro_campo((ANCHO_VENTANA,ALTO_VENTANA), self.__balon.get_coordenadas()):
                 gol = self.hizo_gol() #1 hizo gol equipo A, -1 equipo B y 0 nadie
-                goles = self.get_goles()
-                if gol==0:
-                    self.__balon.update_coordenadas(coor_ant_b)
-                    return
-                elif gol==1:
-                    self.__goles_equipos = (goles[0]+1,goles[1])
-                elif gol==-1:
-                    self.__goles_equipos = (goles[0],goles[1]+1)
-                self.__balon.update_coordenadas(((ANCHO_VENTANA/2)-8,(ALTO_VENTANA/2)-8))
+                self.anotar_gol(gol,coord_anteriores)
         if self.__conexion: #Esta jugando online
             info_a = self.__conexion.get_info_out().split(",")
             n_info = f"{info_a[0]},{info_a[1]},{jugador.get_coordenadas()},{soltar_balon}"
             self.__conexion.set_info_out(n_info)
+    
+    def anotar_gol(self, gol, coor_ant_b = None):
+        goles = self.get_goles()
+        if gol==0:
+            self.__balon.update_coordenadas(coor_ant_b)
+            return
+        elif gol==1:
+            self.__goles_equipos = (goles[0]+1,goles[1])
+        elif gol==-1:
+            self.__goles_equipos = (goles[0],goles[1]+1)
+        self.__balon.update_coordenadas(((ANCHO_VENTANA/2)-8,(ALTO_VENTANA/2)-8))
     
     def posiciones_despues_gol(self):
         self.__balon.update_coordenadas(((ANCHO_VENTANA/2)-8,(ALTO_VENTANA/2)-8))
@@ -304,6 +307,10 @@ class Partido():
         if col: #Cambia el nombre de usuario al bot
             self.__balon.set_usuario(self.__jugadores[1].get_usuario())
         if self.__balon.get_usuario()=="" or self.__balon.get_usuario()==self.__usuario_de_jugador:
+            return
+        if self.__balon.get_usuario()=="/":
+            self.anotar_gol(-1, None)
+            self.posiciones_despues_gol()
             return
         #Checo si se hizo gol, recordar que no importa jugador solo coordenadas del balon
         gol = self.hizo_gol() #1 hizo gol equipo A, -1 equipo B y 0 nadie
