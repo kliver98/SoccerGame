@@ -27,10 +27,7 @@ class Jugador():
         """Constructor que recibe el nombre de usuario y el equipo al cual pertenece"""
         self.__usuario = usuario
         self.__equipo = equipo
-        if len(coordenadas)==3:
-            self.__coordenadas = (random.randint(100,coordenadas[0]-100),random.randint(100,coordenadas[1]-100)) #Ver como se cuadra lo de las coordenadas que aparece el jugador
-        else:
-            self.__coordenadas = coordenadas
+        self.__coordenadas = coordenadas
         self.__numero_de_imagen = 1
         self.__angulo_de_imagen = 270 if equipo=="A" else 90
     

@@ -68,13 +68,19 @@ class Partido():
         self.__jugadores.append(Jugador(usuario,equipo, coordenadas))
     
     def iniciar_bots(self): #Ya se que selecciono modo Local
-        self.__jugadores.append(Jugador(f"{self.__usuario_de_jugador}","A",(ANCHO_VENTANA,ALTO_VENTANA,-1))) #Jugador del usuario del cliente
+        cont = 100
+        bordes = 100
+        self.__jugadores.append(Jugador(f"{self.__usuario_de_jugador}","A",(cont,random.randint(bordes,cont)))) #Jugador del usuario del cliente
         for i in range(1,JUGADORES_BOT_EQUIPO*2):
+            cont = 100 if i<JUGADORES_BOT_EQUIPO else cont+100
+            aux = 0
             if i<JUGADORES_BOT_EQUIPO:
                 equipo = "A"
+                aux = cont
             else:
+                aux = ANCHO_VENTANA-cont
                 equipo = "B"
-            self.agregar_jugador(f"bot#{i}",equipo, (ANCHO_VENTANA,ALTO_VENTANA,-1))
+            self.agregar_jugador(f"bot#{i}",equipo, (aux,random.randint(bordes,cont)))
         return len(self.__jugadores)==(JUGADORES_BOT_EQUIPO*2)
     
     def iniciar_jugadores(self):
@@ -134,6 +140,21 @@ class Partido():
             info_a = self.__conexion.get_info_out().split(",")
             n_info = f"{info_a[0]},{info_a[1]},{jugador.get_coordenadas()},{soltar_balon}"
             self.__conexion.set_info_out(n_info)
+    
+    def posiciones_despues_gol(self):
+        self.__balon.update_coordenadas(((ANCHO_VENTANA/2)-8,(ALTO_VENTANA/2)-8))
+        self.__balon.set_usuario("")
+        m = len(self.__jugadores)/2
+        cont = 100
+        borde = 100
+        for i,j in enumerate(self.__jugadores):
+            if i<m:
+                j.reset_coordenadas((cont,random.randint(borde,ALTO_VENTANA-borde)))
+            else:
+                j.reset_coordenadas((ANCHO_VENTANA-cont,random.randint(borde,ALTO_VENTANA-borde)))
+            cont+=100
+            if i==(m-1):
+                cont = 100
             
     def hizo_gol(self): #retorna -1 si hizo gol en la porteria izquierda, 1 gol en la de la derecha y 0 no hizo gol
         coord_b = self.__balon.get_coordenadas()
@@ -141,12 +162,14 @@ class Partido():
         coord_a1 = (ANCHO_VENTANA*0.038, ALTO_VENTANA*0.575)
         coord_b0 = (ANCHO_VENTANA*0.962, ALTO_VENTANA*0.425)
         coord_b1 = (ANCHO_VENTANA*0.962, ALTO_VENTANA*0.575)
+        val = 0
         if coord_b[0]<=coord_a0[0] and coord_b[1]>=coord_a0[1] and coord_b[1]<=coord_a1[1]:
-            return -1
+            val = -1
         elif coord_b[0]>=coord_b0[0] and coord_b[1]>=coord_b0[1] and coord_b[1]<=coord_b1[1]:
-            return 1
-        else:
-            return 0
+            val = 1
+        if val!=0:#Reinicar posiciones
+            self.posiciones_despues_gol()
+        return val
     
     def esta_jugador_dentro_campo(self, coordenadas_campo,jugador):
         """Metodo que verifica si un jugador esta dentro de las coordenadas del campo.
@@ -281,6 +304,15 @@ class Partido():
         if col: #Cambia el nombre de usuario al bot
             self.__balon.set_usuario(self.__jugadores[1].get_usuario())
         if self.__balon.get_usuario()=="" or self.__balon.get_usuario()==self.__usuario_de_jugador:
+            return
+        #Checo si se hizo gol, recordar que no importa jugador solo coordenadas del balon
+        gol = self.hizo_gol() #1 hizo gol equipo A, -1 equipo B y 0 nadie
+        if gol!=0:
+            goles = self.get_goles()
+            if gol==1:
+                self.__goles_equipos = (goles[0]+1,goles[1])
+            elif gol==-1:
+                self.__goles_equipos = (goles[0],goles[1]+1)
             return
         jug = self.__jugadores[1]
         coord = jug.get_coordenadas()
