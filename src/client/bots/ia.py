@@ -4,6 +4,7 @@ from keras.models import model_from_json
 from client.bots import red_neuronal_1 as rn1
 import constantesCompartidas as cc
 from client.bots import entreno_red_gol as rn2
+from math import fabs
 
 NOMBRE_ARCHIVO_1 = "modeloAgarrar"
 NOMBRE_ARCHIVO_2 = "modeloGol"
@@ -39,15 +40,20 @@ def calcular(jugadores, balon, modelos):
             jugador.set_coordenadas(x,y)
     if user_balon==jugadores[1].get_usuario(): #la red 2 tiene que hacer gol
         for i,jugador in enumerate(jugadores):
-            if i==0 :
+            if i==0 or balon.get_usuario() is not jugador.get_usuario():
                 continue
             entrada = np.array(convertir_a_entrada_gol(jugador,jugador))
             salida = modelos[1].predict(entrada)
-            y = mover if salida[0][0]>0 else -mover if salida[0][0]<0 else 0
-            x = mover if salida[0][1]<0 else -mover if salida[0][1]>0 else 0
-            jugador.set_coordenadas(x,0)
+            print(salida)
+            y = mover if salida[0][0]<-0.25 else -mover if salida[0][0]>0.25 else 0
+            x = 0 if fabs( salida[0][1])<0.3 else -mover if fabs(salida[0][1])>0.5 else mover
+            patear= True if salida[0][2]>=0.5 else False
+            if patear:
+                pass
+            jugador.set_coordenadas(x,y)
+            
 def convertir_a_entrada_gol(user,bot):
-    return [[0,0,0]]
+    return [[0,1,0]]
     
     
 def convertir_a_entrada(tipo,jugador,balon):
