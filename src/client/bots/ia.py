@@ -42,19 +42,38 @@ def calcular(jugadores, balon, modelos):
         for i,jugador in enumerate(jugadores):
             if i==0 or balon.get_usuario() is not jugador.get_usuario():
                 continue
-            entrada = np.array(convertir_a_entrada_gol(jugador,jugador))
+            entrada = np.array(convertir_a_entrada_gol(jugadores))
             salida = modelos[1].predict(entrada)
             print(salida)
-            y = mover if salida[0][0]<-0.25 else -mover if salida[0][0]>0.25 else 0
-            x = 0 if fabs( salida[0][1])<0.3 else -mover if fabs(salida[0][1])>0.5 else mover
+            y = 1 if salida[0][0]>0.25 else -mover
+            x = -mover if salida[0][1]> 0.25 else mover*2 if salida[0][1]< -0.25 else 0
             patear= True if salida[0][2]>=0.5 else False
+            print(jugador.get_coordenadas())
             if patear:
-                pass
-            jugador.set_coordenadas(x,y)
+                    balon.set_coordenadas(100,0)
+            else:
+                mover_a_porteria(jugador, x, y, mover)
+                
             
-def convertir_a_entrada_gol(user,bot):
-    return [[0,1,0]]
+def convertir_a_entrada_gol(jugadores):
+    coor_persona=jugadores[0].get_coordenadas()
+    coor_bot=jugadores[1].get_coordenadas()
+    calc_x= coor_bot[0]-coor_persona[0]
+    calc_y= coor_bot[1]-coor_persona[1]
+    calc_patear=True if coor_bot[0]- (cc.ANCHO_VENTANA*0.15)<=0 else False
     
+    x=1 if 0<=calc_x<100 else -1 
+    y=-1 if 0<fabs( calc_y)<30 else 1 
+    patear=1 if calc_patear else -1 if fabs(coor_bot[0] - cc.ANCHO_VENTANA) <=50  else 0
+    return [[y,x,patear]]
+    
+def mover_a_porteria(bot,act_x,act_y,mover):
+        y=act_y
+        if act_y==1:
+            coordenadas=bot.get_coordenadas()
+            direccion_y= 193-coordenadas[1]
+            y= -mover if direccion_y<0 else mover if direccion_y>0 else 0
+        bot.set_coordenadas(act_x,y)
     
 def convertir_a_entrada(tipo,jugador,balon):
     #de acuerdo al tipo (0 para agarrar balon, 1 para hacer gol) devuelve un arreglo en formato de  estimulo
