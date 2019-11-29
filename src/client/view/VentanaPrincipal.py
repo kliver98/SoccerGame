@@ -148,7 +148,7 @@ class VentanaPrincipal():
                                 "Guia rapida: Esta pantalla te permite seleccionar el modo de juego, presione la tecla correspondiente."
                                 ,int(ANCHO*0.02) , (ANCHO*0.05,ALTO*0.8))
             self.dibujar_texto(
-                                "Los controles en el juego son: teclas arriba, abajo, izquierda, derecha. Para soltar/patear presiona x/z"
+                                "Los controles en el juego son: teclas arriba, abajo, izquierda, derecha. Para patear presiona x"
                                 ,int(ANCHO*0.02) , (ANCHO*0.05,ALTO*0.85))
             pg.display.update()
             if pg.key.get_pressed()[pg.K_a]:
@@ -208,12 +208,15 @@ class VentanaPrincipal():
         run = True
         while run:
             self.clock.tick(5) #Dado que solo se reproducira audio no hay problema con 5fps
+            goles = self.controlador.get_goles()
             if modoOnline:
                 self.sg = self.controlador.get_tiempo_juego_Online() #Segundos transcurridos del juego
             else:
                 self.sg = self.cr.get_cuenta()
             self.pintar_fondo(True)
             self.dibujar_texto(f"Tiempo restante: {int(tiempos[0]+tiempos[1]-self.sg)}", int(ANCHO*0.02), [ANCHO*0.42,10])
+            self.dibujar_texto(f"Goles equipo A: {int(goles[0])}", int(ANCHO*0.04), [ANCHO*0.35,ALTO*0.35], (0, 0, 0), True)
+            self.dibujar_texto(f"Goles equipo B: {int(goles[1])}", int(ANCHO*0.04), [ANCHO*0.35,ALTO*0.65], (0, 0, 0), True)
             pg.display.update()
             for event in pg.event.get():
                 if event.type == pg.QUIT:

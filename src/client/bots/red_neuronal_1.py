@@ -4,7 +4,6 @@ from keras.layers.core import Dense
 
 def entrenar():
     # datos de entreno
-    print("Hola")
     training_data = np.array([[1,-1],[1,0],[1,1],
                           [0,-1],[0,0],[0,1],
                           [-1,-1],[-1,0],[-1,1]],"float32")
@@ -14,13 +13,12 @@ def entrenar():
     model = Sequential()
     model.add(Dense(3, input_dim=2, activation='tanh'))
     model.add(Dense(2, activation='tanh'))
+
     model.compile(loss='mean_squared_error',
                   optimizer='adam',
                   metrics=['binary_accuracy'])
     
-    print("Chiax1")
-    model.fit(training_data, target_data, epochs=1500)
-    print("Chia")
+    model.fit(training_data, target_data, epochs=1000)
 
     # evaluamos el modelo
     #scores = model.evaluate(training_data, target_data)

@@ -17,7 +17,7 @@ if gpus:
   try:
     tf.config.experimental.set_virtual_device_configuration(
         gpus[0],
-        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)])
+        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=2048)])
     logical_gpus = tf.config.experimental.list_logical_devices('GPU')
     print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
   except RuntimeError as e:
@@ -42,7 +42,7 @@ def iniciar():
 
 def calcular(jugadores, balon, modelos):
     #Este metodo es el encargado de actualizar las posicinoes de los jugadores pasados por parametro. No devuelve nada, actualiza los mismo objetos del model
-    mover = cc.DIFICULTAD[0]
+    mover = cc.DIFICULTAD[0]-1
     user_balon = balon.get_usuario()
     if user_balon!=jugadores[0].get_usuario() or user_balon==jugadores[0].get_usuario(): #la red 1 tiene que hacer que atrape el balon
         for i,jugador in enumerate(jugadores):
@@ -61,14 +61,14 @@ def calcular(jugadores, balon, modelos):
             salida = modelos[1].predict(entrada)
             y = 1 if salida[0][0]>0.25 else -mover
             x = -mover if salida[0][1]> 0.25 else mover*2 if salida[0][1]< -0.25 else 0
-            patear= True if salida[0][2]>=0.5 else False
+            patear= True if salida[0][2]>=0.5 else False #and balon.get_coordenadas()[1]>=cc.ALTO_VENTANA*0.4 and balon.get_coordenadas()[1]<=cc.ALTO_VENTANA*0.6 else False
+            #print(patear)
             if patear:
                 balon.set_coordenadas(cc.ANCHO_VENTANA*0.15, 0)
                 balon.set_usuario("/")
                 time.sleep(0.15)
             else:
                 mover_a_porteria(jugador, x, y, mover)
-                
             
 def convertir_a_entrada_gol(jugadores):
     coor_persona=jugadores[0].get_coordenadas()
